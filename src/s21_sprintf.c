@@ -1,22 +1,12 @@
 #include "s21_sprintf.h"
 
-int main() {
-  char str[100];
-  char my_str[100];
-  sprintf(str, "Hello, %d, %d", 123, 'a');
-  printf("%s\n", str);
-  s21_sprintf(my_str, "Hello, %d, %d", 123, 'a');
-  printf("%s\n", my_str);
-  return 0;
-}
-
 int s21_sprintf(char *str, const char *format, ...) {
   char specifiers_stack[100] = {0};
   int spec_count = 0;
 
   va_list args;
   va_start(args, format);  // Initialize args to point to additional arguments
-  char object_to_insert[100];
+  char object_to_insert[100] = {0};
   char ch;
   for (size_t i = 0; format[i] != '\0'; i++) {
     ch = format[i];
@@ -26,31 +16,74 @@ int s21_sprintf(char *str, const char *format, ...) {
       }
     }
   }
-
-  change_in_place(str, format, args, object_to_insert, specifiers_stack);
-
   size_t char_count;
+  char_count =
+      change_in_place(str, format, args, object_to_insert, specifiers_stack);
 
   va_end(args);  // Clear the va_list
   return char_count;
 }
 
-void change_in_place(char *str, const char *format, char *args,
-                     char *object_to_insert, const char *specifiers_stack) {
-  for (size_t format_ind = 0, output_ind = 0, spec_ind = 0;
-       format[format_ind] != '\0'; format_ind++) {
+size_t change_in_place(char *str, const char *format, va_list args,
+                       char *object_to_insert, const char *specifiers_stack) {
+  size_t output_ind = 0;
+  for (size_t format_ind = 0, spec_ind = 0; format[format_ind] != '\0';
+       format_ind++) {
     char ch = format[format_ind];
     if (ch == '%') {
       format_ind++;
       if (specifiers_stack[spec_ind] != '\0') {
         variable_to_string(specifiers_stack[spec_ind++], args,
                            object_to_insert);
-        str[output_ind++] = object_to_insert[0];
+        insert_object(str, object_to_insert, &output_ind);
+        reset_object(object_to_insert);
       }
     } else {
       str[output_ind++] = ch;
-      format_ind++;
     }
+  }
+  return output_ind;
+}
+
+void reset_object(char *object_to_insert) {
+  for (int i = 0; object_to_insert[i] != '\0'; i++) {
+    object_to_insert[i] = '\0';
+  }
+}
+
+void insert_object(char *str, const char *object_to_insert,
+                   size_t *output_ind) {
+  for (int i = 0; object_to_insert[i] != '\0'; i++) {
+    str[(*output_ind)++] = object_to_insert[i];
+  }
+}
+
+char *itoa(int num, char *object_to_insert, int base) {
+  bool is_negative = false;
+  size_t i = 0;
+  if (num < 0) {
+    is_negative = true;
+    num *= -1;
+  }
+
+  do {
+    int rem = num % base;
+    num /= base;
+    object_to_insert[i++] = rem > 9 ? rem - 10 + 'a' : rem + '0';
+  } while (num > 0);
+
+  if (is_negative) {
+    object_to_insert[i++] = '-';
+  }
+  s21_reverse_str(object_to_insert, i);
+  return object_to_insert;
+}
+
+void s21_reverse_str(char *str, size_t len) {
+  for (size_t i = 0, j = len - 1; i < j; i++, j--) {
+    char temp = str[i];
+    str[i] = str[j];
+    str[j] = temp;
   }
 }
 
@@ -107,7 +140,7 @@ void variable_to_string(const char specifier, va_list args,
       break;
 
     case 'd':
-      *object_to_insert = va_arg(args, int);
+      itoa(va_arg(args, int), object_to_insert, DECIMAL_BASE);
       break;
 
     case 'e':
@@ -165,4 +198,16 @@ void variable_to_string(const char specifier, va_list args,
     default:
       break;
   }
+}
+
+int main() {
+  int count = 0;
+  // char str[100];
+  // count = sprintf(str, "Hello, %d, %d", 123, 'a');
+  // printf("%s\ncount = %d\n", str, count);
+
+  char my_str[100];
+  count = s21_sprintf(my_str, "Hello, %d, %d", 123, 'a');
+  printf("%s\ncount = %d\n", my_str, count);
+  return 0;
 }

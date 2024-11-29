@@ -29,6 +29,7 @@
 *.dylib
 
 # Executables
+s21_sprintf
 *.exe
 *.out
 *.app
