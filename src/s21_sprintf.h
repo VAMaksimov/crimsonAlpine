@@ -2,13 +2,17 @@
 #define S21_SPRINTF
 
 #include <stdarg.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#define bool _Bool
+#define true 1
+#define false 0
+
 #define DECIMAL_BASE 10
 #define HEX_BASE 16
+#define FLOAT_FORMAT 1000000
 
 int s21_sprintf(char *str, const char *format, ...);
 size_t change_in_place(char *str, const char *format, va_list args,

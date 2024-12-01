@@ -58,7 +58,30 @@ void insert_object(char *str, const char *object_to_insert,
   }
 }
 
+size_t get_integer_size(int num, int base) {
+  size_t size = 0;
+  while (num > 0) {
+    num /= base;
+    size++;
+  }
+  return size;
+}
+
+size_t get_float_size(double num, int base) {
+  int integer_part = (int)num;
+  double fractional_part = num - integer_part;
+  size_t size = 0;
+  if (integer_part != 0) {
+    size = get_integer_size(integer_part, base);
+  }
+  if (fractional_part != 0) {
+    size += 1 + get_integer_size((int)(fractional_part * FLOAT_FORMAT), base);
+  }
+  return size;
+}
+
 char *itoa(int num, char *object_to_insert, int base) {
+  // size_t num_size = get_integer_size(num, base);
   bool is_negative = false;
   size_t i = 0;
   if (num < 0) {
@@ -76,8 +99,46 @@ char *itoa(int num, char *object_to_insert, int base) {
     object_to_insert[i++] = '-';
   }
   s21_reverse_str(object_to_insert, i);
-  return object_to_insert;
+  return &object_to_insert[i];
 }
+
+// char *float_to_string(double num, char *object_to_insert) {
+//   // size_t num_size = get_float_size(num, DECIMAL_BASE);
+//   bool is_negative = false;
+//   if (num < 0) {
+//     is_negative = true;
+//     num *= -1;
+//   }
+//   double integer_part = (int)num;
+//   double fractional_part = num - integer_part;
+//   char *temp = itoa((int)integer_part, object_to_insert, DECIMAL_BASE);
+//   temp[0] = '.';
+//   fractional_part *= FLOAT_FORMAT;
+//   int fractional_int = (int)fractional_part;
+//   fractional_int %= 1000000;  // Cut off all digits after 6th
+//   itoa(fractional_int, temp + 1, DECIMAL_BASE);
+
+//   if (is_negative) {
+//     object_to_insert[0] = '-';
+//   }
+
+//   s21_reverse_str(object_to_insert, strlen(object_to_insert));
+
+//   return object_to_insert;
+// }
+
+// void exp_to_string(double num, char *object_to_insert) {
+//   int power = 0;
+//   double temp = num;
+//   while (temp > 1) {
+//     temp /= 10;
+//     power++;
+//   }
+//   object_to_insert[0] = 'e';
+//   object_to_insert[1] = '+';
+//   object_to_insert[2] = '\0';
+//   itoa(power, object_to_insert + 2, DECIMAL_BASE);
+// }
 
 void s21_reverse_str(char *str, size_t len) {
   for (size_t i = 0, j = len - 1; i < j; i++, j--) {
@@ -136,7 +197,7 @@ void variable_to_string(const char specifier, va_list args,
                         char *object_to_insert) {
   switch (specifier) {
     case 'c':
-      *object_to_insert = va_arg(args, int);
+      itoa(va_arg(args, int), object_to_insert, DECIMAL_BASE);
       break;
 
     case 'd':
@@ -201,10 +262,11 @@ void variable_to_string(const char specifier, va_list args,
 }
 
 int main() {
+  double my_num = 1.99999999;
   int count = 0;
-  // char str[100];
-  // count = sprintf(str, "Hello, %d, %d", 123, 'a');
-  // printf("%s\ncount = %d\n", str, count);
+  char str[100];
+  count = sprintf(str, "Hello, %d, %d %f", 123, 'a', my_num);
+  printf("%s\ncount = %d\n", str, count);
 
   char my_str[100];
   count = s21_sprintf(my_str, "Hello, %d, %d", 123, 'a');
