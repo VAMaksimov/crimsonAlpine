@@ -1,0 +1,59 @@
+CC = gcc
+FLAGS = -std=c11 -Wall -Wextra -Werror 
+TEST_FLAGS = -lcheck -lm -lsubunit -lpthread
+GCOV_FLAGS = -ftest-coverage -fprofile-arcs
+BUILD_DIR = build
+UNAME_S := $(shell uname -s)
+
+
+OBJS_TEST = $(shell find tests/ -name '*.c' | sed 's/\.c$$/\.o/')
+OBJS_ADD_FUNC = $(shell find additions/ -name '*.c' | sed 's/\.c$$/\.o/')
+OBJS_FUNC = $(shell find . -maxdepth 1 -name '*.c' | sed 's/^\.\///; s/\.c$$/.o/')
+
+
+ifeq (${UNAME_S}, Linux)
+	TEST_FLAGS = -lcheck -pthread -lrt -lm -lsubunit
+	OPEN_CMD = xdg-open
+else
+	TEST_FLAGS = -lcheck
+	OPEN_CMD = open
+endif
+
+
+all: clean s21_string.a gcov_report
+
+
+# s21_string.a: ${OBJS_S21_FUNC} ${ADD_FUNC}
+s21_string.a: ${OBJS_FUNC} ${OBJS_ADD_FUNC}
+	ar rc s21_string.a ${OBJS_FUNC}
+	ranlib s21_string.a
+	
+
+test:   s21_string.a ${OBJS_TEST} ${OBJS_ADD_FUNC} ${OBJS_FUNC}
+	${CC} ${FLAGS} ${GCOV_FLAGS} ${OBJS_FUNC} ${OBJS_TEST} ${OBJS_ADD_FUNC}  s21_string.a  -o test ${TEST_FLAGS}
+	./test
+
+%.o: %.c
+	@result=$$(echo "$(OBJS_TEST) ${OBJS_ADD_FUNC}" | grep -w -q "$@"; echo $$?); \
+	if [ $$result -eq 0 ]; then \
+		mkdir -p $(dir $@); \
+		$(CC) $(FLAGS) -c $< -o $@; \
+	else \
+		$(CC) $(FLAGS) $(GCOV_FLAGS) -c $< -o $@; \
+	fi
+	
+gcov_report: test
+	./test
+	lcov -t "test" -o test.info -c -d .
+	genhtml -o report test.info
+	$(OPEN_CMD) report/index.html
+
+
+clang-format:
+	find . -name "*.c" -or -name "*.h" | xargs clang-format -i -style=Google
+
+valgrind:
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./test
+
+clean:
+	rm -rf ${BUILD_DIR} *.o *.gcno *.gcda s21_string.a tests/*.o additions/*.o test report test.info

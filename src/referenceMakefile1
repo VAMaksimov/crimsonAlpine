@@ -1,0 +1,40 @@
+CC = gcc
+CFLAGS_LIB = -Wall -Wextra -Werror
+CFLAGS_TEST = $(CFLAGS_LIB) -fprofile-arcs -ftest-coverage
+LDFLAGS_TEST = -lcheck
+AR = ar
+ARFLAGS = rcs
+
+SRC_DIR = core
+OBJ_DIR = obj
+OBJ_TEST_DIR = obj_test
+TEST_DIR = tests
+COMPILED_TESTS = obj_test
+
+LIBRARY = s21_string.a
+TEST_EXEC = my_tests
+
+SRCS = $(wildcard $(SRC_DIR)/*.c)
+TESTS = $(wildcard $(TEST_DIR)/*.c)
+OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+TEST_OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_TEST_DIR)/%.o)
+TEST_FILES_OBJS = $(TESTS:$(TEST_DIR)/%.c=$(COMPILED_TESTS)/%.o)
+
+all: $(LIBRARY)
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+    @mkdir -p $(OBJ_DIR)    $(CC) $(CFLAGS_LIB) -c $< -o $@
+$(OBJ_TEST_DIR)/%.o: $(SRC_DIR)/%.c
+    @mkdir -p $(OBJ_TEST_DIR)    $(CC) $(CFLAGS_TEST) -c $< -o $@
+$(COMPILED_TESTS)/%.o: $(TEST_DIR)/%.c
+    @mkdir -p $(COMPILED_TESTS)    $(CC) $(CFLAGS_TEST) -c $< -o $@
+$(TEST_EXEC): $(TEST_OBJS) $(TEST_FILES_OBJS)
+    $(CC) $(CFLAGS_TEST) -o $@ $^ $(LDFLAGS_TEST)
+test: $(TEST_EXEC)
+    ./$(TEST_EXEC)
+gcov_report: test    rm -rf $(OBJ_TEST_DIR)/test* $(OBJ_TEST_DIR)/sscanf_test*
+    lcov --capture --directory $(OBJ_TEST_DIR) --output-file coverage.info    genhtml coverage.info --output-directory html_report
+    
+$(LIBRARY): $(OBJS)
+    $(AR) $(ARFLAGS) $@ $^
+clean:    rm -rf $(OBJ_DIR) $(OBJ_TEST_DIR) $(LIBRARY) $(TEST_EXEC) $(COMPILED_TESTS) coverage.info
