@@ -17,6 +17,9 @@ COMPILED_TESTS = compiled_tests
 # compiled sources
 SRCS = $(wildcard $(SRC_DIR)/*.c)
 TESTS = $(wildcard $(TEST_DIR)/*.c)
+# For each object file specified in OBJS, Make checks if there is a corresponding rule defined for building it.
+# The pattern rule ($(BUILD_DIR)/%.o: $(SRC_DIR)/%.c) matches
+# because both the target and prerequisite follow the same naming convention.
 OBJS = $(SRCS:$(SRC_DIR)/%.c=$(BUILD_DIR)/%.o)
 TEST_OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_TEST_DIR)/%.o)
 TEST_FILES_OBJS = $(TESTS:$(TEST_DIR)/%.c=$(COMPILED_TESTS)/%.o)
@@ -32,26 +35,40 @@ all: $(LIBRARY)
 $(LIBRARY): $(OBJS)
 	$(AR) $@ $^
 
+# The target $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c defines a pattern rule.
+# The % character acts as a wildcard.
+# This rule tells Make how to create an object file from its corresponding source file:
+# When Make needs to build an object file (e.g., $(BUILD_DIR)/file1.o),
+# it recognizes that it can use the source file $(SRC_DIR)/file1.c.
+
+# With -c flag, the compiler will generate a .o file (object file) from a .c file (source file)
+# but will not produce an executable.
+# This is essential in multi-file projects
+# where each source file compiles separately before linking them together later.
+
+# Using $< is appropriate here because you only need to specify one source file for each compilation command
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
-    @mkdir -p $(BUILD_DIR)
-    $(CC) -c $< -o $@
+	@mkdir -p $(BUILD_DIR)
+	$(CC) -c $< -o $@
+
 $(OBJ_TEST_DIR)/%.o: $(SRC_DIR)/%.c
-    @mkdir -p $(OBJ_TEST_DIR)
-    $(CC) $(CFLAGS_TEST) -c $< -o $@
+	@mkdir -p $(OBJ_TEST_DIR)
+	$(CC) $(CFLAGS_TEST) -c $< -o $@
+
 $(COMPILED_TESTS)/%.o: $(TEST_DIR)/%.c
-    @mkdir -p $(COMPILED_TESTS)
-    $(CC) $(CFLAGS_TEST) -c $< -o $@
+	@mkdir -p $(COMPILED_TESTS)
+	$(CC) $(CFLAGS_TEST) -c $< -o $@
 
 # test with library!!
 $(TEST_EXEC): $(TEST_OBJS) $(TEST_FILES_OBJS)
-    $(CC) $(CFLAGS_TEST) $(LDFLAGS_TEST) -o $@ $^
+	$(CC) $(CFLAGS_TEST) $(LDFLAGS_TEST) $^ -o $@
 
 test: $(TEST_EXEC)
-    ./$(TEST_EXEC)
+	./$(TEST_EXEC)
 
 gcov_report: test
 	rm -rf $(OBJ_TEST_DIR)/test* $(OBJ_TEST_DIR)/sscanf_test*
-    lcov --capture --directory $(OBJ_TEST_DIR) --output-file coverage.info
+	lcov --capture --directory $(OBJ_TEST_DIR) --output-file coverage.info
 	genhtml coverage.info --output-directory html_report
 
 clean:

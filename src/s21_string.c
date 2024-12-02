@@ -1,18 +1,5 @@
 #include "s21_string.h"
 
-typedef struct {
-  bool flag_exist;
-  bool width_exist;
-  bool precision_exist;
-  bool length_exist;
-  bool specifier_exist;
-  char flag_value;
-  int width_value;
-  size_t precision_value;
-  char length_value;
-  char specifier_value;
-} format_value;
-
 int number_parser(const char **p) {
   int res = 0;
   while (s21_strchr("0123456789", **p)) {
