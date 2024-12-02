@@ -1,5 +1,7 @@
 #include "s21_strerror.h"
 
+#include "../s21_string.h"
+
 /**
  * @brief Returns a string with the error message for the given error number.
  * The error numbers should be in the range 0 to ERR_MSG_AMOUNT - 1.
