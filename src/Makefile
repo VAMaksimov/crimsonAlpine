@@ -5,7 +5,7 @@ LIBRARY = s21_string.a
 # flags
 CC = gcc -Wall -Wextra -Werror -std=c11
 CFLAGS_TEST = -fprofile-arcs -ftest-coverage
-LDFLAGS_TEST = -lcheck -lm
+LDFLAGS_TEST = -lcheck -lm -lsubunit 
 
 # dirs
 SRC_DIR = components
@@ -61,7 +61,7 @@ $(COMPILED_TESTS)/%.o: $(TEST_DIR)/%.c
 
 # test with library!!
 $(TEST_EXEC): $(TEST_OBJS) $(TEST_FILES_OBJS)
-	$(CC) $(CFLAGS_TEST) $(LDFLAGS_TEST) $^ -o $@
+	$(CC) $(CFLAGS_TEST) $^ -o $@ $(LDFLAGS_TEST)
 
 test: $(TEST_EXEC)
 	./$(TEST_EXEC)
