@@ -10,7 +10,6 @@
 #define bool _Bool
 #define true 1
 #define false 0
-#define ll 'd'
 
 #define LEFT_JUSTIFY_FLAG '-'
 #define SIGN_PRECEDENCE_FLAG '+'
@@ -21,6 +20,7 @@
 #define SHORT_INT_LENGTH 'h'
 #define LONG_INT_LENGTH 'l'
 #define LONG_DOUBLE_LENGTH 'L'
+#define LONG_LONG_INT_LENGTH 'd'
 
 #define CHAR_SPEC 'c'
 #define DECIMAL_INT_SPEC 'd'

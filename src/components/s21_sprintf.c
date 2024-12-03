@@ -194,7 +194,8 @@ void formated_int(char *buffer, size_t *index, va_list factor,
   if (!values.length_value) v = va_arg(factor, int);
   if (values.length_value == SHORT_INT_LENGTH) v = va_arg(factor, int);
   if (values.length_value == LONG_INT_LENGTH) v = va_arg(factor, long);
-  if (values.length_value == LONG_DOUBLE_LENGTH) v = va_arg(factor, long long);
+  if (values.length_value == LONG_LONG_INT_LENGTH)
+    v = va_arg(factor, long long);
   if (v != 0) {
     size_t len = 1;
     if (v < 0) v = -v, ++len;
@@ -212,7 +213,7 @@ void formated_uint(char *buffer, size_t *index, va_list factor,
   if (!values.length_value) v = va_arg(factor, unsigned int);
   if (values.length_value == SHORT_INT_LENGTH) v = va_arg(factor, unsigned int);
   if (values.length_value == LONG_INT_LENGTH) v = va_arg(factor, unsigned long);
-  if (values.length_value == LONG_DOUBLE_LENGTH)
+  if (values.length_value == LONG_LONG_INT_LENGTH)
     v = va_arg(factor, unsigned long long);
   if (v != 0) {
     size_t len = ((size_t)log10(v)) + 1UL;
@@ -249,10 +250,11 @@ void formated_float(char *buffer, size_t *index, va_list factor,
                     format_value values) {
   long double v = 0;
   if (!values.length_value) v = va_arg(factor, double);
-  if (values.length_value & LONG_DOUBLE_LENGTH) v = va_arg(factor, long double);
+  if (values.length_value == LONG_LONG_INT_LENGTH)
+    v = va_arg(factor, long double);
   if (!values.precision_exist) values.precision_value = STANDARD_PRECISION;
   size_t len = 1;
-  if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
+  if (values.precision_value != 0 || values.flag_value == HASH_FLAG)
     len += values.precision_value + 1;
   char sign = '+';
   if (v < 0) v = -v, ++len, sign = '-';
@@ -271,9 +273,9 @@ void formated_float(char *buffer, size_t *index, va_list factor,
 //                 format_value values) {
 //   long double v = 0;
 //   if (!values.length_value) v = va_arg(factor, double);
-//   if (values.length_value & LONG_DOUBLE_LENGTH) v = va_arg(factor, long
+//   if (values.length_value == LONG_LONG_INT_LENGTH) v = va_arg(factor, long
 //   double); if (!values.precision_exist) values.precision_value = 1; size_t
-//   len = 1; if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
+//   len = 1; if (values.precision_value != 0 || values.flag_value == HASH_FLAG)
 //     len += values.precision_value + 1;
 //   char sign = '+';
 //   if (v < 0) v = -v, ++len, sign = '-';
@@ -339,7 +341,7 @@ int s21_sprintf(char *buffer, const char *format, ...) {
     while (*p != '%' && *p != '\0') {  // Переписать на s21_strncpy
       buffer[index++] = *p++;
     }
-    if (*p == '\0') p = format_parser(buffer, &index, ++p, factor, values);
+    if (*p != '\0') p = format_parser(buffer, &index, ++p, factor, values);
   }
 
   va_end(factor);

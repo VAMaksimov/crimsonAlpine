@@ -28,9 +28,7 @@ void precision_parser(const char **p, format_value *values, va_list factor) {
 void length_parser(const char **p, format_value *values) {
   if (**p == 'l' && *(*p + 1) == 'l') {
     ++(*p);
-    values->length_value = LONG_DOUBLE_LENGTH;
-  } else if (**p == 'l')
-    values->length_value = LONG_INT_LENGTH;
-  else if (**p == 'h')
-    values->length_value = SHORT_INT_LENGTH;
+    values->length_value = LONG_LONG_INT_LENGTH;
+  } else
+    values->length_value = **p;
 }
