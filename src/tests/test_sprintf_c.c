@@ -12,6 +12,7 @@ START_TEST(sprintf_1_c) {
   ck_assert_int_eq(sprintf(str1, str3, a, b, c, d, e),
                    s21_sprintf(str2, str3, a, b, c, d, e));
   ck_assert_pstr_eq(str1, str2);
+  printf("test with string: %s passed\n", str3);
 }
 END_TEST
 

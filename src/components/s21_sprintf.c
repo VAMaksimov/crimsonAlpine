@@ -27,7 +27,7 @@ void ctoa(void *c, char *buffer, size_t *index, format_value values) {
   buffer[(*index)++] = *i;
 }
 
-void integer_ftoa(long double *c, char *buffer, size_t *index) {
+void integer_ftoa(const long double *c, char *buffer, size_t *index) {
   long double v = *c;
   int len_v = 0;
   if (truncl(v) != 0) len_v = ((int)log10l(v));
@@ -50,14 +50,11 @@ void s21_memmove(char *dest, const char *src, size_t n) {
   }
 }
 
-void round_ftoa(long double *c, char *buffer, size_t *index) {
+void round_ftoa(const long double *c, char *buffer, size_t *index) {
   if ((*c) * 10 > 5) {
     int i = (*index) - 1;
-    while (buffer[i] == '9' && i >= 0 && buffer[i] != '.') {
-      if (buffer[i] == '.') {
-        --i;
-      } else
-        buffer[i--] = '0';
+    while (buffer[i] == '9' && i >= 0) {
+      buffer[i--] = '0';
     }
     if (buffer[i--] == '.') {
       while (buffer[i] == '9' && i >= 0) {
@@ -200,9 +197,9 @@ void formated_int(char *buffer, size_t *index, va_list factor,
   if (values.length_value == LONG_DOUBLE_LENGTH) v = va_arg(factor, long long);
   if (v != 0) {
     size_t len = 1;
-    char sign = v < 0 ? '-' : '+';
-    if (v != 0) len = ((size_t)log10(v < 0 ? -v : v)) + 1;
     if (v < 0) v = -v, ++len;
+    char sign = v < 0 ? '-' : '+';
+    len += ((size_t)log10(v));
     unsigned long long r = v;
     format_flag_(buffer, index, values, &r, len, sign, itoa);
   } else
@@ -218,8 +215,7 @@ void formated_uint(char *buffer, size_t *index, va_list factor,
   if (values.length_value == LONG_DOUBLE_LENGTH)
     v = va_arg(factor, unsigned long long);
   if (v != 0) {
-    size_t len = 1;
-    if (v != 0) len = ((size_t)log10(v)) + 1UL;
+    size_t len = ((size_t)log10(v)) + 1UL;
     format_flag_(buffer, index, values, &v, len, '+', itoa);
   } else
     format_flag_(buffer, index, values, &v, 1, '+', itoa_for_zero);
@@ -235,7 +231,7 @@ void formated_string(char *buffer, size_t *index, va_list factor,
   *index += len;
 }
 
-void formated_n(size_t *index, va_list factor) {
+void formated_n(const size_t *index, va_list factor) {
   int *v = va_arg(factor, int *);
   *v = *index;
 }
@@ -244,8 +240,8 @@ void formated_pointer(char *buffer, size_t *index, va_list factor,
                       format_value values) {
   void *v = va_arg(factor, void *);
   uintptr_t address = (uintptr_t)v;
-  values.specifier_value == OCTAL_SPEC;
-  values.flag_value == HASH_FLAG;
+  values.specifier_value = OCTAL_SPEC;
+  values.flag_value = HASH_FLAG;
   format_flag_(buffer, index, values, &address, 0, '+', itoa);
 }
 
@@ -322,7 +318,7 @@ const char *format_parser(char *buffer, size_t *index, const char *p,
       ++p;
       precision_parser(&p, &values, factor);
     } else if (s21_strchr("hlL", *p))
-      length_parser(p, &values);
+      length_parser(&p, &values);
     else if (s21_strchr("cdieEfgGosuxXpn%%", *p))
       values.specifier_value = *p;
     ++p;
@@ -337,8 +333,7 @@ int s21_sprintf(char *buffer, const char *format, ...) {
   size_t index = 0;
   va_list factor;
   va_start(factor, format);
-  bool flag = false;
-  while (p == NULL || *p == '\0') {
+  while (p != NULL && *p != '\0') {
     //[флаги][ширина][.точность][длина][спецификатор]
     format_value values = {0};
     while (*p != '%' && *p != '\0') {  // Переписать на s21_strncpy
@@ -352,18 +347,7 @@ int s21_sprintf(char *buffer, const char *format, ...) {
   return (int)s21_strlen(buffer);
 }
 
-// char *insert(const char *src, const char *str, size_t start_index) {
-//     size_t len_str = s21_strlen(str);
-//     size_t len_src = s21_strlen(src);
-//     char *res = malloc(len_src + len_str + 1);
-//     size_t len_res = 0;
-//     s21_strncpy(res, src, start_index);
-//     s21_strncat(res, str, len_str);
-//     s21_strncat(res, src + start_index, len_src - start_index);
-//     res[len_src + len_str] = '\0';
-//     return res;
-// }
-
+/*
 int main() {
 #include <string.h>
   char text[100];
@@ -372,10 +356,79 @@ int main() {
   sprintf(text, "333%01i333", -10);
   printf("2text: %s\n\n", text);
 
+  int result;
+  char buffer[100];
+
+  // Тест 1: Нормальное положительное число
+  result = sprintf(buffer, "%.5s", "123");
+  printf("Test 1: %d, Output: %s, Result: %d\n", result, buffer, result);
+  result = s21_sprintf(buffer, "%.5s", "123");
+  printf("Test 1: %d, Output: %s, Result: %d\n", result, buffer, result);
+
+  // Тест 2: Нормальное отрицательное число
+  result = sprintf(buffer, "%.5d", -100);
+  printf("Test 2: %d, Output: %s, Result: %d\n", result, buffer, result);
+  result = s21_sprintf(buffer, "%.5d", -100);
+  printf("Test 2: %d, Output: %s, Result: %d\n", result, buffer, result);
+
+  // Тест 3: Ноль
+  result = sprintf(buffer, "%.0d", 0);
+  printf("Test 3: %d, Output: %s, Result: %d\n", result, buffer, result);
+  result = s21_sprintf(buffer, "%.0d", 0);
+  printf("Test 3: %d, Output: %s, Result: %d\n", result, buffer, result);
+
+  // Тест 6: Положительное число с ведущими нулями
+  result = sprintf(buffer, "%.5d", 42);
+  printf("Test 6: %d, Output: %s, Result: %d\n", result, buffer, result);
+  result = s21_sprintf(buffer, "%.5d", 42);
+  printf("Test 6: %d, Output: %s, Result: %d\n", result, buffer, result);
+
+  // Тест 7: Отрицательное число с ведущими нулями
+  result = sprintf(buffer, "%05d", -42);
+  printf("Test 7: %d, Output: %s, Result: %d\n", result, buffer, result);
+  result = s21_sprintf(buffer, "%05d", -42);
+  printf("Test 7: %d, Output: %s, Result: %d\n", result, buffer, result);
+
+  // Тест 8: Положительное число с пробелами
+  result = sprintf(buffer, "% d", 42);
+  printf("Test 8: %d, Output: %s, Result: %d\n", result, buffer, result);
+  result = s21_sprintf(buffer, "% d", 42);
+  printf("Test 8: %d, Output: %s, Result: %d\n", result, buffer, result);
+  // Тест 9: Отрицательное число с пробелами
+  result = sprintf(buffer, "% d", -42);
+  printf("Test 9: %d, Output: %s, Result: %d\n", result, buffer, result);
+  result = s21_sprintf(buffer, "% d", -42);
+  printf("Test 9: %d, Output: %s, Result: %d\n", result, buffer, result);
+
+  // Тест 10: Положительное число с шириной
+  result = sprintf(buffer, "%10d", 42);
+  printf("Test 10: %d, Output: %s, Result: %d\n", result, buffer, result);
+  result = s21_sprintf(buffer, "%10d", 42);
+  printf("Test 10: %d, Output: %s, Result: %d\n", result, buffer, result);
+
+  result = sprintf(buffer, "%+d", 42);
+  printf("Test 11: %d, Output: %s, Result: %d\n", result, buffer, result);
+  result = s21_sprintf(buffer, "%+d", 42);
+  printf("Test 11: %d, Output: %s, Result: %d\n", result, buffer, result);
+
+  int p = 0;
+  result = sprintf(buffer, "%+d", -42);
+  printf("Test 12: %d, Output: %s, Result: %d\n", result, buffer, result);
+  result = s21_sprintf(buffer, "%+d", -42);
+  printf("Test 12: %d, Output: %s, Result: %d\n", result, buffer, result);
+  printf("%d\n", p);
+
   char buffer1[50];
   float test_values[10] = {
       0,      1.2345,  -1.2345,          12345.6789,        -12345.6789,
       0.0001, -0.0001, 123456789.123456, -123456789.123456, 3.141592653589793};
+
+  long double ld = 5;
+  for (int i = 0; i != 400; ++i) ld *= 10;
+  sprintf(buffer1, "%.0Lf", ld);
+  printf("Test : %s\n", buffer1);
+  s21_sprintf(buffer1, "%Lf", ld);
+  printf("Test : %s\n", buffer1);
 
   for (int i = 0; i < 10; i++) {
     sprintf(buffer1, "%e", test_values[i]);
@@ -392,6 +445,7 @@ int main() {
 
   return 0;
 }
+*/
 
 // int main(void) {
 // // Тест 1: Поиск подстроки, которая есть в строке

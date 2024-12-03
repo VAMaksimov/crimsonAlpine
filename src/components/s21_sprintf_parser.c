@@ -25,12 +25,12 @@ void precision_parser(const char **p, format_value *values, va_list factor) {
     values->precision_value = number_parser(p);
 }
 
-void length_parser(const char *p, format_value *values) {
-  if (*p == 'l' && *(p + 1) == 'l') {
-    ++p;
+void length_parser(const char **p, format_value *values) {
+  if (**p == 'l' && *(*p + 1) == 'l') {
+    ++(*p);
     values->length_value = LONG_DOUBLE_LENGTH;
-  } else if (*p == 'l')
+  } else if (**p == 'l')
     values->length_value = LONG_INT_LENGTH;
-  else if (*p == 'h')
+  else if (**p == 'h')
     values->length_value = SHORT_INT_LENGTH;
 }

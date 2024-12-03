@@ -7,7 +7,6 @@
 #include <stdio.h>
 
 #define size_t long unsigned int
-#define NULL ((void *)0)
 #define bool _Bool
 #define true 1
 #define false 0
@@ -51,6 +50,8 @@ typedef struct {
   char specifier_value;
 } format_value;
 
+char *s21_strerror(int errnum);
+
 char *s21_strstr(const char *haystack, const char *needle);
 char *s21_strchr(const char *str, int c);
 char *s21_strrchr(const char *str, int c);
@@ -73,7 +74,7 @@ char *s21_strncat(char *dest, const char *src, size_t n);
 int number_parser(const char **p);
 void width_parser(const char **p, format_value *values, va_list factor);
 void precision_parser(const char **p, format_value *values, va_list factor);
-void length_parser(const char *p, format_value *values);
+void length_parser(const char **p, format_value *values);
 
 int s21_sprintf(char *buffer, const char *format, ...);
 

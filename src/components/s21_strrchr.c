@@ -14,5 +14,6 @@ char *s21_strrchr(const char *str, int c) {
     if (*str == c) last_occurrence = str;
     str++;
   }
+  if (*str == c) last_occurrence = str;
   return (char *)last_occurrence;
 }

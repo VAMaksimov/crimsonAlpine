@@ -72,13 +72,13 @@ gcov_report: test
 	genhtml coverage.info --output-directory html_report
 
 clean:
-	rm -rf $(OBJ_DIR) $(OBJ_TEST_DIR) $(LIBRARY) $(TEST_EXEC) $(COMPILED_TESTS) coverage.info  *.gcda *.gcno
+	rm -rf $(BUILD_DIR) $(OBJ_TEST_DIR) $(LIBRARY) $(TEST_EXEC) $(COMPILED_TESTS) coverage.info  *.gcda *.gcno
 
 rebuild: clean all
 
 # write valgrind!!!
 valgrind:
-
+	valgrind --leak-check=full ./$(TEST_EXEC)
 
 # ---
 # old

@@ -9,7 +9,8 @@
  */
 char *s21_strtok(char *str, const char *delim) {
   if (str == NULL || delim == NULL) return NULL;
-  char *src = str, *dst = str;
+  char *src = str;
+  char *dst;
   // Skip over the delimiter characters at the beginning of the string.
   while (*src != '\0' && s21_strchr(delim, *src) != NULL) src++;
   if (*src == '\0') {

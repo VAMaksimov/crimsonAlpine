@@ -11,9 +11,10 @@
  */
 char *s21_strerror(int errnum) {
   char *result = NULL;
+  char unknown_result[25];
   if (errnum < 0 || errnum >= ERR_MSG_AMOUNT) {
-    printf("Unknown error: %d", errnum);
-    result = "";
+    s21_sprintf(unknown_result, "Unknown error: %d", errnum);
+    result = unknown_result;
   } else {
 #ifdef __APPLE__
     result = mac_error_messages[errnum];
@@ -21,6 +22,5 @@ char *s21_strerror(int errnum) {
     result = linux_error_messages[errnum];
 #endif
   }
-
   return result;
 }
