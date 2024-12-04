@@ -74,7 +74,7 @@ START_TEST(strcspn_single_character_no_match) {
 }
 END_TEST
 
-START_TEST(strcspn_first_character_match) {
+START_TEST(strcspn_first_character_matches) {
     assert_strcspn("abc", "b"); 
 }
 END_TEST
@@ -117,7 +117,7 @@ Suite *test_strcspn(void) {
     tcase_add_test(tc, strcspn_partial_non_matching);
     tcase_add_test(tc, strcspn_single_character_matching_exact);
     tcase_add_test(tc, strcspn_single_character_no_match);
-    tcase_add_test(tc, strcspn_first_character_match);
+    tcase_add_test(tc, strcspn_first_character_matches);
     tcase_add_test(tc, strcspn_second_string_in_first);
     tcase_add_test(tc, strcspn_repeated_characters);
     tcase_add_test(tc, strcspn_no_match_in_set);
