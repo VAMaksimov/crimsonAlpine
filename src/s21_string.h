@@ -11,11 +11,11 @@
 #define true 1
 #define false 0
 
-#define LEFT_JUSTIFY_FLAG '-'
-#define SIGN_PRECEDENCE_FLAG '+'
-#define NO_SIGN_FLAG ' '
-#define HASH_FLAG '#'
-#define ZERO_PADDING_FLAG '0'
+#define LEFT_JUSTIFY_FLAG 1     //'-'
+#define SIGN_PRECEDENCE_FLAG 2  //'+'
+#define NO_SIGN_FLAG 4          //' '
+#define HASH_FLAG 8             //'#'
+#define ZERO_PADDING_FLAG 16    //'0'
 
 #define SHORT_INT_LENGTH 'h'
 #define LONG_INT_LENGTH 'l'
