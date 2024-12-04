@@ -23,8 +23,14 @@ void itoa_for_zero(void *c, char *buffer, size_t *index, format_value values) {
 
 void ctoa(void *c, char *buffer, size_t *index, format_value values) {
   if (values.precision_exist) values.precision_value = 0;
-  int *i = (int *)c;
-  buffer[(*index)++] = *i;
+  if (values.length_value != LONG_INT_LENGTH) {
+    unsigned long int *i = (unsigned long int *)c;
+    buffer[(*index)++] = *i;
+  } else {
+    unsigned long int n = *(unsigned long int *)c;
+    for (int j = 7; j >= 0; --j)
+      if ((n >> (j * 8)) & 0xFF) buffer[(*index)++] = (n >> (j * 8)) & 0xFF;
+  }
 }
 
 void integer_ftoa(const long double *c, char *buffer, size_t *index) {
@@ -158,7 +164,7 @@ void format_flag_(char *buffer, size_t *index, format_value values, void *c,
   }
   if (sign == '-' || values.flag_value == SIGN_PRECEDENCE_FLAG)
     buffer[(*index)++] = sign;
-  if (values.flag_value == NO_SIGN_FLAG)
+  if (values.flag_value == NO_SIGN_FLAG && sign != ' ')
     if (sign != '-') buffer[(*index)++] = ' ';
   if (values.flag_value == HASH_FLAG) {
     flag_hash_execusion(buffer, index, values.specifier_value);
@@ -183,9 +189,19 @@ void format_flag_(char *buffer, size_t *index, format_value values, void *c,
 
 void formated_char(char *buffer, size_t *index, va_list factor,
                    format_value values) {
-  char c = va_arg(factor, int);
+  unsigned long int c;
+  long len = 1;
+  if (!values.length_value) c = (unsigned long int)va_arg(factor, int);
+  if (values.length_value == SHORT_INT_LENGTH)
+    c = (unsigned long int)va_arg(factor, int);
+  if (values.length_value == LONG_INT_LENGTH) {
+    c = va_arg(factor, unsigned long int);
+    len = (int)(c / 255) + 1;
+  }
+  if (values.flag_value == ZERO_PADDING_FLAG) values.flag_value = 0;
+  if (values.flag_value == SIGN_PRECEDENCE_FLAG) values.flag_value = 0;
   if (values.precision_exist) values.precision_value = 0;
-  format_flag_(buffer, index, values, &c, 1, ' ', ctoa);
+  format_flag_(buffer, index, values, &c, len, ' ', ctoa);
 }
 
 void formated_int(char *buffer, size_t *index, va_list factor,
@@ -228,7 +244,7 @@ void formated_string(char *buffer, size_t *index, va_list factor,
   size_t len = s21_strlen(v);
   if (values.precision_exist)
     len = values.precision_value > len ? len : values.precision_value;
-  s21_memcpy(buffer, v, len);
+  s21_strncpy(buffer + *index, v, len);
   *index += len;
 }
 
@@ -310,9 +326,8 @@ void format_execusion(char *buffer, size_t *index, format_value values,
 const char *format_parser(char *buffer, size_t *index, const char *p,
                           va_list factor, format_value values) {
   while (!values.specifier_value) {
-    if (*p == '%') {
-      buffer[(*index)++] = '%';
-    } else if (s21_strchr("-+ #0", *p))
+    if (values.flag_value != '-' && values.flag_value != '+' &&
+        s21_strchr("-+ #0", *p))
       values.flag_value = *p;
     else if (s21_strchr("123456789*", *p))
       width_parser(&p, &values, factor);
@@ -346,7 +361,7 @@ int s21_sprintf(char *buffer, const char *format, ...) {
 
   va_end(factor);
   buffer[index] = '\0';
-  return (int)s21_strlen(buffer);
+  return index;  //(int)s21_strlen(buffer);
 }
 
 /*
