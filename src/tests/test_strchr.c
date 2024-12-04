@@ -1,75 +1,62 @@
 #include "test_me.h"
 
-START_TEST(strchr_1) {
-  char s[] = "Hello, world!";
-  int ch = 'h';
-  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+void assert_strchr(const char *str, int ch) {
+    ck_assert_pstr_eq(strchr(str, ch), s21_strchr(str, ch));
+}
+
+START_TEST(strchr_lowercase_letter) {
+    assert_strchr("Hello, world!", 'h');
 }
 END_TEST
 
-START_TEST(strchr_2) {
-  char s[] = "Hello, world!";
-  int ch = '\0';
-  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+START_TEST(strchr_null_character) {
+    assert_strchr("Hello, world!", '\0');
 }
 END_TEST
 
-START_TEST(strchr_3) {
-  char s[] = "Hello, world!";
-  int ch = ',';
-  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+START_TEST(strchr_comma) {
+    assert_strchr("Hello, world!", ',');
 }
 END_TEST
 
-START_TEST(strchr_4) {
-  char s[] = "Hello, world!";
-  int ch = 33;
-  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+START_TEST(strchr_nonexistent_character) {
+    assert_strchr("Hello, world!", 33);
 }
 END_TEST
 
-START_TEST(strchr_5) {
-  char s[] = "Hello, Polina!";
-  int ch = 'P';
-  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+START_TEST(strchr_uppercase_letter) {
+    assert_strchr("Hello, Polina!", 'P');
 }
 END_TEST
 
-START_TEST(strchr_6) {
-  char s[] = "Hello, world!";
-  int ch = 'w';
-  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+START_TEST(strchr_existing_letter) {
+    assert_strchr("Hello, world!", 'w');
 }
 END_TEST
 
-START_TEST(strchr_7) {
-  char s[] = "Hello, world!";
-  int ch = '0';
-  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+START_TEST(strchr_digit) {
+    assert_strchr("Hello, world!", '0');
 }
 END_TEST
 
-START_TEST(strchr_8) {
-  char s[] = "Hello, world!";
-  int ch = 'm';
-  ck_assert_pstr_eq(strchr(s, ch), s21_strchr(s, ch));
+START_TEST(strchr_last_letter) {
+    assert_strchr("Hello, world!", 'm');
 }
 END_TEST
 
 Suite *test_strchr(void) {
-  Suite *s = suite_create("\033[45m-=S21_STRCHR=-\033[0m");
-  TCase *tc = tcase_create("strchr_tc");
+    Suite *s = suite_create("\033[45m-=S21_STRCHR=-\033[0m");
+    TCase *tc = tcase_create("strchr_tc");
 
-  suite_add_tcase(s, tc);
-  tcase_add_test(tc, strchr_1);
-  tcase_add_test(tc, strchr_2);
-  tcase_add_test(tc, strchr_3);
-  tcase_add_test(tc, strchr_4);
-  tcase_add_test(tc, strchr_5);
-  tcase_add_test(tc, strchr_6);
-  tcase_add_test(tc, strchr_7);
-  tcase_add_test(tc, strchr_8);
+    tcase_add_test(tc, strchr_lowercase_letter);
+    tcase_add_test(tc, strchr_null_character);
+    tcase_add_test(tc, strchr_comma);
+    tcase_add_test(tc, strchr_nonexistent_character);
+    tcase_add_test(tc, strchr_uppercase_letter);
+    tcase_add_test(tc, strchr_existing_letter);
+    tcase_add_test(tc, strchr_digit);
+    tcase_add_test(tc, strchr_last_letter);
 
-  suite_add_tcase(s, tc);
-  return s;
+    suite_add_tcase(s, tc);
+    return s;
 }
