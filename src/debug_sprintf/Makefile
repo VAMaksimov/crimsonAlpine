@@ -1,6 +1,6 @@
 EXEC = s21_sprintf
 SRCS = $(wildcard *.c)
-LDFLAGS_TEST = -g -fdiagnostics-color=always -lcheck -lm
+LDFLAGS_TEST = -g -fdiagnostics-color=always -lcheck -lm -lsubunit
 
 all: debug
 
