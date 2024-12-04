@@ -14,8 +14,8 @@ void *insert(const char *src, const char *str, size_t start_index) {
 
     s21_strncpy(new_str, src, start_index);
     new_str[start_index] = '\0';
-    s21_strcat(new_str, str);
-    s21_strcat(new_str, src + start_index);
+    s21_strncat(new_str, str, str_len);
+    s21_strncat(new_str, src + start_index, src_len - start_index);
 
     return new_str;
 }
