@@ -5,6 +5,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define size_t long unsigned int
 #define bool _Bool
@@ -66,10 +67,10 @@ int s21_memcmp(const void *str1, const void *str2, size_t n);
 void *s21_memcpy(void *dest, const void *src, size_t n);
 void *s21_memset(void *str, int c, size_t n);
 char *s21_strncat(char *dest, const char *src, size_t n);
-// void *s21_to_lower(const char *str);
-// void *s21_to_upper(const char *str);
-// char *s21_trim(const char *src, const char *trim_chars);
-// char *s21_insert(const char *src, const char *str, size_t start_index);
+void *s21_to_lower(const char *str);
+void *s21_to_upper(const char *str);
+void *s21_trim(const char *src, const char *trim_chars);
+void *s21_insert(const char *src, const char *str, size_t start_index);
 
 int number_parser(const char **p);
 void width_parser(const char **p, format_value *values, va_list factor);

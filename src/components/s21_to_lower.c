@@ -1,5 +1,5 @@
 #include "../s21_string.h"
-void *to_lower(const char *str) {
+void *s21_to_lower(const char *str) {
     char *result = NULL;
     if (str == NULL) return NULL;
     result = (char*)malloc(s21_strlen(str) + 1);
