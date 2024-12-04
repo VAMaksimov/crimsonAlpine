@@ -156,11 +156,12 @@ void format_flag_(char *buffer, size_t *index, format_value values, void *c,
                   void (*write_to_buffer)(void *c, char *buffer, size_t *index,
                                           format_value values)) {
   char b = ' ';
-  if (values.width_value > (int)len &&
+  int new_len = len > values.precision_value ? len : values.precision_value;
+  if (values.width_value > new_len &&
       !(values.flag_value == LEFT_JUSTIFY_FLAG) &&
       !(values.flag_value == ZERO_PADDING_FLAG)) {
-    s21_memset(buffer + (*index), b, values.width_value - len);
-    *index += values.width_value - len;
+    s21_memset(buffer + (*index), b, values.width_value - new_len);
+    *index += values.width_value - new_len;
   }
   if (sign == '-' || values.flag_value == SIGN_PRECEDENCE_FLAG)
     buffer[(*index)++] = sign;
@@ -169,21 +170,24 @@ void format_flag_(char *buffer, size_t *index, format_value values, void *c,
   if (values.flag_value == HASH_FLAG) {
     flag_hash_execusion(buffer, index, values.specifier_value);
   }
-  if (values.flag_value == ZERO_PADDING_FLAG || values.precision_value != 0) {
-    if (values.width_value > (int)len && values.specifier_value != FLOAT_SPEC) {
-      s21_memset(buffer + (*index), '0', values.width_value - len);
-      *index += values.width_value - len;
-    } else if (values.precision_value > len &&
-               values.specifier_value != FLOAT_SPEC) {
+  if (values.flag_value == ZERO_PADDING_FLAG) {
+    if (values.width_value > new_len && values.specifier_value != FLOAT_SPEC &&
+        values.flag_value != '-') {
+      s21_memset(buffer + (*index), '0', values.width_value - new_len);
+      *index += values.width_value - new_len;
+    }
+  }
+  if (values.precision_value != 0) {
+    if (values.precision_value > len && values.specifier_value != FLOAT_SPEC) {
       if (sign == '-') values.precision_value += 1;
       s21_memset(buffer + (*index), '0', values.precision_value - len);
       *index += values.precision_value - len;
     }
   }
   write_to_buffer(c, buffer, index, values);
-  if (values.flag_value == '-' && values.width_value > (int)len) {
-    s21_memset(buffer + (*index), b, values.width_value - len);
-    *index += values.width_value - len;
+  if (values.flag_value == '-' && values.width_value > new_len) {
+    s21_memset(buffer + (*index), b, values.width_value - new_len);
+    *index += values.width_value - new_len;
   }
 }
 
@@ -231,11 +235,27 @@ void formated_uint(char *buffer, size_t *index, va_list factor,
   if (values.length_value == LONG_INT_LENGTH) v = va_arg(factor, unsigned long);
   if (values.length_value == LONG_LONG_INT_LENGTH)
     v = va_arg(factor, unsigned long long);
+  if (values.flag_value == SIGN_PRECEDENCE_FLAG ||
+      values.flag_value == NO_SIGN_FLAG)
+    values.flag_value = 0;
   if (v != 0) {
-    size_t len = ((size_t)log10(v)) + 1UL;
+    size_t len = 1;
+    if (values.specifier_value == OCTAL_SPEC)
+      len += (size_t)((log(v) / log(8)));
+    else if (values.specifier_value == x_SPEC ||
+             values.specifier_value == X_SPEC)
+      len += (size_t)((log(v) / log(16)));
+    else
+      len += ((size_t)log10(v));
+    if (values.flag_value == HASH_FLAG && values.specifier_value == OCTAL_SPEC)
+      ++len;
     format_flag_(buffer, index, values, &v, len, '+', itoa);
-  } else
-    format_flag_(buffer, index, values, &v, 1, '+', itoa_for_zero);
+  } else {
+    int len = 1;
+    if (values.precision_exist && values.precision_value == 0) len = 0;
+    values.flag_value = 0;
+    format_flag_(buffer, index, values, &v, len, '+', itoa_for_zero);
+  }
 }
 
 void formated_string(char *buffer, size_t *index, va_list factor,
