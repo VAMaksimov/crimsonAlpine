@@ -1,105 +1,138 @@
 #include "test_me.h"
 
-void assert_strncat(const char *s1, const char *s2, s21_size_t n) {
-  char tmp_s1[100];
-  char tmp_s2[100];
-  strcpy(tmp_s1, s1);
-  strcpy(tmp_s2, s2);
-  ck_assert_pstr_eq(strncat(tmp_s1, s2, n), s21_strncat(tmp_s2, s2, n));
-}
-
-START_TEST(strncat_basic_test) {
-  assert_strncat("Hello, world!", "Hello, world!", 1);
+START_TEST(strncat_1) {
+  char s1[30] = "Hello, world!";
+  char s2[30] = "Hello, world!";
+  char s3[] = "Hello, world!";
+  s21_size_t n = 1;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
-START_TEST(strncat_empty_append) {
-  assert_strncat("Hello, world!", "\0", 1);
+START_TEST(strncat_2) {
+  char s1[30] = "Hello, world!";
+  char s2[30] = "Hello, world!";
+  char s3[] = "\0";
+  s21_size_t n = 1;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
-START_TEST(strncat_special_chars) {
-  assert_strncat("Hello, world!", "\n\0\\d\f\\g\7", 3);
+START_TEST(strncat_3) {
+  char s1[30] = "Hello, world!";
+  char s2[30] = "Hello, world!";
+  char s3[] = "\n\0\\d\f\\g\7";
+  s21_size_t n = 3;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
-START_TEST(strncat_zero_append) {
-  assert_strncat("Hello, world!", "", 0);
+START_TEST(strncat_4) {
+  char s1[30] = "Hello, world!";
+  char s2[30] = "Hello, world!";
+  char s3[] = "";
+  s21_size_t n = 0;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
-START_TEST(strncat_full_append) {
-  assert_strncat("", "Hello, world!", 13);
+START_TEST(strncat_5) {
+  char s1[30] = "";
+  char s2[30] = "";
+  char s3[] = "Hello, world!";
+  s21_size_t n = 13;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
-START_TEST(strncat_large_append) {
-  assert_strncat("Hello, world!", "My name is Polina. I hate this, maybe I'm not supposed for this.", 6);
+START_TEST(strncat_6) {
+  char s1[100] = "Hello, world!";
+  char s2[100] = "Hello, world!";
+  char s3[] =
+      "My name is Polina. I hate this, maybe I'm not supposed for this.";
+  s21_size_t n = 6;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
-START_TEST(strncat_partial_append) {
-  assert_strncat("", "Hello, world!", 3);
+START_TEST(strncat_7) {
+  char s1[30] = "";
+  char s2[30] = "";
+  char s3[] = "Hello, world!";
+  s21_size_t n = 3;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
-START_TEST(strncat_small_n) {
-  assert_strncat("Hello, world!", "My name is Polina.", 2);
+START_TEST(strncat_8) {
+  char s1[100] = "Hello, world!";
+  char s2[100] = "Hello, world!";
+  char s3[] = "My name is Polina.";
+  s21_size_t n = 2;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
-START_TEST(strncat_zero_length) {
-  assert_strncat("", "", 10);
+START_TEST(strncat_9) {
+  char s1[100] = "";
+  char s2[100] = "";
+  char s3[] = "";
+  s21_size_t n = 10;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
-START_TEST(strncat_null_character_in_string) {
-  assert_strncat("Hello\0, world!", "My name is\0 Polina.", 15);
+START_TEST(strncat_10) {
+  char s1[100] = "Hello\0, world!";
+  char s2[100] = "Hello\0, world!";
+  char s3[] = "My name is\0 Polina.";
+  s21_size_t n = 15;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
-START_TEST(strncat_append_null) {
-  assert_strncat("Hello, world!", "\0", 1);
+START_TEST(strncat_11) {
+  char s1[100] = "Hello, world!";
+  char s2[100] = "Hello, world!";
+  char s3[] = "\0";
+  s21_size_t n = 1;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
-START_TEST(strncat_zero_n) {
-  assert_strncat("Hello, world!", "\0", 0);
+START_TEST(strncat_12) {
+  char s1[100] = "Hello, world!";
+  char s2[100] = "Hello, world!";
+  char s3[] = "\0";
+  s21_size_t n = 0;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
-START_TEST(strncat_multiple_nulls) {
-  assert_strncat("Hello, world!", "\0\0\0\0", 4);
+START_TEST(strncat_13) {
+  char s1[100] = "Hello, world!";
+  char s2[100] = "Hello, world!";
+  char s3[] = "\0\0\0\0";
+  s21_size_t n = 4;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
-START_TEST(strncat_small_string_append) {
-  assert_strncat("Hello, world!", "", 2);
+START_TEST(strncat_14) {
+  char s1[100] = "Hello, world!";
+  char s2[100] = "Hello, world!";
+  char s3[] = "";
+  s21_size_t n = 2;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
-START_TEST(strncat_zero_append_test) {
-  assert_strncat("Hello, world!\0\0\0", "My name is Polina.", 0);
-}
-END_TEST
-
-START_TEST(strncat_edge_max_length) {
-  assert_strncat("Hello, world!", "A long string that we are appending.", 10000);
-}
-END_TEST
-
-START_TEST(strncat_overflow_case) {
-  assert_strncat("Hello, ", "world!", 10);
-}
-END_TEST
-
-START_TEST(strncat_large_n) {
-  assert_strncat("Hello, world!", "test", 100);
-}
-END_TEST
-
-START_TEST(strncat_n_equals_zero) {
-  assert_strncat("Hello, world!", "test", 0);
+START_TEST(strncat_15) {
+  char s1[100] = "Hello, world!\0\0\0";
+  char s2[100] = "Hello, world!\0\0\0";
+  char s3[] = "My name is Polina.";
+  s21_size_t n = 0;
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 END_TEST
 
@@ -108,25 +141,21 @@ Suite *test_strncat(void) {
   TCase *tc = tcase_create("strncat_tc");
 
   suite_add_tcase(s, tc);
-  tcase_add_test(tc, strncat_basic_test);
-  tcase_add_test(tc, strncat_empty_append);
-  tcase_add_test(tc, strncat_special_chars);
-  tcase_add_test(tc, strncat_zero_append);
-  tcase_add_test(tc, strncat_full_append);
-  tcase_add_test(tc, strncat_large_append);
-  tcase_add_test(tc, strncat_partial_append);
-  tcase_add_test(tc, strncat_small_n);
-  tcase_add_test(tc, strncat_zero_length);
-  tcase_add_test(tc, strncat_null_character_in_string);
-  tcase_add_test(tc, strncat_append_null);
-  tcase_add_test(tc, strncat_zero_n);
-  tcase_add_test(tc, strncat_multiple_nulls);
-  tcase_add_test(tc, strncat_small_string_append);
-  tcase_add_test(tc, strncat_zero_append_test);
-  tcase_add_test(tc, strncat_edge_max_length);
-  tcase_add_test(tc, strncat_overflow_case);
-  tcase_add_test(tc, strncat_large_n);
-  tcase_add_test(tc, strncat_n_equals_zero);
+  tcase_add_test(tc, strncat_1);
+  tcase_add_test(tc, strncat_2);
+  tcase_add_test(tc, strncat_3);
+  tcase_add_test(tc, strncat_4);
+  tcase_add_test(tc, strncat_5);
+  tcase_add_test(tc, strncat_6);
+  tcase_add_test(tc, strncat_7);
+  tcase_add_test(tc, strncat_8);
+  tcase_add_test(tc, strncat_9);
+  tcase_add_test(tc, strncat_10);
+  tcase_add_test(tc, strncat_11);
+  tcase_add_test(tc, strncat_12);
+  tcase_add_test(tc, strncat_13);
+  tcase_add_test(tc, strncat_14);
+  tcase_add_test(tc, strncat_15);
 
   suite_add_tcase(s, tc);
   return s;

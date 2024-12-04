@@ -11,7 +11,7 @@
  */
 char *s21_strerror(int errnum) {
   char *result = NULL;
-  char unknown_result[25];
+  char unknown_result[100];
   if (errnum < 0 || errnum >= ERR_MSG_AMOUNT) {
     s21_sprintf(unknown_result, "Unknown error: %d", errnum);
     result = unknown_result;
