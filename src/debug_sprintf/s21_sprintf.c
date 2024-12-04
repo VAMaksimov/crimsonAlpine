@@ -207,8 +207,9 @@ void format_flag_(char *buffer, size_t *index, format_value values, void *c,
   }
   if (sign == '-' || values.flag_value & SIGN_PRECEDENCE_FLAG)
     buffer[(*index)++] = sign;
-  if (values.flag_value & NO_SIGN_FLAG && sign != ' ')
+  if (values.flag_value & NO_SIGN_FLAG && sign != ' ') {
     if (sign != '-') buffer[(*index)++] = ' ';
+  }
   if (values.flag_value & HASH_FLAG) {
     flag_hash_execusion(buffer, index, values.specifier_value);
   }
@@ -262,7 +263,10 @@ void formated_int(char *buffer, size_t *index, va_list factor,
   if (v != 0) {
     size_t len = 1;
     char sign = '+';
-    if (v < 0) v = -v, ++len, sign = '-';
+    if (v < 0)
+      v = -v, ++len, sign = '-';
+    else if (values.flag_value & NO_SIGN_FLAG)
+      ++len;
     len += ((size_t)log10(v));
     unsigned long long r = v;
     format_flag_(buffer, index, values, &r, len, sign, itoa);
@@ -477,15 +481,6 @@ int main(void) {
     srunner_free(sr);
   }
   printf("========= FAILED: %d =========\n", failed);
-  char str1[200];
-  char str2[200];
-  char *str3 = "%p Test %3.p Test %5.7p TEST %10p %#p %-p %+p %.p % .p";
-  char *val = 0;
-  sprintf(str1, str3, val, val, val, val, val, val, val, val, val);
-  printf("%s\n", str1);
-  s21_sprintf(str2, str3, val, val, val, val, val, val, val, val, val);
-  printf("%s\n", str2);
-  return failed == 0 ? 0 : 1;
 }
 
 /*
