@@ -13,6 +13,6 @@
 void *s21_memset(void *str, int c, size_t n) {
   if (str == NULL) return NULL;
   char *p = (char *)str;
-  while (n-- && *p != '\0') *p++ = (char)c;
+  while (n--) *p++ = (char)c;
   return str;
 }

@@ -10,6 +10,9 @@
 
 #include "../s21_string.h"
 
+#define s21_size_t long unsigned int
+#define S21_NULL NULL
+
 Suite *test_memchr(void);
 Suite *test_memcmp(void);
 Suite *test_memcpy(void);

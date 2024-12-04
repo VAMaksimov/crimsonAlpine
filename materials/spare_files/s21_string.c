@@ -1,17 +1,3 @@
-#include "s21_string.h"
-
-typedef struct {
-  bool flag_exist;
-  bool width_exist;
-  bool precision_exist;
-  bool length_exist;
-  bool specifier_exist;
-  char flag_value;
-  int width_value;
-  size_t precision_value;
-  char length_value;
-  char specifier_value;
-} format_value;
 
 int number_parser(const char **p) {
   int res = 0;
@@ -73,14 +59,16 @@ void itoa(void *c, char *buffer, size_t *index, format_value values) {
 }
 
 void itoa_for_zero(void *c, char *buffer, size_t *index, format_value values) {
-  if (values.precision_exist && values.precision_value == 0) return;
+  if (values.precision_exist && values.precision_value == 0)
+    return;
   unsigned int n = *(unsigned int *)c;
   buffer[(*index)] = '0' + n;
   buffer[(*index)++] = '0';
 }
 
 void ctoa(void *c, char *buffer, size_t *index, format_value values) {
-  if (values.precision_exist) values.precision_value = 0;
+  if (values.precision_exist)
+    values.precision_value = 0;
   int *i = (int *)c;
   buffer[(*index)++] = *i;
 }
@@ -88,7 +76,8 @@ void ctoa(void *c, char *buffer, size_t *index, format_value values) {
 void integer_ftoa(long double *c, char *buffer, size_t *index) {
   long double v = *c;
   int len_v = 0;
-  if (truncl(v) != 0) len_v = ((int)log10l(v));
+  if (truncl(v) != 0)
+    len_v = ((int)log10l(v));
   for (int i = len_v; i >= 0; --i) {
     buffer[(*index) + i] = ((int)fmodl(v, 10)) + '0';
     v /= 10;
@@ -187,7 +176,8 @@ void etoa(void *c, char *buffer, size_t *index, format_value values) {
   round_ftoa(&v, buffer, index);
   buffer[(*index)++] = values.specifier_value;
   buffer[(*index)++] = e < 0 ? '-' : '+';
-  if (e < 0) e = -e;
+  if (e < 0)
+    e = -e;
   buffer[(*index)++] = '0';
   buffer[(*index)] = '0';
   long double e_copy = e;
@@ -216,9 +206,11 @@ void format_flag_(char *buffer, size_t *index, format_value values, void *c,
     s21_memset(buffer + (*index), b, values.width_value - len);
     *index += values.width_value - len;
   }
-  if (sign == '-' || values.flag_value == '+') buffer[(*index)++] = sign;
+  if (sign == '-' || values.flag_value == '+')
+    buffer[(*index)++] = sign;
   if (values.flag_value == ' ')
-    if (sign != '-') buffer[(*index)++] = ' ';
+    if (sign != '-')
+      buffer[(*index)++] = ' ';
   if (values.flag_value == '#') {
     flag_hash_execusion(buffer, index, values.specifier_value);
   }
@@ -227,7 +219,8 @@ void format_flag_(char *buffer, size_t *index, format_value values, void *c,
       s21_memset(buffer + (*index), '0', values.width_value - len);
       *index += values.width_value - len;
     } else if (values.precision_value > len && values.specifier_value != 'f') {
-      if (sign == '-') values.precision_value += 1;
+      if (sign == '-')
+        values.precision_value += 1;
       s21_memset(buffer + (*index), '0', values.precision_value - len);
       *index += values.precision_value - len;
     }
@@ -242,22 +235,29 @@ void format_flag_(char *buffer, size_t *index, format_value values, void *c,
 void formated_char(char *buffer, size_t *index, va_list factor,
                    format_value values) {
   char c = va_arg(factor, int);
-  if (values.precision_exist) values.precision_value = 0;
+  if (values.precision_exist)
+    values.precision_value = 0;
   format_flag_(buffer, index, values, &c, 1, ' ', ctoa);
 }
 
 void formated_int(char *buffer, size_t *index, va_list factor,
                   format_value values) {
   long long v = 0;
-  if (!values.length_exist) v = va_arg(factor, int);
-  if (values.length_value == 'h') v = va_arg(factor, int);
-  if (values.length_value == 'l') v = va_arg(factor, long);
-  if (values.length_value == ll) v = va_arg(factor, long long);
+  if (!values.length_exist)
+    v = va_arg(factor, int);
+  if (values.length_value == 'h')
+    v = va_arg(factor, int);
+  if (values.length_value == 'l')
+    v = va_arg(factor, long);
+  if (values.length_value == ll)
+    v = va_arg(factor, long long);
   if (v != 0) {
     size_t len = 1;
     char sign = v < 0 ? '-' : '+';
-    if (v != 0) len = ((size_t)log10(v < 0 ? -v : v)) + 1;
-    if (v < 0) v = -v, ++len;
+    if (v != 0)
+      len = ((size_t)log10(v < 0 ? -v : v)) + 1;
+    if (v < 0)
+      v = -v, ++len;
     unsigned long long r = v;
     format_flag_(buffer, index, values, &r, len, sign, itoa);
   } else
@@ -267,14 +267,19 @@ void formated_int(char *buffer, size_t *index, va_list factor,
 void formated_uint(char *buffer, size_t *index, va_list factor,
                    format_value values) {
   unsigned long long v = 0;
-  if (!values.length_exist) v = va_arg(factor, unsigned int);
-  if (values.length_value == 'h') v = va_arg(factor, unsigned int);
-  if (values.length_value == 'l') v = va_arg(factor, unsigned long);
-  if (values.length_value == ll) v = va_arg(factor, unsigned long long);
+  if (!values.length_exist)
+    v = va_arg(factor, unsigned int);
+  if (values.length_value == 'h')
+    v = va_arg(factor, unsigned int);
+  if (values.length_value == 'l')
+    v = va_arg(factor, unsigned long);
+  if (values.length_value == ll)
+    v = va_arg(factor, unsigned long long);
   if (v != 0) {
     size_t len = 1;
     char sign = '+';
-    if (v != 0) len = ((size_t)log10(v)) + 1UL;
+    if (v != 0)
+      len = ((size_t)log10(v)) + 1UL;
     format_flag_(buffer, index, values, &v, len, sign, itoa);
   } else
     format_flag_(buffer, index, values, &v, 1, '+', itoa_for_zero);
@@ -307,30 +312,40 @@ void formated_pointer(char *buffer, size_t *index, va_list factor,
 void formated_float(char *buffer, size_t *index, va_list factor,
                     format_value values) {
   long double v = 0;
-  if (!values.length_exist) v = va_arg(factor, double);
-  if (values.length_value == ll) v = va_arg(factor, long double);
-  if (!values.precision_exist) values.precision_value = 6;
+  if (!values.length_exist)
+    v = va_arg(factor, double);
+  if (values.length_value == ll)
+    v = va_arg(factor, long double);
+  if (!values.precision_exist)
+    values.precision_value = 6;
   size_t len = 1;
   if (values.precision_value != 0 || values.flag_value == '#')
     len += values.precision_value + 1;
   char sign = '+';
-  if (v < 0) v = -v, ++len, sign = '-';
-  if (roundl(v) != 0) len += ((size_t)log10l(v));
+  if (v < 0)
+    v = -v, ++len, sign = '-';
+  if (roundl(v) != 0)
+    len += ((size_t)log10l(v));
   format_flag_(buffer, index, values, &v, len, sign, ftoa);
 }
 
 void formated_exp(char *buffer, size_t *index, va_list factor,
                   format_value values) {
   long double v = 0;
-  if (!values.length_exist) v = va_arg(factor, double);
-  if (values.length_value == ll) v = va_arg(factor, long double);
-  if (!values.precision_exist) values.precision_value = 6;
+  if (!values.length_exist)
+    v = va_arg(factor, double);
+  if (values.length_value == ll)
+    v = va_arg(factor, long double);
+  if (!values.precision_exist)
+    values.precision_value = 6;
   size_t len = 1;
   if (values.precision_value != 0 || values.flag_value == '#')
     len += values.precision_value + 1;
   char sign = '+';
-  if (v < 0) v = -v, ++len, sign = '-';
-  if (roundl(v) != 0) len += ((size_t)log10l(v));
+  if (v < 0)
+    v = -v, ++len, sign = '-';
+  if (roundl(v) != 0)
+    len += ((size_t)log10l(v));
   len += 4;
   format_flag_(buffer, index, values, &v, len, sign, etoa);
 }
@@ -403,14 +418,15 @@ const char *format_parser(char *buffer, size_t *index, const char *p,
 }
 
 int s21_sprintf(char *buffer, const char *format, ...) {
-  if (format == NULL) return 0;
+  if (format == NULL)
+    return 0;
   const char *p = format;
   size_t index = 0;
   va_list factor;
   va_start(factor, format);
   bool flag = false;
   while (!flag) {
-    while (*p != '%' && *p != '\0') {  // Переписать на s21_strncpy
+    while (*p != '%' && *p != '\0') { // Переписать на s21_strncpy
       buffer[index++] = *p++;
     }
     if (p == NULL || *p == '\0')

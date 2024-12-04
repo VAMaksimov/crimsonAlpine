@@ -16,5 +16,6 @@ void *s21_memcpy(void *dest, const void *src, size_t n) {
   char *d = (char *)dest;
   const char *p = (const char *)src;
   while (n-- && *p != '\0') *d++ = *p++;  // the same as: *d = *s; d++; s++;
+  if (n == 0) *d = '\0';
   return dest;
 }

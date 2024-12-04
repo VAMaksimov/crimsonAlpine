@@ -14,5 +14,6 @@ char *s21_strncpy(char *dest, const char *src, size_t n) {
   char *d = dest;
   const char *p = src;
   while (n-- && *p != '\0') *d++ = *p++;  // the same as: *d = *s; d++; s++;
+  if (n == 0) *d = '\0';
   return dest;
 }

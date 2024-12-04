@@ -13,7 +13,7 @@
  * not found
  */
 void *s21_memchr(const void *str, int c, size_t n) {
-  if (str == NULL) return NULL;
+  if (str == NULL || n == 0) return NULL;
   char *p = (char *)str;
   while (n-- && *p != (char)c && *p != '\0') p++;
   return *p == c ? p : NULL;
