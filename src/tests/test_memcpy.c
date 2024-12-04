@@ -9,43 +9,48 @@ void assert_memcpy(const char *expected, const char *actual, const char *src,
   ck_assert_str_eq(memcpy(s1, src, n), s21_memcpy(s2, src, n));
 }
 
-START_TEST(memcpy_basic) {
+START_TEST(standart_1) {
   assert_memcpy("Hello, world!", "Hello, world!", "Good", 4);
 }
 END_TEST
 
-START_TEST(memcpy_empty_source) {
-  assert_memcpy("Hello, world!", "Hello, world!", "\0", 1);
-}
-END_TEST
-
-START_TEST(memcpy_zero_length) {
-  assert_memcpy("Hello, world!", "Hello, world!", "f", 0);
-}
-END_TEST
-
-START_TEST(memcpy_partial_copy) {
+START_TEST(standart_2) {
   assert_memcpy("Hello, world!", "Hello, world!", "Hi", 2);
 }
 END_TEST
 
-START_TEST(memcpy_large_copy) {
+START_TEST(standart_3) {
+  assert_memcpy("Hello, world!", "Hello, world!", "Goodbye", 7);
+}
+END_TEST
+
+START_TEST(border_1) {
+  assert_memcpy("Hello, world!", "Hello, world!", "\0", 1);
+}
+END_TEST
+
+START_TEST(border_2) {
+  assert_memcpy("Hello, world!", "Hello, world!", "f", 0);
+}
+END_TEST
+
+START_TEST(border_3) {
   assert_memcpy("new_strnew_string", "new_strnew_string", "new_string",
                 strlen("new_string"));
 }
 END_TEST
 
-START_TEST(memcpy_non_ascii) {
+START_TEST(irregular_1) {
   assert_memcpy("699\017020", "699\017020", "com", 3);
 }
 END_TEST
 
-START_TEST(memcpy_with_null_chars) {
+START_TEST(irregular_2) {
   assert_memcpy("ABC\0DEF", "ABC\0DEF", "XYZ\0123", 7);
 }
 END_TEST
 
-START_TEST(memcpy_overlap_forward) {
+START_TEST(irregular_3) {
   char buffer1[30] = "Overlap test data";
   char buffer2[30] = "Overlap test data";
   ck_assert_str_eq(memcpy(buffer1 + 5, buffer1, 10),
@@ -53,7 +58,7 @@ START_TEST(memcpy_overlap_forward) {
 }
 END_TEST
 
-START_TEST(memcpy_overlap_backward) {
+START_TEST(irregular_4) {
   char buffer1[30] = "Overlap test data";
   char buffer2[30] = "Overlap test data";
   ck_assert_str_eq(memcpy(buffer1, buffer1 + 5, 10),
@@ -65,15 +70,18 @@ Suite *test_memcpy(void) {
   Suite *s = suite_create("\033[45m-=S21_MEMCPY=-\033[0m");
   TCase *tc = tcase_create("memcpy_tc");
 
-  tcase_add_test(tc, memcpy_basic);
-  tcase_add_test(tc, memcpy_empty_source);
-  tcase_add_test(tc, memcpy_zero_length);
-  tcase_add_test(tc, memcpy_partial_copy);
-  tcase_add_test(tc, memcpy_large_copy);
-  tcase_add_test(tc, memcpy_non_ascii);
-  tcase_add_test(tc, memcpy_with_null_chars);
-  tcase_add_test(tc, memcpy_overlap_forward);
-  tcase_add_test(tc, memcpy_overlap_backward);
+  tcase_add_test(tc, standart_1);
+  tcase_add_test(tc, standart_2);
+  tcase_add_test(tc, standart_3);
+
+  tcase_add_test(tc, border_1);
+  tcase_add_test(tc, border_2);
+  tcase_add_test(tc, border_3);
+
+  tcase_add_test(tc, irregular_1);
+  tcase_add_test(tc, irregular_2);
+  tcase_add_test(tc, irregular_3);
+  tcase_add_test(tc, irregular_4);
 
   suite_add_tcase(s, tc);
   return s;

@@ -1,105 +1,89 @@
 #include "test_me.h"
 
-void assert_strncat(const char *s1, const char *s2, s21_size_t n) {
-  char tmp_s1[100];
-  char tmp_s2[100];
-  strcpy(tmp_s1, s1);
-  strcpy(tmp_s2, s2);
-  ck_assert_pstr_eq(strncat(tmp_s1, s2, n), s21_strncat(tmp_s2, s2, n));
+void assert_strncat_func(char *expected_s1, char *expected_s2, char *s3, s21_size_t n) {
+  char s1[100] = {0};
+  char s2[100] = {0};
+
+  strncpy(s1, expected_s1, sizeof(s1) - 1);
+  strncpy(s2, expected_s2, sizeof(s2) - 1);
+
+  ck_assert_pstr_eq(strncat(s1, s3, n), s21_strncat(s2, s3, n));
 }
 
-START_TEST(strncat_basic_test) {
-  assert_strncat("Hello, world!", "Hello, world!", 1);
-}
-END_TEST
-
-START_TEST(strncat_empty_append) {
-  assert_strncat("Hello, world!", "\0", 1);
+START_TEST(standart_1) {
+  assert_strncat_func("Hello, world!", "Hello, world!", "Hello, world!", 1);
 }
 END_TEST
 
-START_TEST(strncat_special_chars) {
-  assert_strncat("Hello, world!", "\n\0\\d\f\\g\7", 3);
+START_TEST(standart_2) {
+  assert_strncat_func("Hello, world!", "Hello, world!", "\0", 1);
 }
 END_TEST
 
-START_TEST(strncat_zero_append) {
-  assert_strncat("Hello, world!", "", 0);
+START_TEST(standart_3) {
+  assert_strncat_func("Hello, world!", "Hello, world!", "\n\0\\d\f\\g\7", 3);
 }
 END_TEST
 
-START_TEST(strncat_full_append) {
-  assert_strncat("", "Hello, world!", 13);
+START_TEST(border_1) {
+  assert_strncat_func("Hello, world!", "Hello, world!", "", 0);
 }
 END_TEST
 
-START_TEST(strncat_large_append) {
-  assert_strncat("Hello, world!", "My name is Polina. I hate this, maybe I'm not supposed for this.", 6);
+START_TEST(border_2) {
+  assert_strncat_func("", "", "Hello, world!", 13);
 }
 END_TEST
 
-START_TEST(strncat_partial_append) {
-  assert_strncat("", "Hello, world!", 3);
+START_TEST(border_3) {
+  assert_strncat_func("Hello, world!My name is Polina. I hate this, maybe I'm not supposed for this.",
+                      "Hello, world!My name is Polina. I hate this, maybe I'm not supposed for this.",
+                      "My name is Polina. I hate this, maybe I'm not supposed for this.", 6);
 }
 END_TEST
 
-START_TEST(strncat_small_n) {
-  assert_strncat("Hello, world!", "My name is Polina.", 2);
+START_TEST(irregular_1) {
+  assert_strncat_func("", "", "Hello, world!", 3);
 }
 END_TEST
 
-START_TEST(strncat_zero_length) {
-  assert_strncat("", "", 10);
+START_TEST(irregular_2) {
+  assert_strncat_func("Hello, world!My name is Polina.", "Hello, world!My name is Polina.", "My name is Polina.", 2);
 }
 END_TEST
 
-START_TEST(strncat_null_character_in_string) {
-  assert_strncat("Hello\0, world!", "My name is\0 Polina.", 15);
+START_TEST(irregular_3) {
+  assert_strncat_func("", "", "", 10);
 }
 END_TEST
 
-START_TEST(strncat_append_null) {
-  assert_strncat("Hello, world!", "\0", 1);
+START_TEST(irregular_4) {
+  assert_strncat_func("Hello\0, world!", "Hello\0, world!", "My name is\0 Polina.", 15);
 }
 END_TEST
 
-START_TEST(strncat_zero_n) {
-  assert_strncat("Hello, world!", "\0", 0);
+START_TEST(irregular_5) {
+  assert_strncat_func("Hello, world!", "Hello, world!", "\0", 1);
 }
 END_TEST
 
-START_TEST(strncat_multiple_nulls) {
-  assert_strncat("Hello, world!", "\0\0\0\0", 4);
+START_TEST(irregular_6) {
+  assert_strncat_func("Hello, world!", "Hello, world!", "\0", 0);
 }
 END_TEST
 
-START_TEST(strncat_small_string_append) {
-  assert_strncat("Hello, world!", "", 2);
+START_TEST(irregular_7) {
+  assert_strncat_func("Hello, world!\0\0\0", "Hello, world!\0\0\0", "\0\0\0\0", 4);
 }
 END_TEST
 
-START_TEST(strncat_zero_append_test) {
-  assert_strncat("Hello, world!\0\0\0", "My name is Polina.", 0);
+START_TEST(irregular_8) {
+  assert_strncat_func("Hello, world!", "Hello, world!", "", 2);
 }
 END_TEST
 
-START_TEST(strncat_edge_max_length) {
-  assert_strncat("Hello, world!", "A long string that we are appending.", 10000);
-}
-END_TEST
-
-START_TEST(strncat_overflow_case) {
-  assert_strncat("Hello, ", "world!", 10);
-}
-END_TEST
-
-START_TEST(strncat_large_n) {
-  assert_strncat("Hello, world!", "test", 100);
-}
-END_TEST
-
-START_TEST(strncat_n_equals_zero) {
-  assert_strncat("Hello, world!", "test", 0);
+START_TEST(irregular_9) {
+  assert_strncat_func("Hello, world!", "Hello, world!", "My name is Polina.", 0);
 }
 END_TEST
 
@@ -107,26 +91,23 @@ Suite *test_strncat(void) {
   Suite *s = suite_create("\033[45m-=S21_STRNCAT=-\033[0m");
   TCase *tc = tcase_create("strncat_tc");
 
-  suite_add_tcase(s, tc);
-  tcase_add_test(tc, strncat_basic_test);
-  tcase_add_test(tc, strncat_empty_append);
-  tcase_add_test(tc, strncat_special_chars);
-  tcase_add_test(tc, strncat_zero_append);
-  tcase_add_test(tc, strncat_full_append);
-  tcase_add_test(tc, strncat_large_append);
-  tcase_add_test(tc, strncat_partial_append);
-  tcase_add_test(tc, strncat_small_n);
-  tcase_add_test(tc, strncat_zero_length);
-  tcase_add_test(tc, strncat_null_character_in_string);
-  tcase_add_test(tc, strncat_append_null);
-  tcase_add_test(tc, strncat_zero_n);
-  tcase_add_test(tc, strncat_multiple_nulls);
-  tcase_add_test(tc, strncat_small_string_append);
-  tcase_add_test(tc, strncat_zero_append_test);
-  tcase_add_test(tc, strncat_edge_max_length);
-  tcase_add_test(tc, strncat_overflow_case);
-  tcase_add_test(tc, strncat_large_n);
-  tcase_add_test(tc, strncat_n_equals_zero);
+  tcase_add_test(tc, standart_1);
+  tcase_add_test(tc, standart_2);
+  tcase_add_test(tc, standart_3);
+
+  tcase_add_test(tc, border_1);
+  tcase_add_test(tc, border_2);
+  tcase_add_test(tc, border_3);
+
+  tcase_add_test(tc, irregular_1);
+  tcase_add_test(tc, irregular_2);
+  tcase_add_test(tc, irregular_3);
+  tcase_add_test(tc, irregular_4);
+  tcase_add_test(tc, irregular_5);
+  tcase_add_test(tc, irregular_6);
+  tcase_add_test(tc, irregular_7);
+  tcase_add_test(tc, irregular_8);
+  tcase_add_test(tc, irregular_9);
 
   suite_add_tcase(s, tc);
   return s;

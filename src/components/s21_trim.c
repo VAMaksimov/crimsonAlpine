@@ -9,7 +9,7 @@ int is_trim_char(char c, const char *trim_chars) {
     return flag;
 }
 
-void *trim(const char *src, const char *trim_chars) {
+void *s21_trim(const char *src, const char *trim_chars) {
     if (src == NULL || trim_chars == NULL) {
         return NULL;
     }
