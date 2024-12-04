@@ -1,12 +1,11 @@
 EXEC = s21_sprintf
 SRCS = $(wildcard *.c)
-LDFLAGS_TEST = -lcheck -lm
+LDFLAGS_TEST = -g -fdiagnostics-color=always -lcheck -lm
 
 all: debug
 
 debug:
-	gcc -g $(SRCS) -o $(EXEC) $(LDFLAGS_TEST)
-	./$(EXEC)
+	gcc $(SRCS) -o $(EXEC) $(LDFLAGS_TEST)
 
 clean:
-	rm $(EXEC) *.gcno
+	rm $(EXEC)
