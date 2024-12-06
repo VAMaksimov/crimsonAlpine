@@ -11,6 +11,10 @@
 #define true 1
 #define false 0
 
+#define DECIMAL_BASE 10
+#define OCTAL_BASE 8
+#define HEXADECIMAL_BASE 16
+
 #define LEFT_JUSTIFY_FLAG 1     //'-'
 #define SIGN_PRECEDENCE_FLAG 2  //'+'
 #define NO_SIGN_FLAG 4          //' '
@@ -42,7 +46,7 @@
 #define STANDARD_PRECISION 6
 
 typedef struct {
-  char flag_value;
+  int flag_value;
   int width_value;
   bool precision_exist;
   size_t precision_value;

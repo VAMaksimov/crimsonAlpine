@@ -32,3 +32,18 @@ void length_parser(const char **p, format_value *values) {
   } else
     values->length_value = **p;
 }
+
+char flag_value(char c) {
+  char r = 0;
+  if (c == '-')
+    r = LEFT_JUSTIFY_FLAG;
+  else if (c == '+')
+    r = SIGN_PRECEDENCE_FLAG;
+  else if (c == ' ')
+    r = NO_SIGN_FLAG;
+  else if (c == '#')
+    r = HASH_FLAG;
+  else if (c == '0')
+    r = ZERO_PADDING_FLAG;
+  return r;
+}
