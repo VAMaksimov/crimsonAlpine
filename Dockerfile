@@ -12,7 +12,9 @@ RUN apk --no-cache --upgrade add \
     cppcheck \
     alpine-sdk \
     pcre-dev \
-    clang-extra-tools
+    clang-extra-tools \
+    check \
+    check-dev
 
 
 COPY . /project

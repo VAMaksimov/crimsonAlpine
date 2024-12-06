@@ -5,7 +5,7 @@ LIBRARY = s21_string.a
 # flags
 CC = gcc -Wall -Wextra -Werror -std=c11
 CFLAGS_TEST = -fprofile-arcs -ftest-coverage
-LDFLAGS_TEST = -lcheck -lm  
+LDFLAGS_TEST = -lcheck -lm  -lsubunit
 
 # dirs
 SRC_DIR = components
