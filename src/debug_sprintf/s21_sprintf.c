@@ -11,13 +11,6 @@ int number_parser(const char **p) {
   return res;
 }
 
-void trim_zeros(char *buffer, size_t *index, size_t old_index) {
-  int i = (*index) - 1;
-  while (( buffer[i] == '.' || buffer[i] == '0') && i >= old_index) {
-    (*index)--, buffer[i--] = 0;
-  }
-}
-
 void width_parser(const char **p, format_value *values, va_list factor) {
   if (**p == '*')
     values->width_value = va_arg(factor, int);
@@ -136,6 +129,16 @@ void fractional_ftoa(long double *c, char *buffer, size_t *index,
   }
 }
 
+int trim_zeros(char *buffer, size_t *index, size_t old_index) {
+  int i = (*index) - 1, r = 0;
+  while (( buffer[i] == '.' || buffer[i] == '0') && i >= old_index) {
+    bool f = buffer[i] == '.';
+    (*index)--, ++r, buffer[i--] = ' ';
+    if (f) i = -1;
+  }
+  return r;
+}
+
 void ftoa(void *c, char *buffer, size_t *index, format_value values) {
   // if (values.precision_exist && values.precision_value == 0) return buffer;
   long double v = *((long double *)c);
@@ -148,8 +151,16 @@ void ftoa(void *c, char *buffer, size_t *index, format_value values) {
     buffer[(*index)++] = '.';
   fractional_ftoa(&fractional_value, buffer, index, values.precision_value);
   round_ftoa(&fractional_value, buffer, index, old_index);
-  if ((values.specifier_value == g_SPEC || values.specifier_value == G_SPEC) && !(values.flag_value & HASH_FLAG))
-    trim_zeros(buffer, index, old_index); 
+  if ((values.specifier_value == g_SPEC || values.specifier_value == G_SPEC) && !(values.flag_value & HASH_FLAG)) {
+      int r = 0;
+      if(values.precision_value != 0)r =trim_zeros(buffer, index, old_index);
+      
+      if ((!(values.flag_value & LEFT_JUSTIFY_FLAG)) && values.width_value > *index - old_index + 1) {
+        s21_memmove(&buffer[old_index + r - 1], &buffer[old_index - 1], *index - old_index +1);
+        for (int i = 0; i < r; ++i) buffer[old_index+i-1] = ' ';
+      }
+        *index += r;
+    }
   // } else {
   //   integer_ftoa(&v, buffer, index);
   //   if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
@@ -555,11 +566,11 @@ int main(void) {
   printf("========= FAILED: %d =========\n", failed);
   char str1[100];
   char str2[100];
-  char *str3 = "%20.10g\n%20.15g\n%-20.5g!";
-  double num = -76.756589;
-  sprintf(str1, str3, num, num, num);
+  char *str3 = "%g TEST %.g TEST %4g TEST %4.g TEST %5.10g!";
+  double num = 573429.56589367;
+  sprintf(str1, str3, num, num, num, num, num);
   printf("%s\n\n", str1);
-  s21_sprintf(str2, str3, num, num, num);
+  s21_sprintf(str2, str3, num, num, num, num, num);
   printf("%s\n", str2);
 }
 
