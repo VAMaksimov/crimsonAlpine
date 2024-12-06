@@ -11,11 +11,11 @@
 #define true 1
 #define false 0
 
-#define LEFT_JUSTIFY_FLAG 1     //'-'
-#define SIGN_PRECEDENCE_FLAG 2  //'+'
-#define NO_SIGN_FLAG 4          //' '
-#define HASH_FLAG 8             //'#'
-#define ZERO_PADDING_FLAG 16    //'0'
+#define LEFT_JUSTIFY_FLAG (1 << 0)     //'-'
+#define SIGN_PRECEDENCE_FLAG (1 << 1)  //'+'
+#define NO_SIGN_FLAG (1 << 2)          //' '
+#define HASH_FLAG (1 << 3)             //'#'
+#define ZERO_PADDING_FLAG (1 << 4)     //'0'
 
 #define SHORT_INT_LENGTH 'h'
 #define LONG_INT_LENGTH 'l'
@@ -42,7 +42,7 @@
 #define STANDARD_PRECISION 6
 
 typedef struct {
-  char flag_value;
+  int flag_value;
   int width_value;
   bool precision_exist;
   size_t precision_value;

@@ -92,7 +92,7 @@ void s21_memmove(char *dest, const char *src, size_t n) {
 
 void round_ftoa(const long double *c, char *buffer, size_t *index,
                 size_t old_index) {
-  if ((*c) * 10 > 5) {
+  if ((*c) > 0.5) {
     int i = (*index) - 1;
     while (buffer[i] == '9' && i >= 0) {
       buffer[i--] = '0';
@@ -176,7 +176,7 @@ void etoa(void *c, char *buffer, size_t *index, format_value values) {
   buffer[(*index)++] = values.specifier_value;
   buffer[(*index)++] = e < 0 ? '-' : '+';
   if (e < 0) e = -e;
-  buffer[(*index)++] = '0';
+  if (e < 10) buffer[(*index)++] = '0';
   buffer[(*index)] = '0';
   long double e_copy = e;
   integer_ftoa(&e_copy, buffer, index);
@@ -208,7 +208,7 @@ void format_flag_(char *buffer, size_t *index, format_value values, void *c,
                   void (*write_to_buffer)(void *c, char *buffer, size_t *index,
                                           format_value values)) {
   char b = ' ';
-  if (sign == '-' && values.specifier_value != FLOAT_SPEC)
+  if (sign == '-' && s21_strchr("diouxX)", values.specifier_value))
     values.precision_value += 1;
   int new_len = len > values.precision_value ? len : values.precision_value;
   if (values.width_value > new_len &&
@@ -324,7 +324,7 @@ void formated_string(char *buffer, size_t *index, va_list factor,
   char *v = va_arg(factor, char *);
   if (v == NULL) {
     v = "(null)";
-    if (values.precision_value < 6) values.precision_value = 0;
+    if (values.precision_value < STANDARD_PRECISION) values.precision_value = 0;
   }
   size_t len = s21_strlen(v);
   if (values.precision_exist)
@@ -384,8 +384,17 @@ void formated_float(char *buffer, size_t *index, va_list factor,
              values.specifier_value == E_SPEC) {
     len += 4;
     format_flag_(buffer, index, values, &v, len, sign, etoa);
+  } else if (values.specifier_value == 'g' || values.specifier_value == 'G') {
+    // Если точность больше полученной экспоненты (X) или экспонента больше либо
+    // равна -4, то выводиться будет полное число как в %f. Если нет, то в виде
+    // %e, %E.
+    if (values.precision_value > 1 + (size_t)log10l(v) &&
+        1 + (size_t)log10l(v) >= -4) {
+      format_flag_(buffer, index, values, &v, len, sign, ftoa);
+    } else {
+      format_flag_(buffer, index, values, &v, len, sign, etoa);
+    }
   }
-  // else if (values.specifier_value == 'g' || values.specifier_value == 'G') {}
 }
 
 // void formated_g(char *buffer, size_t *index, va_list factor,
@@ -438,18 +447,18 @@ void format_execusion(char *buffer, size_t *index, format_value values,
     formated_percent(buffer, index, values);
 }
 
-char flag_value(char c) {
-  char r = 0;
+int flag_value(char c) {
+  int r = 0;
   if (c == '-')
-    r = LEFT_JUSTIFY_FLAG;
+    r |= LEFT_JUSTIFY_FLAG;
   else if (c == '+')
-    r = SIGN_PRECEDENCE_FLAG;
+    r |= SIGN_PRECEDENCE_FLAG;
   else if (c == ' ')
-    r = NO_SIGN_FLAG;
+    r |= NO_SIGN_FLAG;
   else if (c == '#')
-    r = HASH_FLAG;
+    r |= HASH_FLAG;
   else if (c == '0')
-    r = ZERO_PADDING_FLAG;
+    r |= ZERO_PADDING_FLAG;
   return r;
 }
 
@@ -496,11 +505,14 @@ int s21_sprintf(char *buffer, const char *format, ...) {
 int main(void) {
   int failed = 0;
   Suite *s21_string_test[] = {
-      test_sprintf_c(),       test_sprintf_e(),        test_sprintf_g(),
-      test_sprintf_octal(),   test_sprintf_percent(),  test_sprintf_n(),
-      test_sprintf_string(),  test_sprintf_unsigned(), test_sprintf_HEX(),
-      test_sprintf_hex(),     test_sprintf_signed(),   test_sprintf_signed_i(),
-      test_sprintf_pointer(), test_sprintf_f(),        NULL};
+      // test_sprintf_c(),
+      test_sprintf_e(),
+      // test_sprintf_g(),
+      // test_sprintf_octal(),   test_sprintf_percent(),  test_sprintf_n(),
+      // test_sprintf_string(),  test_sprintf_unsigned(), test_sprintf_HEX(),
+      // test_sprintf_hex(),     test_sprintf_signed(), test_sprintf_signed_i(),
+      // test_sprintf_pointer(), test_sprintf_f(),
+      NULL};
 
   for (int i = 0; s21_string_test[i] != NULL; i++) {
     SRunner *sr = srunner_create(s21_string_test[i]);
@@ -512,104 +524,12 @@ int main(void) {
     srunner_free(sr);
   }
   printf("========= FAILED: %d =========\n", failed);
-}
-
-/*
-int main() {
-#include <string.h>
-  char text[100];
-  s21_sprintf(text, "333%01i333", -10);
-  printf("2text: %s\n\n", text);
-  sprintf(text, "333%01i333", -10);
-  printf("2text: %s\n\n", text);
-
-  int result;
-  char buffer[100];
-
-  // Тест 1: Нормальное положительное число
-  result = sprintf(buffer, "%.5s", "123");
-  printf("Test 1: %d, Output: %s, Result: %d\n", result, buffer, result);
-  result = s21_sprintf(buffer, "%.5s", "123");
-  printf("Test 1: %d, Output: %s, Result: %d\n", result, buffer, result);
-
-  // Тест 2: Нормальное отрицательное число
-  result = sprintf(buffer, "%.5d", -100);
-  printf("Test 2: %d, Output: %s, Result: %d\n", result, buffer, result);
-  result = s21_sprintf(buffer, "%.5d", -100);
-  printf("Test 2: %d, Output: %s, Result: %d\n", result, buffer, result);
-
-  // Тест 3: Ноль
-  result = sprintf(buffer, "%.0d", 0);
-  printf("Test 3: %d, Output: %s, Result: %d\n", result, buffer, result);
-  result = s21_sprintf(buffer, "%.0d", 0);
-  printf("Test 3: %d, Output: %s, Result: %d\n", result, buffer, result);
-
-  // Тест 6: Положительное число с ведущими нулями
-  result = sprintf(buffer, "%.5d", 42);
-  printf("Test 6: %d, Output: %s, Result: %d\n", result, buffer, result);
-  result = s21_sprintf(buffer, "%.5d", 42);
-  printf("Test 6: %d, Output: %s, Result: %d\n", result, buffer, result);
-
-  // Тест 7: Отрицательное число с ведущими нулями
-  result = sprintf(buffer, "%05d", -42);
-  printf("Test 7: %d, Output: %s, Result: %d\n", result, buffer, result);
-  result = s21_sprintf(buffer, "%05d", -42);
-  printf("Test 7: %d, Output: %s, Result: %d\n", result, buffer, result);
-
-  // Тест 8: Положительное число с пробелами
-  result = sprintf(buffer, "% d", 42);
-  printf("Test 8: %d, Output: %s, Result: %d\n", result, buffer, result);
-  result = s21_sprintf(buffer, "% d", 42);
-  printf("Test 8: %d, Output: %s, Result: %d\n", result, buffer, result);
-  // Тест 9: Отрицательное число с пробелами
-  result = sprintf(buffer, "% d", -42);
-  printf("Test 9: %d, Output: %s, Result: %d\n", result, buffer, result);
-  result = s21_sprintf(buffer, "% d", -42);
-  printf("Test 9: %d, Output: %s, Result: %d\n", result, buffer, result);
-
-  // Тест 10: Положительное число с шириной
-  result = sprintf(buffer, "%10d", 42);
-  printf("Test 10: %d, Output: %s, Result: %d\n", result, buffer, result);
-  result = s21_sprintf(buffer, "%10d", 42);
-  printf("Test 10: %d, Output: %s, Result: %d\n", result, buffer, result);
-
-  result = sprintf(buffer, "%+d", 42);
-  printf("Test 11: %d, Output: %s, Result: %d\n", result, buffer, result);
-  result = s21_sprintf(buffer, "%+d", 42);
-  printf("Test 11: %d, Output: %s, Result: %d\n", result, buffer, result);
-
-  int p = 0;
-  result = sprintf(buffer, "%+d", -42);
-  printf("Test 12: %d, Output: %s, Result: %d\n", result, buffer, result);
-  result = s21_sprintf(buffer, "%+d", -42);
-  printf("Test 12: %d, Output: %s, Result: %d\n", result, buffer, result);
-  printf("%d\n", p);
-
-  char buffer1[50];
-  float test_values[10] = {
-      0,      1.2345,  -1.2345,          12345.6789,        -12345.6789,
-      0.0001, -0.0001, 123456789.123456, -123456789.123456, 3.141592653589793};
-
-  long double ld = 5;
-  for (int i = 0; i != 400; ++i) ld *= 10;
-  sprintf(buffer1, "%.0Lf", ld);
-  printf("Test : %s\n", buffer1);
-  s21_sprintf(buffer1, "%Lf", ld);
-  printf("Test : %s\n", buffer1);
-
-  for (int i = 0; i < 10; i++) {
-    sprintf(buffer1, "%e", test_values[i]);
-    printf("Test %d: %s\n", i, buffer1);
-    s21_sprintf(buffer1, "%e", test_values[i]);
-    printf("Test %d: %s\n", i, buffer1);
-  }
-
-  float ja = 43560.1;
-  sprintf(buffer1, "%f", ja);
-  printf("Test : %s\n", buffer1);
-  s21_sprintf(buffer1, "%f", ja);
-  printf("Test : %s\n", buffer1);
-
+  char str1[100];
+  char str2[100];
+  char *str3 = "%#e\n%#.e\n%#5.e\n%#.0e\n%#0.0e!";
+  double num = -665695342471359.;
+  printf("%d\n", sprintf(str1, str3, num, num, num, num, num));
+  printf("%d\n", s21_sprintf(str2, str3, num, num, num, num, num));
+  printf("%s\n%s\n", str1, str2);
   return 0;
 }
-*/
