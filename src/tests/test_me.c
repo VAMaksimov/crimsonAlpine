@@ -42,9 +42,9 @@ int main(void) {
 
         // Изменение цвета названия в зависимости от результатов
         if (suite_failed > 0) {
-            printf("\033[31mFAILED_FAILED_FAILED_FAILED_FAILED_FAILED\033[0m\n"); // Красный текст при ошибках
+            printf("\033[31mFAILED\033[0m\n"); // Красный текст при ошибках
         } else {
-            printf("\033[32mPASSED_PASSED_PASSED_PASSED_PASSED_PASSED\033[0m\n"); // Зеленый текст при успехе
+            printf("\033[32mPASSED\033[0m\n"); // Зеленый текст при успехе
         }
 
         srunner_free(sr); // Освобождаем ресурсы для текущего набора тестов
