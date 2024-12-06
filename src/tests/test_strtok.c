@@ -79,7 +79,7 @@ START_TEST(irregular_3) {
 END_TEST
 
 Suite *test_strtok(void) {
-    Suite *s = suite_create("strtok");
+    Suite *s = suite_create("\033[47mstrtok\033[0m");
     TCase *tc = tcase_create("strtok_tc");
 
     tcase_add_test(tc, standard_1);

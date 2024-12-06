@@ -67,7 +67,7 @@ START_TEST(irregular_2) {
 END_TEST
 
 Suite *test_strrchr(void) {
-    Suite *s = suite_create("\033[45m-=S21_STRRCHR=-\033[0m");
+    Suite *s = suite_create("\033[47mstrchr\033[0m");
     TCase *tc = tcase_create("strrchr_tc");
 
     tcase_add_test(tc, standard_1);

@@ -55,7 +55,7 @@ START_TEST(irregular_4) {
 END_TEST
 
 Suite *test_memcmp(void) {
-    Suite *s = suite_create("\033[45m-=S21_MEMCMP=-\033[0m");
+    Suite *s = suite_create("\033[47mmemcmp\033[0m");
     TCase *tc = tcase_create("memcmp_tc");
 
     tcase_add_test(tc, standart_1);

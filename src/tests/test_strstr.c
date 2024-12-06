@@ -87,7 +87,7 @@ START_TEST(irregular_6) {
 END_TEST
 
 Suite *test_strstr(void) {
-    Suite *s = suite_create("\033[45m-=S21_STRSTR=-\033[0m");
+    Suite *s = suite_create("\033[47mstrstr\033[0m");
     TCase *tc = tcase_create("strstr_tc");
 
     tcase_add_test(tc, standard_1);

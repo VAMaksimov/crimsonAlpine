@@ -1,9 +1,9 @@
 #include "test_me.h"
 
 START_TEST(sprintf_1_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%c Test %c Test %c Test %c Test %c";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%c Word %c Word %c Word %c Word %c";
   int a = 9;
   int b = 10;
   int c = 17;
@@ -12,14 +12,13 @@ START_TEST(sprintf_1_c) {
   ck_assert_int_eq(sprintf(str1, str3, a, b, c, d, e),
                    s21_sprintf(str2, str3, a, b, c, d, e));
   ck_assert_pstr_eq(str1, str2);
-  printf("test with string: %s passed\n", str3);
 }
 END_TEST
 
 START_TEST(sprintf_2_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%c Test %c Test %c Test %c Test %c";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%c Word %c Word %c Word %c Word %c";
   int a = -6;
   int b = -10;
   int c = -17;
@@ -32,9 +31,9 @@ START_TEST(sprintf_2_c) {
 END_TEST
 
 START_TEST(sprintf_3_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%c Test %c Test %c Test %c Test %c";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%c Word %c Word %c Word %c Word %c";
   int a = 60;
   int b = 50;
   int c = 1744;
@@ -47,9 +46,9 @@ START_TEST(sprintf_3_c) {
 END_TEST
 
 START_TEST(sprintf_4_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%c Test %c Test %c Test %c Test %c";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%c Word %c Word %c Word %c Word %c";
   int a = 60;
   int b = 50;
   int c = 1744;
@@ -62,9 +61,9 @@ START_TEST(sprintf_4_c) {
 END_TEST
 
 START_TEST(sprintf_5_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%c Test %c Test %c Test %c Test %c";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%c Word %c Word %c Word %c Word %c";
   char a = 0;
   ck_assert_int_eq(sprintf(str1, str3, a, a, a, a, a),
                    s21_sprintf(str2, str3, a, a, a, a, a));
@@ -73,9 +72,9 @@ START_TEST(sprintf_5_c) {
 END_TEST
 
 START_TEST(sprintf_6_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%05c Test % 5c Test %lc Test";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%05c Word % 5c Word %lc Word";
   int a = 70;
   unsigned long int b = 70;
   ck_assert_int_eq(sprintf(str1, str3, a, a, b),
@@ -85,9 +84,9 @@ START_TEST(sprintf_6_c) {
 END_TEST
 
 START_TEST(sprintf_7_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%-010c Test % -10c Test %-lc";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%-010c Word % -10c Word %-lc";
   int a = 74;
   unsigned long int b = 74;
   ck_assert_int_eq(sprintf(str1, str3, a, a, b),
@@ -97,9 +96,9 @@ START_TEST(sprintf_7_c) {
 END_TEST
 
 START_TEST(sprintf_8_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%+010.5c Test % +10.5c Test %-10lc Test %-10lc Test %+10lc";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%+010.5c Word % +10.5c Word %-10lc Word %-10lc Word %+10lc";
   char a = 92;
   unsigned long int b = 92;
   unsigned long int c = 92;
@@ -110,9 +109,9 @@ START_TEST(sprintf_8_c) {
 END_TEST
 
 START_TEST(sprintf_9_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%6.4c Test %-6.4c Test %4.10lc Test %-4.10lc Test %-0lc";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%6.4c Word %-6.4c Word %4.10lc Word %-4.10lc Word %-0lc";
   int a = 10;
   unsigned long int b = 10;
   unsigned long int c = 10;
@@ -123,9 +122,9 @@ START_TEST(sprintf_9_c) {
 END_TEST
 
 START_TEST(sprintf_10_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%6.4c Test %-6.4c Test %4.10lc Test %-4.10lc Test %-0lc";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%6.4c Word %-6.4c Word %4.10lc Word %-4.10lc Word %-0lc";
   int a = -10;
   unsigned long int b = 10;
   unsigned long int c = 10;
@@ -136,9 +135,9 @@ START_TEST(sprintf_10_c) {
 END_TEST
 
 START_TEST(sprintf_11_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%#c Test %#c Test %#c Test %#c Test %#c";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%#c Word %#c Word %#c Word %#c Word %#c";
   ck_assert_int_eq(sprintf(str1, str3, ' ', 'n', '5', '%', '\\'),
                    s21_sprintf(str2, str3, ' ', 'n', '5', '%', '\\'));
   ck_assert_pstr_eq(str1, str2);
@@ -146,9 +145,9 @@ START_TEST(sprintf_11_c) {
 END_TEST
 
 START_TEST(sprintf_12_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%c Test %c Test %c Test %c Test %c";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%c Word %c Word %c Word %c Word %c";
   ck_assert_int_eq(sprintf(str1, str3, '\n', '\0', '\0', '\0', 'c'),
                    s21_sprintf(str2, str3, '\n', '\0', '\0', '\0', 'c'));
   ck_assert_pstr_eq(str1, str2);
@@ -156,9 +155,9 @@ START_TEST(sprintf_12_c) {
 END_TEST
 
 START_TEST(sprintf_13_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%c Test %c Test %c Test %c Test %c";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%c Word %c Word %c Word %c Word %c";
   ck_assert_int_eq(sprintf(str1, str3, 'b', '4', '#', '@', '\0'),
                    s21_sprintf(str2, str3, 'b', '4', '#', '@', '\0'));
   ck_assert_pstr_eq(str1, str2);
@@ -166,9 +165,9 @@ START_TEST(sprintf_13_c) {
 END_TEST
 
 START_TEST(sprintf_14_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%c Test %c Test %c Test %c Test %c";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%c Word %c Word %c Word %c Word %c";
   ck_assert_int_eq(sprintf(str1, str3, 'Y', 'G', 123, '\0', 'J'),
                    s21_sprintf(str2, str3, 'Y', 'G', 123, '\0', 'J'));
   ck_assert_pstr_eq(str1, str2);
@@ -178,7 +177,7 @@ END_TEST
 START_TEST(sprintf_15_c) {
   char str1[400];
   char str2[400];
-  char *str3 = "%.7c Test %-7c Test %-50c Test % 54c Test %0188c";
+  char *str3 = "%.7c Word %-7c Word %-50c Word % 54c Word %0188c";
   int a = 112;
   ck_assert_int_eq(sprintf(str1, str3, a, a, a, a, a),
                    s21_sprintf(str2, str3, a, a, a, a, a));
@@ -189,7 +188,7 @@ END_TEST
 START_TEST(sprintf_16_c) {
   char str1[400];
   char str2[400];
-  char *str3 = "%.7c Test % -.7c Test %- 050c Test %- 54c Test %-0188c";
+  char *str3 = "%.7c Word % -.7c Word %- 050c Word %- 54c Word %-0188c";
   int a = 45;
   ck_assert_int_eq(sprintf(str1, str3, a, a, a, a, a),
                    s21_sprintf(str2, str3, a, a, a, a, a));
@@ -200,7 +199,7 @@ END_TEST
 START_TEST(sprintf_17_c) {
   char str1[400];
   char str2[400];
-  char *str3 = "%70c Test %-90c Test %080c Test %-065c Test %- 60c";
+  char *str3 = "%70c Word %-90c Word %080c Word %-065c Word %- 60c";
   int a = 255;
   ck_assert_int_eq(sprintf(str1, str3, a, a, a, a, a),
                    s21_sprintf(str2, str3, a, a, a, a, a));
@@ -211,7 +210,7 @@ END_TEST
 START_TEST(sprintf_18_c) {
   char str1[400];
   char str2[400];
-  char *str3 = "%70c Test %-90c Test %080c Test %-065c Test %- 60c";
+  char *str3 = "%70c Word %-90c Word %080c Word %-065c Word %- 60c";
   int a = 255;
   ck_assert_int_eq(sprintf(str1, str3, a, a, a, a, a),
                    s21_sprintf(str2, str3, a, a, a, a, a));
@@ -220,9 +219,9 @@ START_TEST(sprintf_18_c) {
 END_TEST
 
 START_TEST(sprintf_19_c) {
-  char str1[100];
-  char str2[100];  //%lc Test %llc Test %hc Test %hhc
-  char *str3 = "%c Test %lc Test %hc";
+  char str1[400];
+  char str2[400];  //%lc Word %llc Word %hc Word %hhc
+  char *str3 = "%c Word %lc Word %hc";
   int a = 3;
   unsigned long int b = 103;
   unsigned short e = 255;
@@ -233,8 +232,8 @@ START_TEST(sprintf_19_c) {
 END_TEST
 
 /*START_TEST(sprintf_20_c) {
-  char str1[100];
-  char str2[100];
+  char str1[400];
+  char str2[400];
   char *str3 = "TEST %lc right now\n";
   int a = 266;
   ck_assert_int_eq(sprintf(str1, str3, a), s21_sprintf(str2, str3, a));
@@ -247,9 +246,9 @@ END_TEST
 END_TEST
 
 START_TEST(sprintf_21_c) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%lc This is the Test right now\n";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%lc This is the Word right now\n";
   int a = 1156;
   ck_assert_int_eq(sprintf(str1, str3, a),
                    s21_sprintf(str2, str3, a));
@@ -260,7 +259,7 @@ START_TEST(sprintf_21_c) {
 END_TEST */
 
 Suite *test_sprintf_c(void) {
-  Suite *s = suite_create("\033[45m-=S21_SPRINTF_C=-\033[0m");
+  Suite *s = suite_create("\033[47msprintf_c\033[0m");
   TCase *tc = tcase_create("sprintf_tc");
 
   tcase_add_test(tc, sprintf_1_c);

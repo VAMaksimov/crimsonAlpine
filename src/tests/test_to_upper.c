@@ -57,7 +57,7 @@ START_TEST(irregular_4) {
 END_TEST
 
 Suite *test_to_upper(void) {
-  Suite *s = suite_create("\033[45m-=S21_TO_UPPER=-\033[0m");
+  Suite *s = suite_create("\033[47mto_upper\033[0m");
   TCase *tc = tcase_create("to_upper_tc");
 
   tcase_add_test(tc, standart_1);

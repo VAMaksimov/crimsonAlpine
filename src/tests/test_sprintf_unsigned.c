@@ -1,21 +1,19 @@
 #include "test_me.h"
 
-// One parameter unsigned
 START_TEST(sprintf_1_unsigned) {
-  char str1[100] = "";
-  char str2[100] = "";
-  char *str3 = "Test %u Test";
+  char str1[400] = "";
+  char str2[400] = "";
+  char *str3 = "Word %u Word";
   unsigned int val = 012;
   ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// Three unsigned parameters
 START_TEST(sprintf_2_unsigned) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%u Test %u Test %u";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%u Word %u Word %u";
   unsigned int val = 012;
   unsigned int val2 = 017;
   unsigned int val3 = 07464;
@@ -25,11 +23,10 @@ START_TEST(sprintf_2_unsigned) {
 }
 END_TEST
 
-// Three decimal parameters
 START_TEST(sprintf_3_unsigned) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%u Test %u Test %u";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%u Word %u Word %u";
   unsigned int val = 3015;
   unsigned int val2 = 712;
   unsigned int val3 = 99;
@@ -39,11 +36,10 @@ START_TEST(sprintf_3_unsigned) {
 }
 END_TEST
 
-// Different sizes
 START_TEST(sprintf_4_unsigned) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%lu Test %lu Test %hu GOD %hu";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%lu Word %lu Word %hu Word %hu";
   long unsigned int val = 3088675747373646;
   long unsigned val2 = 33030030303;
   unsigned short val3 = 22600;
@@ -54,11 +50,10 @@ START_TEST(sprintf_4_unsigned) {
 }
 END_TEST
 
-// Different width
 START_TEST(sprintf_5_unsigned) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%3u Test %5u Test %10u";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%3u Word %5u Word %10u";
   unsigned int val = 3015;
   unsigned int val2 = 01234;
   unsigned int val3 = 99;
@@ -68,11 +63,10 @@ START_TEST(sprintf_5_unsigned) {
 }
 END_TEST
 
-// Different precision and width
 START_TEST(sprintf_6_unsigned) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%6.5u Test %.23u Test %3.u TEST %.u";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%6.5u Word %.23u Word %3.u Word %.u";
   unsigned int val = 3015;
   unsigned int val2 = 712;
   unsigned int val3 = 99;
@@ -83,11 +77,10 @@ START_TEST(sprintf_6_unsigned) {
 }
 END_TEST
 
-// Minus flag
 START_TEST(sprintf_7_unsigned) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%-10.5u Test %-.8u Test %-7u TEST %-.u";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%-10.5u Word %-.8u Word %-7u Word %-.u";
   unsigned int val = 3015;
   unsigned int val2 = 712;
   unsigned int val3 = 99;
@@ -98,11 +91,10 @@ START_TEST(sprintf_7_unsigned) {
 }
 END_TEST
 
-// Zerues
 START_TEST(sprintf_8_unsigned) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%0u Test %0.u Test %0.0u TEST %0u GOD %.u";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%0u Word %0.u Word %0.0u Word %0u Word %.u";
   unsigned int val = 3015;
   unsigned int val2 = 712;
   unsigned int val3 = 99;
@@ -114,11 +106,10 @@ START_TEST(sprintf_8_unsigned) {
 }
 END_TEST
 
-// Pluses
 START_TEST(sprintf_9_unsigned) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%+u Test %+3.u Test %+5.7u TEST %+10u";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%+u Word %+3.u Word %+5.7u Word %+10u";
   unsigned int val = 3015;
   unsigned int val2 = 712;
   unsigned int val3 = 99;
@@ -129,11 +120,10 @@ START_TEST(sprintf_9_unsigned) {
 }
 END_TEST
 
-// Zeru vals
 START_TEST(sprintf_10_unsigned) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%u Test %3.u Test %5.7u TEST %10u %#u %-u %+u %.u % .u";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%u Word %3.u Word %5.7u Word %10u %#u %-u %+u %.u % .u";
   unsigned int val = 0;
   sprintf(str1, str3, val, val, val, val, val, val, val, val, val);
   s21_sprintf(str2, str3, val, val, val, val, val, val, val, val, val);
@@ -144,11 +134,10 @@ START_TEST(sprintf_10_unsigned) {
 }
 END_TEST
 
-// Spaces
 START_TEST(sprintf_11_unsigned) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "% u Test % 3.u Test % 5.7u TEST % 10u GOD %.u";
+  char str1[400];
+  char str2[400];
+  char *str3 = "% u Word % 3.u Word % 5.7u Word % 10u Word %.u";
   unsigned int val = 32;
   unsigned int val2 = 8899;
   unsigned int val3 = 91918;
@@ -160,11 +149,10 @@ START_TEST(sprintf_11_unsigned) {
 }
 END_TEST
 
-// Plus
 START_TEST(sprintf_12_unsigned) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%+u Test %+3.u Test %+5.7u TEST %+10u GOD %+.u";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%+u Word %+3.u Word %+5.7u Word %+10u Word %+.u";
   unsigned int val = 32;
   unsigned int val2 = 8899;
   unsigned int val3 = 91918;
@@ -176,11 +164,10 @@ START_TEST(sprintf_12_unsigned) {
 }
 END_TEST
 
-// Hash
 START_TEST(sprintf_13_unsigned) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%#u Test %#3u Test %#5.7u TEST %#.7u Ouf %#.u";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%#u Word %#3u Word %#5.7u Word %#.7u Word %#.u";
   unsigned int val = 32;
   unsigned int val2 = 8899;
   unsigned int val3 = 91918;
@@ -192,11 +179,10 @@ START_TEST(sprintf_13_unsigned) {
 }
 END_TEST
 
-// ZERO flag
 START_TEST(sprintf_14_unsigned) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%0u Test %06u Test %05.7u TEST %0.7u Ouf %0.u";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%0u Word %06u Word %05.7u Word %0.7u Word %0.u";
   unsigned int val = 32;
   unsigned int val2 = 8899;
   unsigned int val3 = 91918;
@@ -208,11 +194,10 @@ START_TEST(sprintf_14_unsigned) {
 }
 END_TEST
 
-// Asterisk
 START_TEST(sprintf_15_unsigned) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%*u Test %-*u Test %*.*u TEST %.*u";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%*u Word %-*u Word %*.*u Word %.*u";
   unsigned int val = 32;
   unsigned int val2 = 8899;
   unsigned int val3 = 919;
@@ -231,9 +216,9 @@ START_TEST(sprintf_15_unsigned) {
 END_TEST
 
 START_TEST(sprintf_16_unsigned) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "fdsdsds %lu";
+  char str1[400];
+  char str2[400];
+  char *str3 = "Wordword %lu";
   unsigned long int val = ULONG_MAX;
   ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
   ck_assert_pstr_eq(str1, str2);
@@ -241,9 +226,9 @@ START_TEST(sprintf_16_unsigned) {
 END_TEST
 
 START_TEST(sprintf_17_unsigned) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%- u Test %- 15u sdasda %- 15u sdsad %- u";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%- u Word %- 15u Word %- 15u Word %- u";
   unsigned int val = -3231;
   unsigned int val2 = -3231;
   unsigned int val3 = 3231;
@@ -254,7 +239,7 @@ START_TEST(sprintf_17_unsigned) {
 }
 END_TEST
 Suite *test_sprintf_unsigned(void) {
-  Suite *s = suite_create("\033[45m-=S21_SPRINTF_UNSIGNED=-\033[0m");
+  Suite *s = suite_create("\033[47msprintf_unsigned\033[0m");
   TCase *tc = tcase_create("sprintf_tc");
 
   tcase_add_test(tc, sprintf_1_unsigned);

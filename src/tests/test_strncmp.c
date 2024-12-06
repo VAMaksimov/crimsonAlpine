@@ -64,7 +64,7 @@ START_TEST(irregular_4) {
 END_TEST
 
 Suite *test_strncmp(void) {
-    Suite *s = suite_create("\033[45m-=S21_STRNCMP=-\033[0m");
+    Suite *s = suite_create("\033[47mstrncmp\033[0m");
     TCase *tc = tcase_create("strncmp_tc");
 
     tcase_add_test(tc, standard_1);

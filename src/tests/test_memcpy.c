@@ -67,7 +67,7 @@ START_TEST(irregular_4) {
 END_TEST
 
 Suite *test_memcpy(void) {
-  Suite *s = suite_create("\033[45m-=S21_MEMCPY=-\033[0m");
+  Suite *s = suite_create("\033[47mmemcpy\033[0m");
   TCase *tc = tcase_create("memcpy_tc");
 
   tcase_add_test(tc, standart_1);

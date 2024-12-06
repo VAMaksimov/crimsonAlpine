@@ -57,7 +57,7 @@ START_TEST(irregular_4) {
 END_TEST
 
 Suite *test_to_lower(void) {
-  Suite *s = suite_create("\033[45m-=S21_TO_LOWER=-\033[0m");
+  Suite *s = suite_create("\033[47mto_lower\033");
   TCase *tc = tcase_create("to_lower_tc");
 
   tcase_add_test(tc, standart_1);
