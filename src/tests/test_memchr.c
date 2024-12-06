@@ -55,7 +55,7 @@ START_TEST(irregular_4) {
 END_TEST
 
 Suite *test_memchr(void) {
-  Suite *s = suite_create("\033[45m-=S21_MEMCHR=-\033[0m");
+  Suite *s = suite_create("\033[47mmemchr\033[0m");
   TCase *tc = tcase_create("memchr_tc");
 
   tcase_add_test(tc, standart_1);

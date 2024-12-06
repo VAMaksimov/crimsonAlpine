@@ -1,37 +1,35 @@
 #include "test_me.h"
-// One parameter string
+
 START_TEST(sprintf_1_string) {
-  char str1[100] = "";
-  char str2[100] = "";
-  char *str3 = "Test %s Test";
-  char *val = "Why am I here?!";
+  char str1[400] = "";
+  char str2[400] = "";
+  char *str3 = "Word %s Word";
+  char *val = "Who I am?!";
   ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// Three string parameters
 START_TEST(sprintf_2_string) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%s Test %s Test %s";
-  char *val = "I'm so tired";
-  char *val2 = "Who invented this?";
-  char *val3 = "This project gave me hemmoroids";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%s Word %s Word %s";
+  char *val = "I'm so glad";
+  char *val2 = "Who opened the door?";
+  char *val3 = "My room is tiny and dark";
   ck_assert_int_eq(sprintf(str1, str3, val, val2, val3),
                    s21_sprintf(str2, str3, val, val2, val3));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// Three decimal parameters
 START_TEST(sprintf_3_string) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%s Test %s Test %s";
-  char *val = "Don't need this test";
-  char *val2 = "Just for the kicks";
-  char *val3 = "Lol";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%s Word %s Word %s";
+  char *val = "Like and sub";
+  char *val2 = "Great Chinese wall";
+  char *val3 = "aboba";
   ck_assert_int_eq(sprintf(str1, str3, val, val2, val3),
                    s21_sprintf(str2, str3, val, val2, val3));
   ck_assert_pstr_eq(str1, str2);
@@ -40,10 +38,10 @@ END_TEST
 
 // Different sizes WCHAR FOR LATER
 START_TEST(sprintf_4_string) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "Test %ls Test2";
-  wchar_t *val = L"3wtf80";
+  char str1[400];
+  char str2[400];
+  char *str3 = "Word %ls Word";
+  wchar_t *val = L"3abo80";
   sprintf(str1, str3, val);
   s21_sprintf(str2, str3, val);
   // ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4),
@@ -52,86 +50,80 @@ START_TEST(sprintf_4_string) {
 }
 END_TEST
 
-// Different width
 START_TEST(sprintf_5_string) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%3s Test %5s Test %10s";
-  char *val = "WHAT IS THIS";
-  char *val2 = "i don't care anymore";
-  char *val3 = "PPAP";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%3s Word %5s Word %10s";
+  char *val = "WHO are you";
+  char *val2 = "my followers";
+  char *val3 = "matofatogentleman";
   ck_assert_int_eq(sprintf(str1, str3, val, val2, val3),
                    s21_sprintf(str2, str3, val, val2, val3));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// Different precision and width
 START_TEST(sprintf_6_string) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%6.5s Test %.23s Test %3.s TEST %.s";
-  char *val = "WHAT IS THIS";
-  char *val2 = "i don't care anymore, really";
-  char *val3 = "PPAP";
-  char *val4 = "I don't feel so good";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%6.5s Word %.23s Word %3.s Word %.s";
+  char *val = "WHO are you";
+  char *val2 = "hello guys";
+  char *val3 = "MATOFATOGENTLEMAN";
+  char *val4 = "And I'm feeling good";
   ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4),
                    s21_sprintf(str2, str3, val, val2, val3, val4));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// Minus flag
 START_TEST(sprintf_7_string) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%-10.5s Test %-.8s Test %-7s TEST %-.s";
-  char *val = "WHAT IS THIS";
-  char *val2 = "i don't care anymore, really";
-  char *val3 = "PPAP";
-  char *val4 = "I don't feel so good";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%-10.5s Word %-.8s Word %-7s Word %-.s";
+  char *val = "WHO are you";
+  char *val2 = "hello guys";
+  char *val3 = "MATOFATOGENTLEMAN";
+  char *val4 = "And I'm feeling good";
   ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4),
                    s21_sprintf(str2, str3, val, val2, val3, val4));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// Zeroes
 START_TEST(sprintf_8_string) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%0s Test %0.s Test %0.0s TEST %0s GOD %.s";
-  char *val = "WHAT IS THIS";
-  char *val2 = "i don't care anymore, really";
-  char *val3 = "PPAP";
-  char *val4 = "I don't feel so good";
-  char *val5 = "What is lovin'?!";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%0s Word %0.s Word %0.0s Word %0s Word %.s";
+  char *val = "WHO are you";
+  char *val2 = "And I'm feeling good";
+  char *val3 = "MATOFATOGENTLEMAN";
+  char *val4 = "And I'm feeling good";
+  char *val5 = "hello world";
   ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
                    s21_sprintf(str2, str3, val, val2, val3, val4, val5));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// Pluses
 START_TEST(sprintf_9_string) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%+s Test %+3.s Test %5.7s TEST %10s";
-  char *val = "WHAT IS THIS";
-  char *val2 = "i don't care anymore, really";
-  char *val3 = "abcd";
-  char *val4 = "I don't feel so good";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%+s Word %+3.s Word %5.7s Word %10s";
+  char *val = "WHO are you";
+  char *val2 = "And I'm feeling good";
+  char *val3 = "aboba sus";
+  char *val4 = "AMOGUS sus";
   ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4),
                    s21_sprintf(str2, str3, val, val2, val3, val4));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// Zero vals
 START_TEST(sprintf_10_string) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%s Test %3.s Test %5.7s TEST %10s %#s %-s %+s %.s % .s";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%s Word %3.s Word %5.7s Word %10s %#s %-s %+s %.s % .s";
   char *val = NULL;
   ck_assert_int_eq(
       sprintf(str1, str3, val, val, val, val, val, val, val, val, val),
@@ -140,79 +132,74 @@ START_TEST(sprintf_10_string) {
 }
 END_TEST
 
-// Spaces
 START_TEST(sprintf_11_string) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "% s Test % 3.s Test % 5.7s TEST % 10s GOD %.s";
-  char *val = "WHAT IS THIS";
-  char *val2 = "i don't care anymore, really";
-  char *val3 = "PPAP";
-  char *val4 = "I don't feel so good";
-  char *val5 = "What is lovin'?!";
+  char str1[400];
+  char str2[400];
+  char *str3 = "% s Word % 3.s Word % 5.7s Word % 10s Word %.s";
+  char *val = "WHO are you";
+  char *val2 = "And I'm feeling good";
+  char *val3 = "MATOFATOGENTLEMAN";
+  char *val4 = "AMOGUS sus";
+  char *val5 = "hello";
   ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
                    s21_sprintf(str2, str3, val, val2, val3, val4, val5));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// Plus
 START_TEST(sprintf_12_string) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%+s Test %+3.s Test %+5.7s TEST %+10s GOD %+.s";
-  char *val = "WHAT IS THIS";
-  char *val2 = "i don't care anymore, really";
-  char *val3 = "PPAP";
-  char *val4 = "I don't feel so good";
-  char *val5 = "What is lovin'?!";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%+s Word %+3.s Word %+5.7s Word %+10s Word %+.s";
+  char *val = "WHO are you";
+  char *val2 = "And I'm feeling good";
+  char *val3 = "MATOFATOGENTLEMAN";
+  char *val4 = "AMOGUS sus";
+  char *val5 = "hello";
   ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
                    s21_sprintf(str2, str3, val, val2, val3, val4, val5));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// Hash
 START_TEST(sprintf_13_string) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%#s Test %#3s Test %#5.7s TEST %#.7s Oof %#.s";
-  char *val = "WHAT IS THIS";
-  char *val2 = "i don't care anymore, really";
-  char *val3 = "PPAP";
-  char *val4 = "I don't feel so good";
-  char *val5 = "What is lovin'?!";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%#s Word %#3s Word %#5.7s Word %#.7s Word %#.s";
+  char *val = "WHO are you";
+  char *val2 = "And I'm feeling good";
+  char *val3 = "MATOFATOGENTLEMAN";
+  char *val4 = "AMOGUS sus";
+  char *val5 = "hello";
   ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
                    s21_sprintf(str2, str3, val, val2, val3, val4, val5));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// ZERO flag
 START_TEST(sprintf_14_string) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%0s Test %06s Test %05.7s TEST %0.7s Oof %0.s";
-  char *val = "WHAT IS THIS";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%0s Word %06s Word %05.7s Word %0.7s Word %0.s";
+  char *val = "WHO are you";
   char *val2 = "idx";
-  char *val3 = "PPAP";
+  char *val3 = "MATOFATOGENTLEMAN";
   char *val4 = "I don't";
-  char *val5 = "What is lovin'?!";
+  char *val5 = "hello";
   ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
                    s21_sprintf(str2, str3, val, val2, val3, val4, val5));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// Asterisk
 START_TEST(sprintf_15_string) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%*s Test %-*s Test %*.*s TEST %.*s";
-  char *val = "WHAT IS THIS";
-  char *val2 = "i don't care anymore, really";
-  char *val3 = "PPAP";
-  char *val4 = "I don't feel so good";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%*s Word %-*s Word %*.*s Word %.*s";
+  char *val = "WHO are you";
+  char *val2 = "And I'm feeling good";
+  char *val3 = "MATOFATOGENTLEMAN";
+  char *val4 = "AMOGUS sus";
   int ast = 2;
   int ast2 = 5;
   int ast3 = 4;
@@ -227,13 +214,13 @@ START_TEST(sprintf_15_string) {
 END_TEST
 
 START_TEST(sprintf_16_string) {
-  char str1[100];
-  char str2[100];
+  char str1[400];
+  char str2[400];
   char *str3 = "%s %s %s %% %d";
-  char *val = "This";
+  char *val = "That is";
   char *val2 = "\0";
   int val3 = 65;
-  char *val4 = "string";
+  char *val4 = "nothing";
   ck_assert_int_eq(sprintf(str1, str3, val, val2, val4, val3),
                    s21_sprintf(str2, str3, val, val2, val4, val3));
   ck_assert_pstr_eq(str1, str2);
@@ -255,13 +242,13 @@ START_TEST(sprintf_17_string) {
 END_TEST
 
 Suite *test_sprintf_string(void) {
-  Suite *s = suite_create("\033[45m-=S21_SPRINTF_STRING=-\033[0m");
+  Suite *s = suite_create("\033[47msprintf_string\033[0m");
   TCase *tc = tcase_create("sprintf_tc");
 
   tcase_add_test(tc, sprintf_1_string);
   tcase_add_test(tc, sprintf_2_string);
   tcase_add_test(tc, sprintf_3_string);
-  tcase_add_test(tc, sprintf_4_string);  // WCHAR
+  tcase_add_test(tc, sprintf_4_string);
   tcase_add_test(tc, sprintf_5_string);
   tcase_add_test(tc, sprintf_6_string);
   tcase_add_test(tc, sprintf_7_string);

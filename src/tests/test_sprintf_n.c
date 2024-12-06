@@ -1,9 +1,9 @@
 #include "test_me.h"
 
 START_TEST(sprintf_1_n) {
-  char str1[100] = "";
-  char str2[100] = "";
-  char *str3 = "Test %n Test";
+  char str1[400] = "";
+  char str2[400] = "";
+  char *str3 = "Word %n Word";
   int valn1 = 0, valn2 = 0;
   ck_assert_int_eq(sprintf(str1, str3, &valn1),
                    s21_sprintf(str2, str3, &valn2));
@@ -13,9 +13,9 @@ START_TEST(sprintf_1_n) {
 END_TEST
 
 START_TEST(sprintf_2_n) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "Test %o T%nest %o%n";
+  char str1[400];
+  char str2[400];
+  char *str3 = "Word %o W%nord %o%n";
   int val = 012;
   int val2 = 017;
   int valn1 = 0, valn2 = 0, valn3 = 0, valn4 = 0;
@@ -28,9 +28,9 @@ START_TEST(sprintf_2_n) {
 END_TEST
 
 // START_TEST(sprintf_3_n) {
-//   char str1[100];
-//   char str2[100];
-//   char *str3 = "%o Test %o Te%-+#nst %o";
+//   char str1[400];
+//   char str2[400];
+//   char *str3 = "%o Word %o Wo%-+#rd %o";
 //   int val = 3015;
 //   int val2 = 712;
 //   int val3 = 99;
@@ -43,9 +43,9 @@ END_TEST
 // END_TEST
 
 // START_TEST(sprintf_4_n) {
-//   char str1[100];
-//   char str2[100];
-//   char *str3 = "%lo Test %lo Test %ho%34.23n";
+//   char str1[400];
+//   char str2[400];
+//   char *str3 = "%lo Word %lo Word %ho%34.23n";
 //   long int val = 3088675747373646;
 //   unsigned long int val2 = 33030030303;
 //   unsigned short int val3 = 22600;
@@ -60,7 +60,7 @@ END_TEST
 // END_TEST
 
 Suite *test_sprintf_n(void) {
-  Suite *s = suite_create("\033[45m-=S21_SPRINTF_N=-\033[0m");
+  Suite *s = suite_create("\033[47msprintf_n\033[0m");
   TCase *tc = tcase_create("sprintf_tc");
 
   tcase_add_test(tc, sprintf_1_n);

@@ -72,7 +72,7 @@ START_TEST(irregular_4) {
 END_TEST
 
 Suite *test_strncpy(void) {
-    Suite *s = suite_create("\033[45m-=S21_STRNCPY=-\033[0m");
+    Suite *s = suite_create("\033[47mstrncpy\033[0m");
     TCase *tc = tcase_create("strncpy_tc");
 
     tcase_add_test(tc, standard_1);

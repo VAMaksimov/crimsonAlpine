@@ -1,21 +1,19 @@
 #include "test_me.h"
 
-// One parameter HEX
 START_TEST(sprintf_1_HEX) {
-  char str1[100] = "";
-  char str2[100] = "";
-  char *str3 = "Test %X Test";
+  char str1[400] = "";
+  char str2[400] = "";
+  char *str3 = "Word %X Word";
   int val = 0X32;
   ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// Three HEX parameters
 START_TEST(sprintf_2_HEX) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%X Test %X Test %X";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%X Word %X Word %X";
   int val = 0X7a4;
   int val2 = 0X9112312f;
   int val3 = 0X3123;
@@ -25,11 +23,10 @@ START_TEST(sprintf_2_HEX) {
 }
 END_TEST
 
-// Three decimal parameters
 START_TEST(sprintf_3_HEX) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%X Test %X Test %X";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%X Word %X Word %X";
   int val = 0X3015;
   int val2 = 0X712;
   int val3 = 0X99;
@@ -39,11 +36,10 @@ START_TEST(sprintf_3_HEX) {
 }
 END_TEST
 
-// Different sizes
 START_TEST(sprintf_4_HEX) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%lX Test %lX Test %hX GOD %hX";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%lX Word %lX Word %hX Word %hX";
   unsigned long int val = 3088675747373646;
   unsigned long int val2 = 33030030303;
   unsigned short int val3 = 22600;
@@ -54,11 +50,10 @@ START_TEST(sprintf_4_HEX) {
 }
 END_TEST
 
-// Different width
 START_TEST(sprintf_5_HEX) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%3X Test %5X Test %10X";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%3X Word %5X Word %10X";
   int val = 3015;
   int val2 = 01234;
   int val3 = 99;
@@ -68,11 +63,10 @@ START_TEST(sprintf_5_HEX) {
 }
 END_TEST
 
-// Different precision and width
 START_TEST(sprintf_6_HEX) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%6.5X Test %.23X Test %3.X TEST %.X";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%6.5X Word %.23X Word %3.X Word %.X";
   int val = 3015;
   int val2 = 712;
   int val3 = 99;
@@ -83,11 +77,10 @@ START_TEST(sprintf_6_HEX) {
 }
 END_TEST
 
-// Minus flag
 START_TEST(sprintf_7_HEX) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%-10.5X Test %-.8X Test %-7X TEST %-.X";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%-10.5X Word %-.8X Word %-7X Word %-.X";
   int val = 3015;
   int val2 = 712;
   int val3 = 99;
@@ -98,11 +91,10 @@ START_TEST(sprintf_7_HEX) {
 }
 END_TEST
 
-// Zeroes
 START_TEST(sprintf_8_HEX) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%0X Test %0.X Test %0.0X TEST %0X GOD %.X";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%0X Word %0.X Word %0.0X Word %0X Word %.X";
   int val = 3015;
   int val2 = 712;
   int val3 = 99;
@@ -114,11 +106,10 @@ START_TEST(sprintf_8_HEX) {
 }
 END_TEST
 
-// Pluses
 START_TEST(sprintf_9_HEX) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%+X Test %+3.X Test %+5.7X TEST %+10X";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%+X Word %+3.X Word %+5.7X Word %+10X";
   int val = 3015;
   int val2 = 712;
   int val3 = 99;
@@ -129,11 +120,10 @@ START_TEST(sprintf_9_HEX) {
 }
 END_TEST
 
-// Zero vals
 START_TEST(sprintf_10_HEX) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%X Test %3.X Test %5.7X TEST %10X %#X %-X %+X %.X % .X";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%X Word %3.X Word %5.7X Word %10X %#X %-X %+X %.X % .X";
   int val = 0;
   ck_assert_int_eq(
       sprintf(str1, str3, val, val, val, val, val, val, val, val, val),
@@ -142,11 +132,10 @@ START_TEST(sprintf_10_HEX) {
 }
 END_TEST
 
-// Spaces
 START_TEST(sprintf_11_HEX) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "% X Test % 3.X Test % 5.7X TEST % 10X GOD %.X";
+  char str1[400];
+  char str2[400];
+  char *str3 = "% X Word % 3.X Word % 5.7X TEST % 10X Word %.X";
   int val = 32;
   int val2 = 8899;
   int val3 = 91918;
@@ -158,11 +147,10 @@ START_TEST(sprintf_11_HEX) {
 }
 END_TEST
 
-// Plus
 START_TEST(sprintf_12_HEX) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%+X Test %+3.X Test %+5.7X TEST %+10X GOD %+.X";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%+X Word %+3.X Word %+5.7X Word %+10X Word %+.X";
   int val = 32;
   int val2 = 8899;
   int val3 = 91918;
@@ -174,11 +162,10 @@ START_TEST(sprintf_12_HEX) {
 }
 END_TEST
 
-// Hash
 START_TEST(sprintf_13_HEX) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%#X Test %#3X Test %#5.7X TEST %#.7X Oof %#.X";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%#X Word %#3X Word %#5.7X Word %#.7X Word %#.X";
   int val = 32;
   int val2 = 8899;
   int val3 = 91918;
@@ -190,11 +177,10 @@ START_TEST(sprintf_13_HEX) {
 }
 END_TEST
 
-// ZERO flag
 START_TEST(sprintf_14_HEX) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%0X Test %06X Test %05.7X TEST %0.7X Oof %0.X";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%0X Word %06X Word %05.7X Word %0.7X Word %0.X";
   int val = 32;
   int val2 = 8899;
   int val3 = 91918;
@@ -206,11 +192,10 @@ START_TEST(sprintf_14_HEX) {
 }
 END_TEST
 
-// Asterisk
 START_TEST(sprintf_15_HEX) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%*X Test %-*X Test %*.*X TEST %.*X";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%*X Word %-*X Word %*.*X Word %.*X";
   int val = 32;
   int val2 = 8899;
   int val3 = 919;
@@ -229,9 +214,9 @@ START_TEST(sprintf_15_HEX) {
 END_TEST
 
 START_TEST(sprintf_16_HEX) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%- X Test %- 15X sdasda %- 15X sdsad %- X";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%- X Word %- 15X Word %- 15X Word %- X";
   int val = -3231;
   int val2 = -3231;
   int val3 = 3231;
@@ -243,7 +228,7 @@ START_TEST(sprintf_16_HEX) {
 END_TEST
 
 Suite *test_sprintf_HEX(void) {
-  Suite *s = suite_create("\033[45m-=S21_SPRINTF_HEX2=-\033[0m");
+  Suite *s = suite_create("\033[47msprintf_HEX2\033[0m");
   TCase *tc = tcase_create("sprintf_tc");
 
   tcase_add_test(tc, sprintf_1_HEX);

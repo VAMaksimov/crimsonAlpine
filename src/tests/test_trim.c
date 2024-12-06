@@ -57,7 +57,7 @@ START_TEST(irregular_4) {
 END_TEST
 
 Suite *test_trim(void) {
-  Suite *s = suite_create("\033[45m-=S21_TRIM=-\033[0m");
+  Suite *s = suite_create("\033[47mtrim\033[0m");
   TCase *tc = tcase_create("trim_tc");
 
   tcase_add_test(tc, standart_1);

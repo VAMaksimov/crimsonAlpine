@@ -28,16 +28,34 @@ int main(void) {
        test_trim(),
       NULL};
 
-  for (int i = 0; s21_string_test[i] != NULL; i++) {  // (&& failed == 0)
-    SRunner *sr = srunner_create(s21_string_test[i]);
+    for (int i = 0; s21_string_test[i] != NULL; i++) {
+        Suite *s = s21_string_test[i];
+        
+        // Создаем новый тестовый набор
+        SRunner *sr = srunner_create(s);
 
-    srunner_set_fork_status(sr, CK_NOFORK);
-    srunner_run_all(sr, CK_NORMAL);
+        srunner_set_fork_status(sr, CK_NOFORK); // Не использовать fork для запуска тестов
+        srunner_run_all(sr, CK_NORMAL); // Запуск всех тестов
 
-    failed += srunner_ntests_failed(sr);
-    srunner_free(sr);
-  }
-  printf("========= FAILED: %d =========\n", failed);
+        int suite_failed = srunner_ntests_failed(sr); // Получаем количество неудачных тестов
+        failed += suite_failed; // Суммируем общее количество неудачных тестов
 
-  return failed == 0 ? 0 : 1;
+        // Изменение цвета названия в зависимости от результатов
+        if (suite_failed > 0) {
+            printf("\033[31mFAILED_FAILED_FAILED_FAILED_FAILED_FAILED\033[0m\n"); // Красный текст при ошибках
+        } else {
+            printf("\033[32mPASSED_PASSED_PASSED_PASSED_PASSED_PASSED\033[0m\n"); // Зеленый текст при успехе
+        }
+
+        srunner_free(sr); // Освобождаем ресурсы для текущего набора тестов
+    }
+
+    // Вывод общего результата
+    if (failed > 0) {
+        printf("\033[31m========= FAILED: %d =========\033[0m\n", failed); // Красный текст при ошибках
+    } else {
+        printf("\033[32m========= ALL TESTS PASSED! =========\033[0m\n"); // Зеленый текст при успехе
+    }
+
+    return failed == 0 ? 0 : 1; // Возвращаем 0 при успехе, иначе 1
 }
