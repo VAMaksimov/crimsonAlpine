@@ -66,6 +66,6 @@ void stoa(void *c, char *buffer, size_t *index, format_value values);
 
 int get_uint_length(unsigned long long v, format_value values);
 int define_base_System(char spec);
-int exponent(long double *v);
+int exponent(long double value);
 
 #endif  // S21_SPRINTF_H

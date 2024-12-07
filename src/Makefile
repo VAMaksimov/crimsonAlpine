@@ -3,9 +3,9 @@ AR = ar rcs
 LIBRARY = s21_string.a
 
 # flags
-CC = gcc -Wall -Wextra -Werror -std=c11
+CC = gcc -Wall -Wextra -Werror -std=c11 -g
 CFLAGS_TEST = -fprofile-arcs -ftest-coverage
-LDFLAGS_TEST = -lcheck -lm  
+LDFLAGS_TEST = -lcheck -lm  -lsubunit
 
 # dirs
 SRC_DIR = components
@@ -72,7 +72,7 @@ gcov_report: test
 	genhtml coverage.info --output-directory html_report
 
 clean:
-	rm -rf $(BUILD_DIR) $(OBJ_TEST_DIR) $(LIBRARY) $(TEST_EXEC) $(COMPILED_TESTS) coverage.info  *.gcda *.gcno
+	rm -rf $(BUILD_DIR) $(OBJ_TEST_DIR) $(LIBRARY) $(TEST_EXEC) $(COMPILED_TESTS) debug coverage.info  *.gcda *.gcno
 
 rebuild: clean all
 
@@ -80,6 +80,8 @@ rebuild: clean all
 valgrind:
 	valgrind --leak-check=full ./$(TEST_EXEC)
 
+debug: $(TEST_OBJS) $(TEST_FILES_OBJS) 
+	@$(CC) $(CFLAGS_TEST) $^ -o $@ $(LDFLAGS_TEST)
 # ---
 # old
 

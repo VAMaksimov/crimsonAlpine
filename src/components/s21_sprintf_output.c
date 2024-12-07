@@ -1,5 +1,11 @@
 #include "s21_sprintf.h"
 
+// void zero_ouput(char *buffer, size_t *index, format_value values) {
+//   size_t len = 1;
+//   if (values.precision_exist) len = max(1, values.precision_value);
+//   case_zero_padding(buffer, index, values, len, 1, '+');
+// }
+
 int trim_zeros(char *buffer, size_t *index, size_t old_index) {
   size_t i = (*index) - 1, r = 0;
   while ((buffer[i] == '.' || buffer[i] == '0') && i >= old_index) {
@@ -101,7 +107,7 @@ void ftoa(void *c, char *buffer, size_t *index, format_value values) {
   if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
     buffer[(*index)++] = '.';
   fractional_ftoa(&fractional_value, buffer, index, values.precision_value);
-  round_ftoa(&fractional_value, buffer, index, old_index);
+  // round_ftoa(&fractional_value, buffer, index, old_index);
   if ((values.specifier_value == g_SPEC || values.specifier_value == G_SPEC) &&
       !(values.flag_value & HASH_FLAG)) {
     int r = 0;
@@ -130,14 +136,14 @@ void etoa(void *c, char *buffer, size_t *index, format_value values) {
   if (local_spec == G_SPEC) local_spec = 'E';
   size_t old_index = *index;
   long double v = *((long double *)c);
-  int e = exponent(&v);
+  int e = exponent(v);
 
   buffer[(*index)++] = ((int)v) + '0';
   if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
     buffer[(*index)++] = '.';
   v -= (int)v;
   fractional_ftoa(&v, buffer, index, values.precision_value);
-  round_ftoa(&v, buffer, index, old_index);
+  // round_ftoa(&v, buffer, index, old_index);
   if ((values.specifier_value == g_SPEC || values.specifier_value == G_SPEC) &&
       !(values.flag_value & HASH_FLAG))
     trim_zeros(buffer, index, old_index);

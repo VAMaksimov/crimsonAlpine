@@ -21,20 +21,21 @@ int define_base_System(char spec) {
   return base_System;
 }
 
-int exponent(long double *v) {
-  int e = 0;
-  if (*v == 0)
-    ;
-  else if (*v >= 10) {
-    while (*v >= 10) {
-      *v /= 10;
-      e++;
-    }
-  } else if (*v < 1) {
-    while (*v < 1 && (int)(*v * 10) != 9) {
-      *v *= 10;
-      e--;
+int exponent(long double value) {
+  long double temp = abs(value);
+  int exp = 0;
+  if (temp != 0) {
+    if (temp >= 10) {
+      while (temp >= 10) {
+        temp /= 10;
+        exp++;
+      }
+    } else if (temp < 1) {
+      while (temp < 1 && temp != 0) {
+        temp *= 10;
+        exp--;
+      }
     }
   }
-  return e;
+  return exp;
 }
