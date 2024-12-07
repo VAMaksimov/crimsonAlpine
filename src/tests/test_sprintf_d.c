@@ -1,21 +1,19 @@
 #include "test_me.h"
 
-// One parameter signed
 START_TEST(sprintf_1_signed) {
-  char str1[100] = "";
-  char str2[100] = "";
-  char *str3 = "Test %d Test";
+  char str1[400] = "";
+  char str2[400] = "";
+  char *str3 = "Word %d Word";
   int val = -12;
   ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// Three signed parameters
 START_TEST(sprintf_2_signed) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%d Test %d Test %d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%d Word %d Word %d";
   int val = 012;
   int val2 = -017;
   int val3 = 07464;
@@ -25,11 +23,10 @@ START_TEST(sprintf_2_signed) {
 }
 END_TEST
 
-// Three decimal parameters
 START_TEST(sprintf_3_signed) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%d Test %d Test %d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%d Word %d Word %d";
   int val = 3015;
   int val2 = 712;
   int val3 = 99;
@@ -39,11 +36,10 @@ START_TEST(sprintf_3_signed) {
 }
 END_TEST
 
-// Different sizes
 START_TEST(sprintf_4_signed) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%ld Test %ld Test %hd GOD %hd";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%ld Word %ld Word %hd Word %hd";
   long int val = 3088675747373646;
   long val2 = 33030030303;
   short int val3 = 22600;
@@ -54,11 +50,10 @@ START_TEST(sprintf_4_signed) {
 }
 END_TEST
 
-// Different width
 START_TEST(sprintf_5_signed) {
-  char str1[100];
-  char str2[100];
-  char *str3 = "%3d Test %5d Test %10d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%3d Word %5d Word %10d";
   int val = -3015;
   int val2 = -11234;
   int val3 = -99;
@@ -68,27 +63,25 @@ START_TEST(sprintf_5_signed) {
 }
 END_TEST
 
-// Different precision and width
 START_TEST(sprintf_6_signed) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%6.5d Test %.23d Test %3.d TEST %.d %.6d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%6.5d Word %.23d Word %3.d Word %.d %.6d";
   int val = -3015;
   int val2 = -712;
   int val3 = -99;
   int val4 = -38;
-  int val5 = -100;
+  int val5 = -400;
   ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
                    s21_sprintf(str2, str3, val, val2, val3, val4, val5));
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
 
-// Minus flag
 START_TEST(sprintf_7_signed) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%-10.5d Test %-.8d Test %-7d TEST %-.d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%-10.5d Word %-.8d Word %-7d Word %-.d";
   int val = -3015;
   int val2 = -712;
   int val3 = -99;
@@ -99,11 +92,10 @@ START_TEST(sprintf_7_signed) {
 }
 END_TEST
 
-// Zeroes
 START_TEST(sprintf_8_signed) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%0d Test %0.d Test %0.0d TEST %0d GOD %.d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%0d Word %0.d Word %0.0d Word %0d Word %.d";
   int val = -3015;
   int val2 = -712;
   int val3 = -99;
@@ -115,11 +107,10 @@ START_TEST(sprintf_8_signed) {
 }
 END_TEST
 
-// Pluses
 START_TEST(sprintf_9_signed) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%+d Test %+3.d Test %+5.7d TEST %+10d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%+d Word %+3.d Word %+5.7d Word %+10d";
   int val = -3015;
   int val2 = -712;
   int val3 = -99;
@@ -130,11 +121,10 @@ START_TEST(sprintf_9_signed) {
 }
 END_TEST
 
-// Zero vals
 START_TEST(sprintf_10_signed) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%d Test %3.d Test %5.7d TEST %10d %#d %-d %+d %.d % .d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%d Word %3.d Word %5.7d Word %10d %#d %-d %+d %.d % .d";
   int val = 0;
   ck_assert_int_eq(
       sprintf(str1, str3, val, val, val, val, val, val, val, val, val),
@@ -144,11 +134,10 @@ START_TEST(sprintf_10_signed) {
 }
 END_TEST
 
-// Spaces
 START_TEST(sprintf_11_signed) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "% d Test % 3.d Test % 5.7d TEST % 10d GOD %.d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "% d Word % 3.d Word % 5.7d Word % 10d Word %.d";
   int val = -32;
   int val2 = -8899;
   int val3 = -91918;
@@ -160,11 +149,10 @@ START_TEST(sprintf_11_signed) {
 }
 END_TEST
 
-// Plus
 START_TEST(sprintf_12_signed) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%+d Test %+3.d Test %+5.7d TEST %+10d GOD %+.d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%+d Word %+3.d Word %+5.7d Word %+10d Word %+.d";
   int val = -32;
   int val2 = -8899;
   int val3 = 91918;
@@ -176,11 +164,10 @@ START_TEST(sprintf_12_signed) {
 }
 END_TEST
 
-// Hash
 START_TEST(sprintf_13_signed) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%#d Test %#3d Test %#5.7d TEST %#.7d Oof %#.d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%#d Word %#3d Word %#5.7d Word %#.7d Word %#.d";
   int val = -32;
   int val2 = 8899;
   int val3 = -91918;
@@ -192,11 +179,10 @@ START_TEST(sprintf_13_signed) {
 }
 END_TEST
 
-// ZERO flag
 START_TEST(sprintf_14_signed) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%0d Test %06d Test %05.7d TEST %0.7d Oof %0.d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%0d Word %06d Word %05.7d Word %0.7d Word %0.d";
   int val = -32;
   int val2 = 8899;
   int val3 = -91918;
@@ -208,11 +194,10 @@ START_TEST(sprintf_14_signed) {
 }
 END_TEST
 
-// Asterisk
 START_TEST(sprintf_15_signed) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%*d Test %-*d Test %*.*d TEST %.*d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%*d Word %-*d Word %*.*d Word %.*d";
   int val = 32;
   int val2 = 8899;
   int val3 = -919;
@@ -230,10 +215,9 @@ START_TEST(sprintf_15_signed) {
 }
 END_TEST
 
-// Simple extra test
 START_TEST(sprintf_16_signed) {
-  char str1[100] = "";
-  char str2[100] = "";
+  char str1[400] = "";
+  char str2[400] = "";
   char *str3 = "%d";
   int val = 12;
   ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
@@ -244,16 +228,16 @@ START_TEST(sprintf_17_signed) {
   char str1[1024] = "";
   char str2[1024] = "";
   int val = -75;
-  sprintf(str1, "Hello %d %023d", val, val);  // нет нулей перед числом(бонус)
-  s21_sprintf(str2, "Hello %d %023d", val, val);
+  sprintf(str1, "Hi %d %023d", val, val);
+  s21_sprintf(str2, "Hi %d %023d", val, val);
   ck_assert_str_eq(str1, str2);
 }
 END_TEST
 
 START_TEST(sprintf_18_signed) {
-  char str1[300];
-  char str2[300];
-  char *str3 = "%ld Test %ld Test %hd GOD %hd tt %d tt %d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%ld Word %ld Word %hd Word %hd Word %d word %d";
   long int val = LONG_MAX;
   long val2 = LONG_MIN;
   short int val3 = SHRT_MAX;
@@ -267,9 +251,9 @@ START_TEST(sprintf_18_signed) {
 END_TEST
 
 START_TEST(sprintf_19_signed) {
-  char str1[200];
-  char str2[200];
-  char *str3 = "%- d Test %- 15d sdasda %- 15d sdsad %- d";
+  char str1[400];
+  char str2[400];
+  char *str3 = "%- d Word %- 15d Word %- 15d Word %- d";
   int val = -3231;
   int val2 = -3231;
   int val3 = 3231;
@@ -281,7 +265,7 @@ START_TEST(sprintf_19_signed) {
 END_TEST
 
 Suite *test_sprintf_signed(void) {
-  Suite *s = suite_create("\033[45m-=S21_SPRINTF_SIGNED=-\033[0m");
+  Suite *s = suite_create("\033[47msprintf_d\033[0m");
   TCase *tc = tcase_create("sprintf_tc");
 
   tcase_add_test(tc, sprintf_1_signed);
