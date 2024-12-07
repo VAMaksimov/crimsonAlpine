@@ -11,13 +11,6 @@ int number_parser(const char **p) {
   return res;
 }
 
-void trim_zeros(char *buffer, size_t *index, size_t old_index) {
-  int i = (*index) - 1;
-  while (( buffer[i] == '.' || buffer[i] == '0') && i >= old_index) {
-    (*index)--, buffer[i--] = 0;
-  }
-}
-
 void width_parser(const char **p, format_value *values, va_list factor) {
   if (**p == '*')
     values->width_value = va_arg(factor, int);
@@ -136,6 +129,16 @@ void fractional_ftoa(long double *c, char *buffer, size_t *index,
   }
 }
 
+int trim_zeros(char *buffer, size_t *index, size_t old_index) {
+  int i = (*index) - 1, r = 0;
+  while ((buffer[i] == '.' || buffer[i] == '0') && i >= old_index) {
+    bool f = buffer[i] == '.';
+    (*index)--, ++r, buffer[i--] = ' ';
+    if (f) i = -1;
+  }
+  return r;
+}
+
 void ftoa(void *c, char *buffer, size_t *index, format_value values) {
   // if (values.precision_exist && values.precision_value == 0) return buffer;
   long double v = *((long double *)c);
@@ -148,8 +151,19 @@ void ftoa(void *c, char *buffer, size_t *index, format_value values) {
     buffer[(*index)++] = '.';
   fractional_ftoa(&fractional_value, buffer, index, values.precision_value);
   round_ftoa(&fractional_value, buffer, index, old_index);
-  if ((values.specifier_value == g_SPEC || values.specifier_value == G_SPEC) && !(values.flag_value & HASH_FLAG))
-    trim_zeros(buffer, index, old_index); 
+  if ((values.specifier_value == g_SPEC || values.specifier_value == G_SPEC) &&
+      !(values.flag_value & HASH_FLAG)) {
+    int r = 0;
+    if (values.precision_value != 0) r = trim_zeros(buffer, index, old_index);
+
+    if ((!(values.flag_value & LEFT_JUSTIFY_FLAG)) &&
+        values.width_value > *index - old_index + 1) {
+      s21_memmove(&buffer[old_index + r - 1], &buffer[old_index - 1],
+                  *index - old_index + 1);
+      for (int i = 0; i < r; ++i) buffer[old_index + i - 1] = ' ';
+    }
+    *index += r;
+  }
   // } else {
   //   integer_ftoa(&v, buffer, index);
   //   if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
@@ -191,8 +205,9 @@ void etoa(void *c, char *buffer, size_t *index, format_value values) {
   v -= (int)v;
   fractional_ftoa(&v, buffer, index, values.precision_value);
   round_ftoa(&v, buffer, index, old_index);
-  if ((values.specifier_value == g_SPEC || values.specifier_value == G_SPEC) && !(values.flag_value & HASH_FLAG))
-    trim_zeros(buffer, index, old_index); 
+  if ((values.specifier_value == g_SPEC || values.specifier_value == G_SPEC) &&
+      !(values.flag_value & HASH_FLAG))
+    trim_zeros(buffer, index, old_index);
   buffer[(*index)++] = local_spec;
   buffer[(*index)++] = e < 0 ? '-' : '+';
   if (e < 0) e = -e;
@@ -404,7 +419,7 @@ void formated_float(char *buffer, size_t *index, va_list factor,
       values.precision_value -= 1;
     }
   }
-  if (values.precision_value != 0 || values.flag_value & HASH_FLAG )
+  if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
     len += values.precision_value + 1;
   char sign = '+';
   if (v < 0) v = -v, ++len, sign = '-';
@@ -415,9 +430,8 @@ void formated_float(char *buffer, size_t *index, va_list factor,
   if (local_spec == FLOAT_SPEC) {
     if (roundl(v) != 0) len += ((size_t)log10l(v));
     format_flag_(buffer, index, values, &v, len, sign, ftoa);
-  } else if (local_spec == e_SPEC ||
-             local_spec == E_SPEC) {
-    len += 4 ;
+  } else if (local_spec == e_SPEC || local_spec == E_SPEC) {
+    len += 4;
     int power = log10((long)log10l(v)) - 1;
     len += power > 0 ? power : 0;
     format_flag_(buffer, index, values, &v, len, sign, etoa);
@@ -429,10 +443,9 @@ void formated_float(char *buffer, size_t *index, va_list factor,
 //                 format_value values) {
 //   long double v = 0;
 //   if (!values.length_value) v = va_arg(factor, double);
-//   if (values.length_value == LONG_LONG_INT_LENGTH) v = va_arg(factor, long double);
-//   if (!values.precision_exist) values.precision_value = 1; 
-//   size_t len = 1;
-//   if (values.precision_value != 0 || values.flag_value == HASH_FLAG)
+//   if (values.length_value == LONG_LONG_INT_LENGTH) v = va_arg(factor, long
+//   double); if (!values.precision_exist) values.precision_value = 1; size_t
+//   len = 1; if (values.precision_value != 0 || values.flag_value == HASH_FLAG)
 //     len += values.precision_value + 1;
 //   char sign = '+';
 //   if (v < 0) v = -v, ++len, sign = '-';
@@ -534,14 +547,11 @@ int s21_sprintf(char *buffer, const char *format, ...) {
 int main(void) {
   int failed = 0;
   Suite *s21_string_test[] = {
-      test_sprintf_c(),       
-      test_sprintf_e(),
-              test_sprintf_g(),
+      test_sprintf_c(),       test_sprintf_e(),        test_sprintf_g(),
       test_sprintf_octal(),   test_sprintf_percent(),  test_sprintf_n(),
       test_sprintf_string(),  test_sprintf_unsigned(), test_sprintf_HEX(),
       test_sprintf_hex(),     test_sprintf_signed(),   test_sprintf_signed_i(),
-      test_sprintf_pointer(), test_sprintf_f(),
-              NULL};
+      test_sprintf_pointer(), test_sprintf_f(),        NULL};
 
   for (int i = 0; s21_string_test[i] != NULL; i++) {
     SRunner *sr = srunner_create(s21_string_test[i]);
@@ -555,11 +565,11 @@ int main(void) {
   printf("========= FAILED: %d =========\n", failed);
   char str1[100];
   char str2[100];
-  char *str3 = "%20.10g\n%20.15g\n%-20.5g!";
-  double num = -76.756589;
-  sprintf(str1, str3, num, num, num);
+  char *str3 = "%g TEST %.g TEST %4g TEST %4.g TEST %5.10g!";
+  double num = 573429.56589367;
+  sprintf(str1, str3, num, num, num, num, num);
   printf("%s\n\n", str1);
-  s21_sprintf(str2, str3, num, num, num);
+  s21_sprintf(str2, str3, num, num, num, num, num);
   printf("%s\n", str2);
 }
 

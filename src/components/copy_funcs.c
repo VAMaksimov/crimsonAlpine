@@ -97,7 +97,7 @@ void s21_memmove(char *dest, const char *src, size_t n) {
       dest[i] = src[i];
     }
   } else if (dest > src) {
-    for (size_t i = n - 1; i >= 0; i--) {
+    for (int i = n - 1; i >= 0; i--) {
       dest[i] = src[i];
     }
   }

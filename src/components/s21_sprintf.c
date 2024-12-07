@@ -25,7 +25,7 @@ int s21_sprintf(char *buffer, const char *format, ...) {
 
   while (p != NULL && *p != '\0') {
     format_value values = {0};
-    while (*p != '%' && *p != '\0') {  // Переписать на s21_strncpy
+    while (*p != '%' && *p != '\0') {
       buffer[index++] = *p++;
     }
     if (*p != '\0') p = format_parser(buffer, &index, ++p, factor, values);
@@ -63,7 +63,7 @@ const char *format_parser(char *buffer, size_t *index, const char *p,
   while (!values.specifier_value) {
     if (!(values.flag_value & LEFT_JUSTIFY_FLAG) &&
         !(values.flag_value & SIGN_PRECEDENCE_FLAG) && s21_strchr("-+ #0", *p))
-      values.flag_value = flag_value(*p);
+      values.flag_value |= flag_value(*p);
     else if (s21_strchr("123456789*", *p))
       width_parser(&p, &values, factor);
     else if (*p == '.') {
@@ -101,4 +101,6 @@ void format_execusion(char *buffer, size_t *index, format_value values,
     formated_pointer(buffer, index, factor, values);
   else if (values.specifier_value == COUNT_OF_CHARS_INSIDE_SPEC)
     formated_n(index, factor);
+  else if (values.specifier_value == PERCENT_CHAR_SPEC)
+    formated_percent(buffer, index, values);
 }

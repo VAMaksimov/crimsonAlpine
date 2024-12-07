@@ -1,4 +1,4 @@
-FROM quay.io/school21/alpine:3.16
+FROM ubuntu
 
 RUN apk --no-cache --upgrade add \
     git \
@@ -12,7 +12,9 @@ RUN apk --no-cache --upgrade add \
     cppcheck \
     alpine-sdk \
     pcre-dev \
-    clang-extra-tools
+    clang-extra-tools \
+    check \
+    check-dev
 
 
 COPY . /project

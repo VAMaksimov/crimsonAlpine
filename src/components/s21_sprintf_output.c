@@ -1,5 +1,15 @@
 #include "s21_sprintf.h"
 
+int trim_zeros(char *buffer, size_t *index, size_t old_index) {
+  size_t i = (*index) - 1, r = 0;
+  while ((buffer[i] == '.' || buffer[i] == '0') && i >= old_index) {
+    bool f = buffer[i] == '.';
+    (*index)--, ++r, buffer[i--] = ' ';
+    if (f) i = -1;
+  }
+  return r;
+}
+
 void itoa(void *c, char *buffer, size_t *index, format_value values) {
   unsigned long long n = *(unsigned long long *)c;
   if (n == 0) {
@@ -8,8 +18,8 @@ void itoa(void *c, char *buffer, size_t *index, format_value values) {
   } else {
     char s_v = values.specifier_value;
     int base_System = define_base_System(s_v);
-    size_t len = get_uint_length(n, values);
-    for (size_t i = len; i >= 0; --i) {
+    int len = get_uint_length(n, values);
+    for (int i = len; i >= 0; --i) {
       unsigned long long x = n % base_System;
       n /= base_System;
       buffer[(*index) + i] =
@@ -41,29 +51,28 @@ void integer_ftoa(const long double *c, char *buffer, size_t *index) {
   *index += len_v + 1;
 }
 
-void round_ftoa(const long double *c, char *buffer, size_t *index) {
+void round_ftoa(const long double *c, char *buffer, size_t *index,
+                size_t old_index) {
   if ((*c) * 10 > 5) {
     int i = (*index) - 1;
-    while (buffer[i] == '9' && i >= 0) {
+    while (buffer[i] == '9' && (size_t)i >= old_index) {
       buffer[i--] = '0';
     }
     if (buffer[i--] == '.') {
       while (buffer[i] == '9' && i >= 0) {
         buffer[i--] = '0';
       }
-      if (i < 0) {
-        s21_memmove(&buffer[1], &buffer[0], *index);
-        buffer[0] = '1';
+      if ((size_t)i == old_index - 1) {
+        s21_memmove(&buffer[i + 2], &buffer[i + 1], i);
+        buffer[i + 1] = '1';
         ++(*index);
-      } else {
+      } else
         buffer[i]++;
-      }
     } else {
-      if (i < 0) {
-        s21_memmove(&buffer[1], &buffer[0], *index);
-        buffer[0] = '1';
+      if ((size_t)i == old_index - 2) {
+        s21_memmove(&buffer[i + 2], &buffer[i + 1], i);
+        buffer[i + 2] = '1';
         ++(*index);
-
       } else {
         buffer[++i]++;
       }
@@ -84,42 +93,68 @@ void fractional_ftoa(long double *c, char *buffer, size_t *index,
 void ftoa(void *c, char *buffer, size_t *index, format_value values) {
   // if (values.precision_exist && values.precision_value == 0) return buffer;
   long double v = *((long double *)c);
+  // if ((int)log10l(v) + 1 < 16) {
   long double integer_value = 0;
   long double fractional_value = modfl(v, &integer_value);
+  size_t old_index = *index;
   integer_ftoa(&integer_value, buffer, index);
-  if (values.precision_value != 0 || values.flag_value == HASH_FLAG)
+  if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
     buffer[(*index)++] = '.';
   fractional_ftoa(&fractional_value, buffer, index, values.precision_value);
-  round_ftoa(&fractional_value, buffer, index);
+  round_ftoa(&fractional_value, buffer, index, old_index);
+  if ((values.specifier_value == g_SPEC || values.specifier_value == G_SPEC) &&
+      !(values.flag_value & HASH_FLAG)) {
+    int r = 0;
+    if (values.precision_value != 0) r = trim_zeros(buffer, index, old_index);
+
+    if ((!(values.flag_value & LEFT_JUSTIFY_FLAG)) &&
+        (size_t)values.width_value > (*index - old_index + 1)) {
+      s21_memmove(&buffer[old_index + r - 1], &buffer[old_index - 1],
+                  *index - old_index + 1);
+      for (int i = 0; i < r; ++i) buffer[old_index + i - 1] = ' ';
+    }
+    *index += r;
+  }
+  // } else {
+  //   integer_ftoa(&v, buffer, index);
+  //   if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
+  //     buffer[(*index)++] = '.';
+  //   s21_memset(buffer + *index, '0', values.precision_value);
+  //   *index += values.precision_value;
+  // }
 }
 
 void etoa(void *c, char *buffer, size_t *index, format_value values) {
+  char local_spec = values.specifier_value;
+  if (local_spec == g_SPEC) local_spec = 'e';
+  if (local_spec == G_SPEC) local_spec = 'E';
+  size_t old_index = *index;
   long double v = *((long double *)c);
-  int e = 0;
-  if (v == 0)
-    ;
-  else if (v >= 10) {
-    while (v >= 10) {
-      v /= 10;
-      e++;
-    }
-  } else if (v < 1) {
-    while (v < 1 && (int)(v * 10) != 9) {
-      v *= 10;
-      e--;
-    }
-  }
+  int e = exponent(&v);
+
   buffer[(*index)++] = ((int)v) + '0';
-  if (values.precision_value != 0 || values.flag_value == HASH_FLAG)
+  if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
     buffer[(*index)++] = '.';
   v -= (int)v;
   fractional_ftoa(&v, buffer, index, values.precision_value);
-  round_ftoa(&v, buffer, index);
-  buffer[(*index)++] = values.specifier_value;
+  round_ftoa(&v, buffer, index, old_index);
+  if ((values.specifier_value == g_SPEC || values.specifier_value == G_SPEC) &&
+      !(values.flag_value & HASH_FLAG))
+    trim_zeros(buffer, index, old_index);
+  buffer[(*index)++] = local_spec;
   buffer[(*index)++] = e < 0 ? '-' : '+';
   if (e < 0) e = -e;
   buffer[(*index)++] = '0';
   buffer[(*index)] = '0';
   long double e_copy = e;
+  if (e > 9) --(*index);
   integer_ftoa(&e_copy, buffer, index);
+}
+
+void stoa(void *c, char *buffer, size_t *index, format_value values) {
+  char *v = (char *)c;
+  size_t len = s21_strlen(v);
+  if (values.precision_exist) len = min(len, values.precision_value);
+  s21_memcpy(buffer + *index, v, len);
+  *index += len;
 }
