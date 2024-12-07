@@ -34,7 +34,6 @@ void formated_float(char *buffer, size_t *index, va_list factor,
 // output functions
 
 void itoa(void *c, char *buffer, size_t *index, format_value values);
-void itoa_for_zero(void *c, char *buffer, size_t *index, format_value values);
 void ctoa(void *c, char *buffer, size_t *index, format_value values);
 void integer_ftoa(const long double *c, char *buffer, size_t *index);
 void round_ftoa(const long double *c, char *buffer, size_t *index);
@@ -45,6 +44,7 @@ void etoa(void *c, char *buffer, size_t *index, format_value values);
 
 // minor
 
-size_t get_uint_length(long int v, format_value values);
+size_t get_uint_length(unsigned long long v, format_value values);
+int define_base_System(char spec);
 
 #endif  // S21_SPRINTF_H

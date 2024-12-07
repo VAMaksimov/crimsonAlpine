@@ -2,24 +2,20 @@
 
 void itoa(void *c, char *buffer, size_t *index, format_value values) {
   unsigned long long n = *(unsigned long long *)c;
-  char s_v = values.specifier_value;
-  int base_System =
-      s_v == x_SPEC || s_v == X_SPEC ? HEXADECIMAL_BASE : DECIMAL_BASE;
-  base_System = s_v == OCTAL_SPEC ? OCTAL_BASE : base_System;
-  if (n > 0) {
-    unsigned long long x = n % base_System;
-    unsigned long long next_n = n / base_System;
-    itoa(&next_n, buffer, index, values);
-    buffer[(*index)++] =
-        (x < 10) ? (x + '0') : (x - 10 + (s_v == 'x' ? 'a' : 'A'));
+  if (n == 0) {
+    if (!values.precision_exist || values.precision_value != 0)
+      buffer[(*index)++] = '0';
+  } else {
+    char s_v = values.specifier_value;
+    int base_System = define_base_System(s_v);
+    size_t len = get_uint_length(n, values);
+    for (size_t i = len; i >= 0; --i) {
+      unsigned long long x = n % base_System;
+      n /= base_System;
+      buffer[(*index) + i] =
+          (x < 10) ? (x + '0') : (x - 10 + (s_v == 'x' ? 'a' : 'A'));
+    }
   }
-}
-
-void itoa_for_zero(void *c, char *buffer, size_t *index, format_value values) {
-  if (values.precision_exist && values.precision_value == 0) return;
-  unsigned int n = *(unsigned int *)c;
-  buffer[(*index)] = '0' + n;
-  buffer[(*index)++] = '0';
 }
 
 void ctoa(void *c, char *buffer, size_t *index, format_value values) {

@@ -10,8 +10,8 @@ void formated_char(char *buffer, size_t *index, va_list factor,
     c = va_arg(factor, unsigned long int);
     len = (int)(c / 255) + 1;
   }
-  if (values.flag_value == ZERO_PADDING_FLAG ||
-      values.flag_value == SIGN_PRECEDENCE_FLAG)
+  if (values.flag_value & ZERO_PADDING_FLAG ||
+      values.flag_value & SIGN_PRECEDENCE_FLAG)
     values.flag_value = 0;
   if (values.precision_exist) values.precision_value = 0;
   format_flag_(buffer, index, values, &c, len, ' ', ctoa);
@@ -25,16 +25,17 @@ void formated_int(char *buffer, size_t *index, va_list factor,
   if (values.length_value == LONG_INT_LENGTH) v = va_arg(factor, long);
   if (values.length_value == LONG_LONG_INT_LENGTH)
     v = va_arg(factor, long long);
+
   size_t len = 1;
-  if (v != 0) {
-    char sign = v < 0 ? '-' : '+';
-    if (v < 0) v = -v, ++len;
-    len += ((size_t)log10(v));
-    unsigned long long r = v;
-    format_flag_(buffer, index, values, &r, len, sign, itoa);
-  } else {
-    format_flag_(buffer, index, values, &v, len, '+', itoa_for_zero);
-  }
+  char sign = '+';
+  if (v < 0)
+    v = -v, ++len, sign = '-';
+  else if (values.flag_value & NO_SIGN_FLAG)
+    ++len;
+  len += ((size_t)log10(v));
+
+  unsigned long long r = v;
+  format_flag_(buffer, index, values, &r, len, sign, itoa);
 }
 
 void formated_uint(char *buffer, size_t *index, va_list factor,
@@ -45,18 +46,17 @@ void formated_uint(char *buffer, size_t *index, va_list factor,
   if (values.length_value == LONG_INT_LENGTH) v = va_arg(factor, unsigned long);
   if (values.length_value == LONG_LONG_INT_LENGTH)
     v = va_arg(factor, unsigned long long);
-  if (values.flag_value == SIGN_PRECEDENCE_FLAG ||
-      values.flag_value == NO_SIGN_FLAG)
+  if (values.flag_value & SIGN_PRECEDENCE_FLAG ||
+      values.flag_value & NO_SIGN_FLAG)
     values.flag_value = 0;
   size_t len = 1;
   if (v != 0) {
     len = get_uint_length(v, values);
-    format_flag_(buffer, index, values, &v, len, '+', itoa);
   } else {
     if (values.precision_exist && values.precision_value == 0) len = 0;
     values.flag_value = 0;
-    format_flag_(buffer, index, values, &v, len, '+', itoa_for_zero);
   }
+  format_flag_(buffer, index, values, &v, len, '+', itoa);
 }
 
 void formated_string(char *buffer, size_t *index, va_list factor,
@@ -79,7 +79,7 @@ void formated_pointer(char *buffer, size_t *index, va_list factor,
   void *v = va_arg(factor, void *);
   uintptr_t address = (uintptr_t)v;
   values.specifier_value = OCTAL_SPEC;
-  values.flag_value = HASH_FLAG;
+  values.flag_value |= HASH_FLAG;
   format_flag_(buffer, index, values, &address, 0, '+', itoa);
 }
 
@@ -91,7 +91,7 @@ void formated_float(char *buffer, size_t *index, va_list factor,
     v = va_arg(factor, long double);
   if (!values.precision_exist) values.precision_value = STANDARD_PRECISION;
   size_t len = 1;
-  if (values.precision_value != 0 || values.flag_value == HASH_FLAG)
+  if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
     len += values.precision_value + 1;
   char sign = '+';
   if (v < 0) v = -v, ++len, sign = '-';
@@ -126,12 +126,11 @@ void format_flag_(char *buffer, size_t *index, format_value values, void *c,
 
   case_blank_padding(buffer, index, values, new_len);
 
-  if (sign == '-' || values.flag_value == SIGN_PRECEDENCE_FLAG)
+  if (sign == '-' || values.flag_value & SIGN_PRECEDENCE_FLAG)
     buffer[(*index)++] = sign;
-  if (sign == '+' && values.flag_value == NO_SIGN_FLAG)
-    buffer[(*index)++] = ' ';
+  if (sign == '+' && values.flag_value & NO_SIGN_FLAG) buffer[(*index)++] = ' ';
 
-  if (values.flag_value == HASH_FLAG)
+  if (values.flag_value & HASH_FLAG)
     flag_hash_execusion(buffer, index, values.specifier_value);
 
   case_zero_padding(buffer, index, values, new_len, len, sign);
@@ -169,8 +168,8 @@ void flag_hash_execusion(char *buffer, size_t *index, char specifier) {
 void case_blank_padding(char *buffer, size_t *index, format_value values,
                         int new_len) {
   if (values.width_value > new_len &&
-      !(values.flag_value == LEFT_JUSTIFY_FLAG) &&
-      !(values.flag_value == ZERO_PADDING_FLAG)) {
+      !(values.flag_value & LEFT_JUSTIFY_FLAG) &&
+      !(values.flag_value & ZERO_PADDING_FLAG)) {
     s21_memset(buffer + (*index), ' ', values.width_value - new_len);
     *index += values.width_value - new_len;
   }
@@ -178,9 +177,9 @@ void case_blank_padding(char *buffer, size_t *index, format_value values,
 
 void case_zero_padding(char *buffer, size_t *index, format_value values,
                        int new_len, size_t len, char sign) {
-  if (values.flag_value == ZERO_PADDING_FLAG && values.width_value > new_len &&
+  if (values.flag_value & ZERO_PADDING_FLAG && values.width_value > new_len &&
       values.specifier_value != FLOAT_SPEC &&
-      values.flag_value != LEFT_JUSTIFY_FLAG) {
+      !(values.flag_value & LEFT_JUSTIFY_FLAG)) {
     s21_memset(buffer + (*index), '0', values.width_value - new_len);
     *index += values.width_value - new_len;
   }
@@ -194,7 +193,7 @@ void case_zero_padding(char *buffer, size_t *index, format_value values,
 
 void case_left_justify(char *buffer, size_t *index, format_value values,
                        int new_len) {
-  if (values.flag_value == LEFT_JUSTIFY_FLAG && values.width_value > new_len) {
+  if (values.flag_value & LEFT_JUSTIFY_FLAG && values.width_value > new_len) {
     s21_memset(buffer + (*index), ' ', values.width_value - new_len);
     *index += values.width_value - new_len;
   }

@@ -61,9 +61,9 @@ int s21_sprintf(char *buffer, const char *format, ...) {
 const char *format_parser(char *buffer, size_t *index, const char *p,
                           va_list factor, format_value values) {
   while (!values.specifier_value) {
-    if (values.flag_value != '-' && values.flag_value != '+' &&
-        s21_strchr("-+ #0", *p))
-      values.flag_value = *p;
+    if (!(values.flag_value & LEFT_JUSTIFY_FLAG) &&
+        !(values.flag_value & SIGN_PRECEDENCE_FLAG) && s21_strchr("-+ #0", *p))
+      values.flag_value = flag_value(*p);
     else if (s21_strchr("123456789*", *p))
       width_parser(&p, &values, factor);
     else if (*p == '.') {
