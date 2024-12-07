@@ -49,19 +49,19 @@ $(LIBRARY): $(OBJS)
 # Using $< is appropriate here because you only need to specify one source file for each compilation command
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(BUILD_DIR)
-	$(CC) -c $< -o $@
+	$(CC) -c $< -o $@ &> /dev/null
 
 $(OBJ_TEST_DIR)/%.o: $(SRC_DIR)/%.c
 	@mkdir -p $(OBJ_TEST_DIR)
-	$(CC) $(CFLAGS_TEST) -c $< -o $@
+	$(CC) $(CFLAGS_TEST) -c $< -o $@ &> /dev/null
 
 $(COMPILED_TESTS)/%.o: $(TEST_DIR)/%.c
 	@mkdir -p $(COMPILED_TESTS)
-	$(CC) $(CFLAGS_TEST) -c $< -o $@
+	$(CC) $(CFLAGS_TEST) -c $< -o $@ &> /dev/null
 
 # test with library!!
 $(TEST_EXEC): $(TEST_OBJS) $(TEST_FILES_OBJS)
-	$(CC) $(CFLAGS_TEST) $^ -o $@ $(LDFLAGS_TEST)
+	$(CC) $(CFLAGS_TEST) $^ -o $@ $(LDFLAGS_TEST) &> /dev/null
 
 test: $(TEST_EXEC)
 	./$(TEST_EXEC)
