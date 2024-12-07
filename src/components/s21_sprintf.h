@@ -44,7 +44,7 @@ void formated_percent(char *buffer, size_t *index, format_value values);
 void case_blank_padding(char *buffer, size_t *index, format_value values,
                         int new_len);
 void case_zero_padding(char *buffer, size_t *index, format_value values,
-                       int new_len, size_t len, char sign);
+                       int new_len, size_t len);
 void case_left_justify(char *buffer, size_t *index, format_value values,
                        int new_len);
 
@@ -53,7 +53,7 @@ void case_left_justify(char *buffer, size_t *index, format_value values,
 int trim_zeros(char *buffer, size_t *index, size_t old_index);
 void itoa(void *c, char *buffer, size_t *index, format_value values);
 void ctoa(void *c, char *buffer, size_t *index, format_value values);
-void integer_ftoa(const long double *c, char *buffer, size_t *index);
+void integer_ftoa(const long double *c, char *buffer, size_t *index, int precision);
 void round_ftoa(const long double *c, char *buffer, size_t *index,
                 size_t old_index);
 void fractional_ftoa(long double *c, char *buffer, size_t *index,

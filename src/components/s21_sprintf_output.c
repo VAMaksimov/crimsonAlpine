@@ -24,13 +24,14 @@ void itoa(void *c, char *buffer, size_t *index, format_value values) {
   } else {
     char s_v = values.specifier_value;
     int base_System = define_base_System(s_v);
-    int len = get_uint_length(n, values);
+    int len = get_uint_length(n, values) - 1;
     for (int i = len; i >= 0; --i) {
       unsigned long long x = n % base_System;
       n /= base_System;
       buffer[(*index) + i] =
           (x < 10) ? (x + '0') : (x - 10 + (s_v == 'x' ? 'a' : 'A'));
     }
+    *index += len + 1;
   }
 }
 
@@ -46,13 +47,15 @@ void ctoa(void *c, char *buffer, size_t *index, format_value values) {
   }
 }
 
-void integer_ftoa(const long double *c, char *buffer, size_t *index) {
+void integer_ftoa(const long double *c, char *buffer, size_t *index, int precision) {
   long double v = *c;
   int len_v = 0;
   if (truncl(v) != 0) len_v = ((int)log10l(v));
+  if (precision != 0 ) ++len_v;
   for (int i = len_v; i >= 0; --i) {
     buffer[(*index) + i] = ((int)fmodl(v, 10)) + '0';
     v /= 10;
+    if (precision != 0 && i == len_v - precision + 1) buffer[(*index) + --i] = '.';
   }
   *index += len_v + 1;
 }
@@ -100,13 +103,13 @@ void ftoa(void *c, char *buffer, size_t *index, format_value values) {
   // if (values.precision_exist && values.precision_value == 0) return buffer;
   long double v = *((long double *)c);
   // if ((int)log10l(v) + 1 < 16) {
-  long double integer_value = 0;
-  long double fractional_value = modfl(v, &integer_value);
+  //long double integer_value = 0;
+  //long double fractional_value = modfl(v, &integer_value);
   size_t old_index = *index;
-  integer_ftoa(&integer_value, buffer, index);
-  if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
-    buffer[(*index)++] = '.';
-  fractional_ftoa(&fractional_value, buffer, index, values.precision_value);
+  integer_ftoa(&v, buffer, index, values.precision_value);
+  // if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
+  //   buffer[(*index)++] = '.';
+  // fractional_ftoa(&fractional_value, buffer, index, values.precision_value);
   // round_ftoa(&fractional_value, buffer, index, old_index);
   if ((values.specifier_value == g_SPEC || values.specifier_value == G_SPEC) &&
       !(values.flag_value & HASH_FLAG)) {
@@ -152,9 +155,9 @@ void etoa(void *c, char *buffer, size_t *index, format_value values) {
   if (e < 0) e = -e;
   buffer[(*index)++] = '0';
   buffer[(*index)] = '0';
-  long double e_copy = e;
+  // long double e_copy = e;
   if (e > 9) --(*index);
-  integer_ftoa(&e_copy, buffer, index);
+  // integer_ftoa(&e_copy, buffer, index);
 }
 
 void stoa(void *c, char *buffer, size_t *index, format_value values) {

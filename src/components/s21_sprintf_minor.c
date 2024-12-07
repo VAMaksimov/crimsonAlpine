@@ -5,7 +5,7 @@ int get_uint_length(unsigned long long value, format_value values) {
   if (values.specifier_value == OCTAL_SPEC)
     len += (int)((log(value) / log(OCTAL_BASE)));
   else if (values.specifier_value == x_SPEC || values.specifier_value == X_SPEC)
-    len += (int)((log(value) / log(HEXADECIMAL_BASE)));
+    len += (int)(log(value) / log(HEXADECIMAL_BASE));
   else
     len += ((int)log10(value));
   if (values.flag_value & HASH_FLAG && values.specifier_value == OCTAL_SPEC)

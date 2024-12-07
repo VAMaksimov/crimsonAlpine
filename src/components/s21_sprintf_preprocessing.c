@@ -37,10 +37,11 @@ void formated_int(char *buffer, size_t *index, va_list factor,
     value = -value, ++len, sign = '-';
   else if (value != 0 && values.flag_value & NO_SIGN_FLAG)  // For %+d
     ++len;
-  else if (value == 0 && values.precision_exist && values.precision_value == 0)
-    len = 0;
 
-  len += ((size_t)log10(value));
+ if (value == 0 && values.precision_exist && values.precision_value == 0)
+    len = 0;
+  
+  len += exponent(value);
 
   format_flag_(buffer, index, values, &value, len, sign, itoa);
 }
@@ -57,9 +58,8 @@ void formated_uint(char *buffer, size_t *index, va_list factor,
   if (values.length_value == LONG_LONG_INT_LENGTH)
     value = va_arg(factor, unsigned long long);
 
-  if (values.flag_value & SIGN_PRECEDENCE_FLAG ||
-      values.flag_value & NO_SIGN_FLAG)
-    values.flag_value = 0;
+  if (values.flag_value & SIGN_PRECEDENCE_FLAG) values.flag_value -= SIGN_PRECEDENCE_FLAG;
+  if (values.flag_value & NO_SIGN_FLAG) values.flag_value -= NO_SIGN_FLAG;
 
   size_t len = 1;
   if (value != 0) {
@@ -134,7 +134,7 @@ void formated_float(char *buffer, size_t *index, va_list factor,
 
   int power = exponent(value);
   values.precision_value =
-      values.precision_exist ? STANDARD_PRECISION : values.precision_value;
+      values.precision_exist ? values.precision_value : STANDARD_PRECISION;
 
   // g/G specification handling
   if (local_spec == g_SPEC || local_spec == G_SPEC) {
@@ -156,8 +156,9 @@ void formated_float(char *buffer, size_t *index, va_list factor,
     len += values.precision_value + 1;
   }
 
-  long double temp = roundl(value * pow(10, power));
-  value = floorl(temp / pow(10, power));
+  value= roundl(value * pow(10, values.precision_value));
+  // long double temp = roundl(value * pow(10, values.precision_value));
+  // value = (temp / pow(10, values.precision_value));
   // Sign handling
   if (value < 0) {
     value = -value;
@@ -213,18 +214,19 @@ void format_flag_(char *buffer, size_t *index, format_value values, void *c,
                   size_t len, char sign,
                   void (*write_to_buffer)(void *c, char *buffer, size_t *index,
                                           format_value values)) {
+  if (sign == '-' && s21_strchr("diouxX", values.specifier_value)) values.precision_value += 1;
   int new_len = len > values.precision_value ? len : values.precision_value;
 
   case_blank_padding(buffer, index, values, new_len);
 
   if (sign == '-' || values.flag_value & SIGN_PRECEDENCE_FLAG)
     buffer[(*index)++] = sign;
-  if (sign == '+' && values.flag_value & NO_SIGN_FLAG) buffer[(*index)++] = ' ';
+  else if (sign == '+' && values.flag_value & NO_SIGN_FLAG) buffer[(*index)++] = ' ';
 
   if (values.flag_value & HASH_FLAG)
     flag_hash_execusion(buffer, index, values.specifier_value);
 
-  case_zero_padding(buffer, index, values, new_len, len, sign);
+  case_zero_padding(buffer, index, values, new_len, len);
 
   write_to_buffer(c, buffer, index, values);
 
@@ -267,7 +269,7 @@ void case_blank_padding(char *buffer, size_t *index, format_value values,
 }
 
 void case_zero_padding(char *buffer, size_t *index, format_value values,
-                       int new_len, size_t len, char sign) {
+                       int new_len, size_t len) {
   if (values.flag_value & ZERO_PADDING_FLAG && values.width_value > new_len &&
       values.specifier_value != FLOAT_SPEC &&
       !(values.flag_value & LEFT_JUSTIFY_FLAG)) {
@@ -276,7 +278,6 @@ void case_zero_padding(char *buffer, size_t *index, format_value values,
   }
   if (values.precision_value != 0 && values.precision_value > len &&
       values.specifier_value != FLOAT_SPEC) {
-    if (sign == '-') values.precision_value += 1;
     s21_memset(buffer + (*index), '0', values.precision_value - len);
     *index += values.precision_value - len;
   }
