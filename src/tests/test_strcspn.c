@@ -1,7 +1,7 @@
 #include "test_me.h"
 
 void assert_strcspn(const char *str1, const char *str2) {
-    ck_assert_int_eq(strcspn(str1, str2), s21_strcspn(str1, str2));
+  ck_assert_int_eq(strcspn(str1, str2), s21_strcspn(str1, str2));
 }
 
 START_TEST(standard_1) {

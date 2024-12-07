@@ -110,7 +110,7 @@ START_TEST(memmove_10) {
 END_TEST
 
 Suite *test_memmove(void) {
-  Suite *s = suite_create("\033[45m-=S21_MEMMOVE=-\033[0m");
+  Suite *s = suite_create("\033[47mmemmove\033[0m");
   TCase *tc = tcase_create("memove_tc");
 
   tcase_add_test(tc, memmove_1);
