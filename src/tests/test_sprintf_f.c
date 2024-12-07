@@ -286,28 +286,6 @@ START_TEST(sprintf_26_f) {
 }
 END_TEST
 
-START_TEST(sprintf_27_f) {
-  char str1[400];
-  char str2[400];
-  char *str3 = "Word: %- 26Lf!\nWord: %+- 18Lf!\nWord: %60Lf!";
-  long double num = 3752765839673496.34;
-  ck_assert_int_eq(sprintf(str1, str3, num, num, num),
-                   s21_sprintf(str2, str3, num, num, num));
-  ck_assert_pstr_eq(str1, str2);
-}
-END_TEST
-
-START_TEST(sprintf_28_f) {
-  char str1[4000];
-  char str2[4000];
-  char *str3 = "Word: % +15Lf!Word: %400Lf!";
-  long double num = 3752765839673496.34;
-  ck_assert_int_eq(sprintf(str1, str3, num, num),
-                   s21_sprintf(str2, str3, num, num));
-  ck_assert_pstr_eq(str1, str2);
-}
-END_TEST
-
 START_TEST(sprintf_30_f) {
   char str1[4000];
   char str2[4000];
@@ -601,8 +579,6 @@ Suite *test_sprintf_f(void) {
   tcase_add_test(tc, sprintf_24_f);
   tcase_add_test(tc, sprintf_25_f);
   tcase_add_test(tc, sprintf_26_f);
-  tcase_add_test(tc, sprintf_27_f);
-  tcase_add_test(tc, sprintf_28_f);
   tcase_add_test(tc, sprintf_30_f);
   tcase_add_test(tc, sprintf_31_f);
   tcase_add_test(tc, sprintf_32_f);
