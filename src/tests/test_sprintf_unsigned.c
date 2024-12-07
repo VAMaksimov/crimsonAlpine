@@ -239,7 +239,7 @@ START_TEST(sprintf_17_unsigned) {
 }
 END_TEST
 Suite *test_sprintf_unsigned(void) {
-  Suite *s = suite_create("\033[47msprintf_unsigned\033[0m");
+  Suite *s = suite_create("\033[47;30msprintf_unsigned\033[0m");
   TCase *tc = tcase_create("sprintf_tc");
 
   tcase_add_test(tc, sprintf_1_unsigned);

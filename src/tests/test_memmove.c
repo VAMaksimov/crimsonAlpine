@@ -109,8 +109,26 @@ START_TEST(memmove_10) {
 }
 END_TEST
 
+START_TEST(memmove_11) {
+  char buffer1[30] = "Overlap test data";
+  char buffer2[30] = "Overlap test data";
+  memmove(buffer1 + 5, buffer1, 10);
+  s21_memmove(buffer2 + 5, buffer2, 10);
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(memmove_12) {
+  char buffer1[30] = "Overlap test data";
+  char buffer2[30] = "Overlap test data";
+  memmove(buffer1, buffer1 + 5, 10);
+  s21_memmove(buffer2, buffer2 + 5, 10);
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
 Suite *test_memmove(void) {
-  Suite *s = suite_create("\033[47mmemmove\033[0m");
+  Suite *s = suite_create("\033[47;30mmemmove\033[0m");
   TCase *tc = tcase_create("memove_tc");
 
   tcase_add_test(tc, memmove_1);
@@ -123,6 +141,8 @@ Suite *test_memmove(void) {
   tcase_add_test(tc, memmove_8);
   tcase_add_test(tc, memmove_9);
   tcase_add_test(tc, memmove_10);
+  tcase_add_test(tc, memmove_11);
+  tcase_add_test(tc, memmove_12);
 
   suite_add_tcase(s, tc);
   return s;

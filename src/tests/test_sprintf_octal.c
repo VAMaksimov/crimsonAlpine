@@ -248,7 +248,7 @@ START_TEST(sprintf_18_octal) {
 END_TEST
 
 Suite *test_sprintf_octal(void) {
-  Suite *s = suite_create("\033[47msprintf_octal\033[0m");
+  Suite *s = suite_create("\033[47;30msprintf_octal\033[0m");
   TCase *tc = tcase_create("sprintf_tc");
 
   tcase_add_test(tc, sprintf_1_octal);

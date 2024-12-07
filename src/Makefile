@@ -82,6 +82,7 @@ valgrind:
 
 debug: $(TEST_OBJS) $(TEST_FILES_OBJS) 
 	@$(CC) $(CFLAGS_TEST) $^ -o $@ $(LDFLAGS_TEST)
+
 # ---
 # old
 

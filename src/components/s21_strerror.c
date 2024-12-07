@@ -13,7 +13,7 @@ char *s21_strerror(int errnum) {
   char *result = NULL;
   char unknown_result[100] = {0};
   if (errnum < 0 || errnum >= ERR_MSG_AMOUNT) {
-    s21_sprintf(unknown_result, "Unknown error: %d", errnum);
+    s21_sprintf(unknown_result, "Unknown error %d", errnum);
     result = unknown_result;
   } else {
 #ifdef __APPLE__

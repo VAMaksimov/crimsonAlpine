@@ -36,7 +36,7 @@ START_TEST(sprintf_3_percent) {
 END_TEST
 
 Suite *test_sprintf_percent(void) {
-  Suite *s = suite_create("\033[47msprintf_percent\033[0m");
+  Suite *s = suite_create("\033[47;30msprintf_percent\033[0m");
   TCase *tc = tcase_create("sprintf_tc");
 
   tcase_add_test(tc, sprintf_1_percent);

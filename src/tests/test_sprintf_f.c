@@ -550,7 +550,7 @@ START_TEST(sprintf_54_f) {
 END_TEST
 
 Suite *test_sprintf_f(void) {
-  Suite *s = suite_create("\033[47msprintf_f\033[0m");
+  Suite *s = suite_create("\033[47;30msprintf_f\033[0m");
   TCase *tc = tcase_create("sprintf_tc");
 
   tcase_add_test(tc, sprintf_1_f);
