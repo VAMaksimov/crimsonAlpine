@@ -13,48 +13,32 @@ START_TEST(standart_1) {
 }
 END_TEST
 
-START_TEST(standart_2) {
-  assert_memset("Hello, world!", ' ', 5);
-}
+START_TEST(standart_2) { assert_memset("Hello, world!", ' ', 5); }
 END_TEST
 
-START_TEST(standart_3) {
-  assert_memset("Hello, world!", ' ', 0);
-}
+START_TEST(standart_3) { assert_memset("Hello, world!", ' ', 0); }
 END_TEST
 
-START_TEST(border_1) {
-  assert_memset("", '\0', 0);
-}
+START_TEST(border_1) { assert_memset("", '\0', 0); }
 END_TEST
 
-START_TEST(border_2) {
-  assert_memset("Hello", '\0', 4);
-}
+START_TEST(border_2) { assert_memset("Hello", '\0', 4); }
 END_TEST
 
-START_TEST(border_3) {
-  assert_memset("Hello, world!", 80, 7);
-}
+START_TEST(border_3) { assert_memset("Hello, world!", 80, 7); }
 END_TEST
 
-START_TEST(irregular_1) {
-  assert_memset("12345", 'x', 2);
-}
+START_TEST(irregular_1) { assert_memset("12345", 'x', 2); }
 END_TEST
 
-START_TEST(irregular_2) {
-  assert_memset("abc", 'z', 3);
-}
+START_TEST(irregular_2) { assert_memset("abc", 'z', 3); }
 END_TEST
 
-START_TEST(irregular_3) {
-  assert_memset("This is a test string!", 42, 10);
-}
+START_TEST(irregular_3) { assert_memset("This is a test string!", 42, 10); }
 END_TEST
 
 Suite *test_memset(void) {
-  Suite *s = suite_create("\033[47mmemset\033[0m");
+  Suite *s = suite_create("\033[47;30mmemset\033[0m");
   TCase *tc = tcase_create("memset_tc");
 
   tcase_add_test(tc, standart_1);

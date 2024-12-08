@@ -1,6 +1,7 @@
 #include "test_me.h"
 
-void assert_strncat_func(char *expected_s1, char *expected_s2, char *s3, s21_size_t n) {
+void assert_strncat_func(char *expected_s1, char *expected_s2, char *s3,
+                         s21_size_t n) {
   char s1[100] = {0};
   char s2[100] = {0};
 
@@ -30,35 +31,35 @@ START_TEST(border_1) {
 }
 END_TEST
 
-START_TEST(border_2) {
-  assert_strncat_func("", "", "Hello, world!", 13);
-}
+START_TEST(border_2) { assert_strncat_func("", "", "Hello, world!", 13); }
 END_TEST
 
 START_TEST(border_3) {
-  assert_strncat_func("Hello, world!My name is Polina. I hate this, maybe I'm not supposed for this.",
-                      "Hello, world!My name is Polina. I hate this, maybe I'm not supposed for this.",
-                      "My name is Polina. I hate this, maybe I'm not supposed for this.", 6);
+  assert_strncat_func(
+      "Hello, world!My name is Polina. I hate this, maybe I'm not supposed for "
+      "this.",
+      "Hello, world!My name is Polina. I hate this, maybe I'm not supposed for "
+      "this.",
+      "My name is Polina. I hate this, maybe I'm not supposed for this.", 6);
 }
 END_TEST
 
-START_TEST(irregular_1) {
-  assert_strncat_func("", "", "Hello, world!", 3);
-}
+START_TEST(irregular_1) { assert_strncat_func("", "", "Hello, world!", 3); }
 END_TEST
 
 START_TEST(irregular_2) {
-  assert_strncat_func("Hello, world!My name is Polina.", "Hello, world!My name is Polina.", "My name is Polina.", 2);
+  assert_strncat_func("Hello, world!My name is Polina.",
+                      "Hello, world!My name is Polina.", "My name is Polina.",
+                      2);
 }
 END_TEST
 
-START_TEST(irregular_3) {
-  assert_strncat_func("", "", "", 10);
-}
+START_TEST(irregular_3) { assert_strncat_func("", "", "", 10); }
 END_TEST
 
 START_TEST(irregular_4) {
-  assert_strncat_func("Hello\0, world!", "Hello\0, world!", "My name is\0 Polina.", 15);
+  assert_strncat_func("Hello\0, world!", "Hello\0, world!",
+                      "My name is\0 Polina.", 15);
 }
 END_TEST
 
@@ -73,7 +74,8 @@ START_TEST(irregular_6) {
 END_TEST
 
 START_TEST(irregular_7) {
-  assert_strncat_func("Hello, world!\0\0\0", "Hello, world!\0\0\0", "\0\0\0\0", 4);
+  assert_strncat_func("Hello, world!\0\0\0", "Hello, world!\0\0\0", "\0\0\0\0",
+                      4);
 }
 END_TEST
 
@@ -83,12 +85,13 @@ START_TEST(irregular_8) {
 END_TEST
 
 START_TEST(irregular_9) {
-  assert_strncat_func("Hello, world!", "Hello, world!", "My name is Polina.", 0);
+  assert_strncat_func("Hello, world!", "Hello, world!", "My name is Polina.",
+                      0);
 }
 END_TEST
 
 Suite *test_strncat(void) {
-  Suite *s = suite_create("\033[47mstrncat\033[0m");
+  Suite *s = suite_create("\033[47;30mstrncat\033[0m");
   TCase *tc = tcase_create("strncat_tc");
 
   tcase_add_test(tc, standart_1);

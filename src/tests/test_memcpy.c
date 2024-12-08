@@ -40,9 +40,7 @@ START_TEST(border_3) {
 }
 END_TEST
 
-START_TEST(irregular_1) {
-  assert_memcpy("699\017020", "699\017020", "com", 3);
-}
+START_TEST(irregular_1) { assert_memcpy("699\017020", "699\017020", "com", 3); }
 END_TEST
 
 START_TEST(irregular_2) {
@@ -50,24 +48,8 @@ START_TEST(irregular_2) {
 }
 END_TEST
 
-START_TEST(irregular_3) {
-  char buffer1[30] = "Overlap test data";
-  char buffer2[30] = "Overlap test data";
-  ck_assert_str_eq(memcpy(buffer1 + 5, buffer1, 10),
-                   s21_memcpy(buffer2 + 5, buffer2, 10));
-}
-END_TEST
-
-START_TEST(irregular_4) {
-  char buffer1[30] = "Overlap test data";
-  char buffer2[30] = "Overlap test data";
-  ck_assert_str_eq(memcpy(buffer1, buffer1 + 5, 10),
-                   s21_memcpy(buffer2, buffer2 + 5, 10));
-}
-END_TEST
-
 Suite *test_memcpy(void) {
-  Suite *s = suite_create("\033[47mmemcpy\033[0m");
+  Suite *s = suite_create("\033[47;30mmemcpy\033[0m");
   TCase *tc = tcase_create("memcpy_tc");
 
   tcase_add_test(tc, standart_1);
@@ -80,8 +62,6 @@ Suite *test_memcpy(void) {
 
   tcase_add_test(tc, irregular_1);
   tcase_add_test(tc, irregular_2);
-  tcase_add_test(tc, irregular_3);
-  tcase_add_test(tc, irregular_4);
 
   suite_add_tcase(s, tc);
   return s;

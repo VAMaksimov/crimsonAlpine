@@ -3,13 +3,13 @@
 int get_uint_length(unsigned long long value, format_value values) {
   int len = 1;
   if (values.specifier_value == OCTAL_SPEC)
-    len += (int)((log(value) / log(OCTAL_BASE)));
+    len += exponent(value, OCTAL_BASE);
   else if (values.specifier_value == x_SPEC || values.specifier_value == X_SPEC)
-    len += (int)((log(value) / log(HEXADECIMAL_BASE)));
+    len += exponent(value, HEXADECIMAL_BASE);
   else
-    len += ((int)log10(value));
-  if (values.flag_value & HASH_FLAG && values.specifier_value == OCTAL_SPEC)
-    ++len;
+    len += exponent(value, DECIMAL_BASE);
+  // if (values.flag_value & HASH_FLAG && values.specifier_value == OCTAL_SPEC)
+  //   ++len;
   return len;
 }
 
@@ -21,20 +21,26 @@ int define_base_System(char spec) {
   return base_System;
 }
 
-int exponent(long double *v) {
-  int e = 0;
-  if (*v == 0)
-    ;
-  else if (*v >= 10) {
-    while (*v >= 10) {
-      *v /= 10;
-      e++;
-    }
-  } else if (*v < 1) {
-    while (*v < 1 && (int)(*v * 10) != 9) {
-      *v *= 10;
-      e--;
+int exponent(long double value, int base) {
+  long double temp = abs(value);
+  int exp = 0;
+  if (temp != 0) {
+    if (temp >= base) {
+      while (temp >= base) {
+        temp /= base;
+        exp++;
+      }
+    } else if (temp < 1) {
+      while (temp < 1 && temp != 0) {
+        temp *= base;
+        exp--;
+      }
     }
   }
-  return e;
+  return exp;
+}
+
+long double round_to_precision(long double value, format_value values) {
+  long double temp = roundl(value * pow(10, values.precision_value));
+  return (temp * pow(0.1, values.precision_value));
 }

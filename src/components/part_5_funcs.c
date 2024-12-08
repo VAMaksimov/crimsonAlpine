@@ -47,6 +47,7 @@ void *s21_to_lower(const char *str) {
       result[i] = str[i];
     }
   }
+  result[s21_strlen(str)] = '\0';
   return result;
 }
 
@@ -68,6 +69,7 @@ void *s21_to_upper(const char *str) {
       result[i] = str[i];
     }
   }
+  result[s21_strlen(str)] = '\0';
   return result;
 }
 

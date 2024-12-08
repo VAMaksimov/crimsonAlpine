@@ -330,10 +330,8 @@ void formated_uint(char *buffer, size_t *index, va_list factor,
   if (!values.length_value) v = va_arg(factor, unsigned int);
   if (values.length_value == SHORT_INT_LENGTH) v = va_arg(factor, unsigned int);
   if (values.length_value == LONG_INT_LENGTH) v = va_arg(factor, unsigned long);
-  if (values.length_value == LONG_LONG_INT_LENGTH)
-    v = va_arg(factor, unsigned long long);
-  if (values.flag_value & SIGN_PRECEDENCE_FLAG)
-    values.flag_value -= SIGN_PRECEDENCE_FLAG;
+  if (values.length_value == LONG_LONG_INT_LENGTH) v = va_arg(factor, unsigned long long);
+  if (values.flag_value & SIGN_PRECEDENCE_FLAG) values.flag_value -= SIGN_PRECEDENCE_FLAG;
   if (values.flag_value & NO_SIGN_FLAG) values.flag_value -= NO_SIGN_FLAG;
   if (v != 0) {
     size_t len = 1;
