@@ -37,9 +37,10 @@ void ftoa(void *c, char *buffer, size_t *index, format_value values) {
 void etoa(void *c, char *buffer, size_t *index, format_value values) {
   long double value = *((long double *)c);
   int power = exponent(value);
-  value /= pow(10, power);
-  buffer[(*index)++] = ((int)value) + '0';
-  size_t fractional_part = (size_t)(value * pow(10, values.precision_value));
+  size_t integer_part = (size_t)floorl(value / pow(10, power));
+  buffer[(*index)++] = integer_part + '0';
+  size_t fractional_part =
+      (size_t)(value - (int)value) * pow(10, values.precision_value);
   if (values.precision_value != 0 || values.flag_value == HASH_FLAG)
     buffer[(*index)++] = '.';
   integer_part_toa(fractional_part, buffer, index);
@@ -58,10 +59,10 @@ void write_power_toa(int power, char *buffer, size_t *index) {
 
 void integer_part_toa(size_t number, char *buffer, size_t *index) {
   int length = exponent(number) + 1;
-  for (int i = length; i >= 0; --i) {
+  for (int i = length; i >= 0 && number; --i) {
     int x = number % 10;
     buffer[(*index) + i] = x + '0';
-    (number) = number / 10;
+    (number) /= 10;
   }
   *index += length;
 }
