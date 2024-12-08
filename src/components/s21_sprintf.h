@@ -53,17 +53,13 @@ void case_left_justify(char *buffer, size_t *index, format_value values,
 int trim_zeros(char *buffer, size_t *index, size_t old_index);
 void itoa(void *c, char *buffer, size_t *index, format_value values);
 void ctoa(void *c, char *buffer, size_t *index, format_value values);
-// void integer_ftoa(const long double *c, char *buffer, size_t *index,
-//                   int precision);
-void round_ftoa(const long double *c, char *buffer, size_t *index,
-                size_t old_index);
-// void fractional_ftoa(long double *c, char *buffer, size_t *index,
-//                      int precision);
+void stoa(void *c, char *buffer, size_t *index, format_value values);
 void ftoa(void *c, char *buffer, size_t *index, format_value values);
 void etoa(void *c, char *buffer, size_t *index, format_value values);
-void write_power_toa(int power, char *buffer, size_t *index);
+void fractional_part_handling(long double value, char *buffer, size_t *index,
+                              format_value values, size_t integer_part);
 void integer_part_toa(size_t number, char *buffer, size_t *index);
-void stoa(void *c, char *buffer, size_t *index, format_value values);
+void write_power_toa(int power, char *buffer, size_t *index);
 
 // minor
 

@@ -24,21 +24,24 @@ void ctoa(void *c, char *buffer, size_t *index, format_value values) {
   buffer[(*index)++] = *(unsigned long int *)c;
 }
 
+void stoa(void *c, char *buffer, size_t *index, format_value values) {
+  char *v = (char *)c;
+  size_t len = s21_strlen(v);
+  if (values.precision_exist)
+    len = len > values.precision_value ? values.precision_value : len;
+  s21_memcpy(buffer + *index, v, len);
+  *index += len;
+}
+
 void ftoa(void *c, char *buffer, size_t *index, format_value values) {
   long double value = *(long double *)c;
 
-  value = round_to_precision(*(long double *)c, values);
+  value = round_to_precision(value, values);
 
   size_t integer_part = (size_t)floorl(value);
   integer_part_toa(integer_part, buffer, index);
 
-  if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
-    buffer[(*index)++] = '.';
-  if (values.precision_value != 0) {
-    size_t fractional_part =
-        (size_t)(value - integer_part) * powl(10, values.precision_value);
-    integer_part_toa(fractional_part, buffer, index);
-  }
+  fractional_part_handling(value, buffer, index, values, integer_part);
 }
 
 void etoa(void *c, char *buffer, size_t *index, format_value values) {
@@ -59,6 +62,17 @@ void etoa(void *c, char *buffer, size_t *index, format_value values) {
   size_t integer_part = (size_t)value;
   buffer[(*index)++] = integer_part + '0';
 
+  fractional_part_handling(value, buffer, index, values, integer_part);
+
+  buffer[(*index)++] = values.specifier_value;
+  buffer[(*index)++] = power < 0 ? '-' : '+';
+
+  power = abs(power);
+  write_power_toa(power, buffer, index);
+}
+
+void fractional_part_handling(long double value, char *buffer, size_t *index,
+                              format_value values, size_t integer_part) {
   if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
     buffer[(*index)++] = '.';
   if (values.precision_value != 0) {
@@ -66,18 +80,6 @@ void etoa(void *c, char *buffer, size_t *index, format_value values) {
         (size_t)(value - integer_part) * powl(10, values.precision_value);
     integer_part_toa(fractional_part, buffer, index);
   }
-
-  buffer[(*index)++] = values.specifier_value;
-  buffer[(*index)++] = power < 0 ? '-' : '+';
-  power = abs(power);
-  write_power_toa(power, buffer, index);
-}
-
-void write_power_toa(int power, char *buffer, size_t *index) {
-  if (power < 10) {
-    buffer[(*index)++] = '0';
-  }
-  integer_part_toa((size_t)power, buffer, index);
 }
 
 void integer_part_toa(size_t number, char *buffer, size_t *index) {
@@ -89,13 +91,11 @@ void integer_part_toa(size_t number, char *buffer, size_t *index) {
   *index += length;
 }
 
-void stoa(void *c, char *buffer, size_t *index, format_value values) {
-  char *v = (char *)c;
-  size_t len = s21_strlen(v);
-  if (values.precision_exist)
-    len = len > values.precision_value ? values.precision_value : len;
-  s21_memcpy(buffer + *index, v, len);
-  *index += len;
+void write_power_toa(int power, char *buffer, size_t *index) {
+  if (power < 10) {
+    buffer[(*index)++] = '0';
+  }
+  integer_part_toa((size_t)power, buffer, index);
 }
 
 /*
