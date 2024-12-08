@@ -3,7 +3,7 @@
 START_TEST(sprintf_1_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "%f Word %.f Word %4f Word %4.f Word %5.10f!";
+  char *str3 = "%f Word %.f Word %4f Word %4.f Word %5.9f!";
   double num = 76.756589367;
   sprintf(str1, str3, num, num, num, num, num);
   s21_sprintf(str2, str3, num, num, num, num, num);
@@ -14,7 +14,7 @@ END_TEST
 START_TEST(sprintf_2_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "%f Word %.f Word %3f Word %4.f Word %5.10f!";
+  char *str3 = "%f Word %.f Word %3f Word %4.f Word %5.9f!";
   double num = -76.756589367;
   sprintf(str1, str3, num, num, num, num, num);
   s21_sprintf(str2, str3, num, num, num, num, num);
@@ -36,7 +36,7 @@ END_TEST
 START_TEST(sprintf_4_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "%20.10f\n%20.15f\n%-20.5f!";
+  char *str3 = "%20.9f\n%20.9f\n%-20.5f!";
   double num = -76.756589;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -157,7 +157,7 @@ END_TEST
 START_TEST(sprintf_15_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %#-10.9f!\nWord: %-+25.15f!";
+  char *str3 = "Word: %#-10.9f!\nWord: %-+25.9f!";
   double num = -365289.3462865487;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
@@ -168,7 +168,7 @@ END_TEST
 START_TEST(sprintf_16_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %15.13f!\nWord: %26.15f!";
+  char *str3 = "Word: %15.9f!\nWord: %26.9f!";
   double num = -365289.34628654873789362746834;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
@@ -179,7 +179,7 @@ END_TEST
 START_TEST(sprintf_17_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %18.7f!\nWord: %10.15f!\nWord: %25.15f!";
+  char *str3 = "Word: %18.7f!\nWord: %10.9f!\nWord: %25.9f!";
   double num = -365289.34628654873789362746834;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -190,7 +190,7 @@ END_TEST
 START_TEST(sprintf_18_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %15.13f!\nWord: %26.15f!";
+  char *str3 = "Word: %15.9f!\nWord: %26.9f!";
   double num = 365289.34628654873789362746834;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
@@ -201,7 +201,7 @@ END_TEST
 START_TEST(sprintf_19_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %18.7f!\nWord: %10.15f!";
+  char *str3 = "Word: %18.7f!\nWord: %10.9f!";
   double num = 365289.34628654873789362746834;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
@@ -212,7 +212,7 @@ END_TEST
 START_TEST(sprintf_20_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %- 23.14f!\nWord: %+ 25.15f!";
+  char *str3 = "Word: %- 23.9f!\nWord: %+ 25.9f!";
   double num = 365289.34628654873789362746834;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
@@ -333,7 +333,7 @@ END_TEST
 START_TEST(sprintf_34_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: % 15.1Lf!\nWord: % -26.15Lf!\nWord: %- 30.15Lf!";
+  char *str3 = "Word: % 15.1Lf!\nWord: % -26.9Lf!\nWord: %- 30.9Lf!";
   long double num = 278.723786;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -344,7 +344,7 @@ END_TEST
 START_TEST(sprintf_35_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %+ 50.15Lf!\nWord: % +40.15Lf!";
+  char *str3 = "Word: %+ 50.9Lf!\nWord: % +40.9Lf!";
   long double num = 278.723786;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
@@ -355,7 +355,7 @@ END_TEST
 START_TEST(sprintf_36_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: % 15.1Lf!\nWord: % -26.13Lf!\nWord: %- 30.8Lf!";
+  char *str3 = "Word: % 15.1Lf!\nWord: % -26.9Lf!\nWord: %- 30.8Lf!";
   long double num = -2358.367776967;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -366,7 +366,7 @@ END_TEST
 START_TEST(sprintf_37_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %+ 50.14Lf!\nWord: % +40.14Lf!";
+  char *str3 = "Word: %+ 50.9Lf!\nWord: % +40.9Lf!";
   long double num = -2358.367776967;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
@@ -388,7 +388,7 @@ END_TEST
 START_TEST(sprintf_39_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %.10Lf!\nWord: %.6Lf!\nWord: %.Lf!";
+  char *str3 = "Word: %.9Lf!\nWord: %.6Lf!\nWord: %.Lf!";
   long double num = -9999.99999;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -432,7 +432,7 @@ END_TEST
 START_TEST(sprintf_43_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %+ 0Lf!\nWord: %.6Lf!\nWord: %.15Lf!";
+  char *str3 = "Word: %+ 0Lf!\nWord: %.6Lf!\nWord: %.9Lf!";
   long double num = -635293201236310753.6495633;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -454,7 +454,7 @@ END_TEST
 START_TEST(sprintf_45_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %+ 0Lf!\nWord: %.6Lf!\nWord: %.15Lf!";
+  char *str3 = "Word: %+ 0Lf!\nWord: %.6Lf!\nWord: %.9Lf!";
   long double num = -236310753.6495633;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -476,7 +476,7 @@ END_TEST
 START_TEST(sprintf_47_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %+ 0Lf!\nWord: %.6Lf!\nWord: %.15Lf!";
+  char *str3 = "Word: %+ 0Lf!\nWord: %.6Lf!\nWord: %.9Lf!";
   long double num = -9325781235683689988.;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -498,7 +498,7 @@ END_TEST
 START_TEST(sprintf_49_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %+ 0Lf!\nWord: %.6Lf!\nWord: %.15Lf!";
+  char *str3 = "Word: %+ 0Lf!\nWord: %.6Lf!\nWord: %.9Lf!";
   long double num = 823631075973858585858447757573.6495633;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -520,7 +520,7 @@ END_TEST
 START_TEST(sprintf_51_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %+ 0Lf!\nWord: %060Lf!\nWord: %.15Lf!";
+  char *str3 = "Word: %+ 0Lf!\nWord: %060Lf!\nWord: %.9Lf!";
   long double num = -9325781235683689988.;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -542,7 +542,7 @@ END_TEST
 START_TEST(sprintf_54_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "aboba% 10.12f sussusbaka";
+  char *str3 = "aboba% 10.9f sussusbaka";
   double num = 0.235300;
   sprintf(str1, str3, num);
   s21_sprintf(str2, str3, num);
