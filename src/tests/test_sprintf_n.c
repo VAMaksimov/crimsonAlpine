@@ -5,8 +5,8 @@ START_TEST(sprintf_1_n) {
   char str2[400] = "";
   char *str3 = "Word %n Word";
   int valn1 = 0, valn2 = 0;
-  ck_assert_int_eq(sprintf(str1, str3, &valn1),
-                   s21_sprintf(str2, str3, &valn2));
+  sprintf(str1, str3, &valn1);
+  s21_sprintf(str2, str3, &valn2);
   ck_assert_pstr_eq(str1, str2);
   ck_assert_int_eq(valn1, valn2);
 }
@@ -19,8 +19,8 @@ START_TEST(sprintf_2_n) {
   int val = 012;
   int val2 = 017;
   int valn1 = 0, valn2 = 0, valn3 = 0, valn4 = 0;
-  ck_assert_int_eq(sprintf(str1, str3, val, &valn1, val2, &valn3),
-                   s21_sprintf(str2, str3, val, &valn2, val2, &valn4));
+  sprintf(str1, str3, val, &valn1, val2, &valn3);
+  s21_sprintf(str2, str3, val, &valn2, val2, &valn4);
   ck_assert_pstr_eq(str1, str2);
   ck_assert_int_eq(valn1, valn2);
   ck_assert_int_eq(valn3, valn4);

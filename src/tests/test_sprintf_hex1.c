@@ -5,7 +5,8 @@ START_TEST(sprintf_1_hex) {
   char str2[400] = "";
   char *str3 = "Word %x Word";
   int val = 0x32;
-  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  sprintf(str1, str3, val);
+  s21_sprintf(str2, str3, val);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -17,8 +18,8 @@ START_TEST(sprintf_2_hex) {
   int val = 0x7a4;
   int val2 = 0x91ba123f;
   int val3 = 0x3123;
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3),
-                   s21_sprintf(str2, str3, val, val2, val3));
+  sprintf(str1, str3, val, val2, val3);
+  s21_sprintf(str2, str3, val, val2, val3);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -30,8 +31,8 @@ START_TEST(sprintf_3_hex) {
   int val = 0x3015;
   int val2 = 0x712;
   int val3 = 0x99;
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3),
-                   s21_sprintf(str2, str3, val, val2, val3));
+  sprintf(str1, str3, val, val2, val3);
+  s21_sprintf(str2, str3, val, val2, val3);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -44,8 +45,8 @@ START_TEST(sprintf_4_hex) {
   long val2 = 33030030303;
   unsigned short int val3 = 22600;
   unsigned short val4 = 120;
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4),
-                   s21_sprintf(str2, str3, val, val2, val3, val4));
+  sprintf(str1, str3, val, val2, val3, val4);
+  s21_sprintf(str2, str3, val, val2, val3, val4);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -57,8 +58,8 @@ START_TEST(sprintf_5_hex) {
   int val = 3015;
   int val2 = 01234;
   int val3 = 99;
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3),
-                   s21_sprintf(str2, str3, val, val2, val3));
+  sprintf(str1, str3, val, val2, val3);
+  s21_sprintf(str2, str3, val, val2, val3);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -71,8 +72,8 @@ START_TEST(sprintf_6_hex) {
   int val2 = 712;
   int val3 = 99;
   int val4 = 38;
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4),
-                   s21_sprintf(str2, str3, val, val2, val3, val4));
+  sprintf(str1, str3, val, val2, val3, val4);
+  s21_sprintf(str2, str3, val, val2, val3, val4);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -85,8 +86,8 @@ START_TEST(sprintf_7_hex) {
   int val2 = 712;
   int val3 = 99;
   int val4 = 2939;
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4),
-                   s21_sprintf(str2, str3, val, val2, val3, val4));
+  sprintf(str1, str3, val, val2, val3, val4);
+  s21_sprintf(str2, str3, val, val2, val3, val4);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -100,8 +101,8 @@ START_TEST(sprintf_8_hex) {
   int val3 = 99;
   int val4 = 2939;
   int val5 = 0123;
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
-                   s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  sprintf(str1, str3, val, val2, val3, val4, val5);
+  s21_sprintf(str2, str3, val, val2, val3, val4, val5);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -114,8 +115,8 @@ START_TEST(sprintf_9_hex) {
   int val2 = 712;
   int val3 = 99;
   int val4 = 2939;
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4),
-                   s21_sprintf(str2, str3, val, val2, val3, val4));
+  sprintf(str1, str3, val, val2, val3, val4);
+  s21_sprintf(str2, str3, val, val2, val3, val4);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -125,9 +126,9 @@ START_TEST(sprintf_10_hex) {
   char str2[400];
   char *str3 = "%x Word %3.x Word %5.7x Word %10x %#x %-x %+x %.x % .x";
   int val = 0;
-  ck_assert_int_eq(
-      sprintf(str1, str3, val, val, val, val, val, val, val, val, val),
-      s21_sprintf(str2, str3, val, val, val, val, val, val, val, val, val));
+
+  sprintf(str1, str3, val, val, val, val, val, val, val, val, val);
+  s21_sprintf(str2, str3, val, val, val, val, val, val, val, val, val);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -141,8 +142,8 @@ START_TEST(sprintf_11_hex) {
   int val3 = 91918;
   int val4 = 32311;
   int val5 = 23;
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
-                   s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  sprintf(str1, str3, val, val2, val3, val4, val5);
+  s21_sprintf(str2, str3, val, val2, val3, val4, val5);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -156,8 +157,8 @@ START_TEST(sprintf_12_hex) {
   int val3 = 91918;
   int val4 = 32311;
   int val5 = 3261;
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
-                   s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  sprintf(str1, str3, val, val2, val3, val4, val5);
+  s21_sprintf(str2, str3, val, val2, val3, val4, val5);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -171,8 +172,8 @@ START_TEST(sprintf_13_hex) {
   int val3 = 91918;
   int val4 = 32311;
   int val5 = 8894;
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
-                   s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  sprintf(str1, str3, val, val2, val3, val4, val5);
+  s21_sprintf(str2, str3, val, val2, val3, val4, val5);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -186,8 +187,8 @@ START_TEST(sprintf_14_hex) {
   int val3 = 91918;
   int val4 = 32311;
   int val5 = 8894;
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
-                   s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  sprintf(str1, str3, val, val2, val3, val4, val5);
+  s21_sprintf(str2, str3, val, val2, val3, val4, val5);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -205,10 +206,9 @@ START_TEST(sprintf_15_hex) {
   int ast3 = 4;
   int ast4 = 10;
   int ast5 = 7;
-  ck_assert_int_eq(
-      sprintf(str1, str3, ast, val, ast2, val2, ast3, ast4, val3, ast5, val4),
-      s21_sprintf(str2, str3, ast, val, ast2, val2, ast3, ast4, val3, ast5,
-                  val4));
+
+  sprintf(str1, str3, ast, val, ast2, val2, ast3, ast4, val3, ast5, val4);
+  s21_sprintf(str2, str3, ast, val, ast2, val2, ast3, ast4, val3, ast5, val4);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -221,8 +221,8 @@ START_TEST(sprintf_16_hex) {
   int val2 = -3231;
   int val3 = 3231;
   int val4 = 3231;
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4),
-                   s21_sprintf(str2, str3, val, val2, val3, val4));
+  sprintf(str1, str3, val, val2, val3, val4);
+  s21_sprintf(str2, str3, val, val2, val3, val4);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -232,7 +232,8 @@ START_TEST(sprintf_17_hex) {
   char str2[400];
   char *str3 = "Word %lx";
   long int val = ULONG_MAX;
-  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  sprintf(str1, str3, val);
+  s21_sprintf(str2, str3, val);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST

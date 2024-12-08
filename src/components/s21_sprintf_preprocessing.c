@@ -38,9 +38,9 @@ void formated_int(char *buffer, size_t *index, va_list factor,
   else if (value != 0 && values.flag_value & NO_SIGN_FLAG)  // For %+d
     ++len;
 
- if (value == 0 && values.precision_exist && values.precision_value == 0)
+  if (value == 0 && values.precision_exist && values.precision_value == 0)
     len = 0;
-  
+
   len += exponent(value);
 
   format_flag_(buffer, index, values, &value, len, sign, itoa);
@@ -58,7 +58,8 @@ void formated_uint(char *buffer, size_t *index, va_list factor,
   if (values.length_value == LONG_LONG_INT_LENGTH)
     value = va_arg(factor, unsigned long long);
 
-  if (values.flag_value & SIGN_PRECEDENCE_FLAG) values.flag_value -= SIGN_PRECEDENCE_FLAG;
+  if (values.flag_value & SIGN_PRECEDENCE_FLAG)
+    values.flag_value -= SIGN_PRECEDENCE_FLAG;
   if (values.flag_value & NO_SIGN_FLAG) values.flag_value -= NO_SIGN_FLAG;
 
   size_t len = 1;
@@ -117,6 +118,17 @@ void formated_pointer(char *buffer, size_t *index, va_list factor,
   }
 }
 
+/**
+ * @brief Function to format a float value according to the format specifiers
+ *
+ * @param buffer the buffer to write the formatted value to
+ * @param index the current index in the buffer
+ * @param factor the va_list containing the float value to format
+ * @param values the struct containing the format specifiers and settings
+ *
+ * @note
+ * Used with f, e, E and g specifiers
+ */
 void formated_float(char *buffer, size_t *index, va_list factor,
                     format_value values) {
   long double value = 0;
@@ -125,40 +137,18 @@ void formated_float(char *buffer, size_t *index, va_list factor,
   char sign = '+';
 
   // Argument extraction logging
-  if (!values.length_value) {
-    value = va_arg(factor, double);
-  }
-  if (values.length_value == LONG_DOUBLE_LENGTH) {
+  if (!values.length_value) value = va_arg(factor, double);
+  if (values.length_value == LONG_DOUBLE_LENGTH)
     value = va_arg(factor, long double);
-  }
 
   int power = exponent(value);
-  values.precision_value =
-      values.precision_exist ? values.precision_value : STANDARD_PRECISION;
-
-  // g/G specification handling
-  if (local_spec == g_SPEC || local_spec == G_SPEC) {
-    if (values.precision_value == 0) {
-      values.precision_value = 1;
-    }
-
-    if (power > -4 && (size_t)power < values.precision_value) {
-      local_spec = FLOAT_SPEC;
-      values.precision_value -= power + 1;
-    } else {
-      local_spec = g_SPEC ? e_SPEC : E_SPEC;
-      values.precision_value -= 1;
-    }
-  }
+  precision_processing(values, &local_spec, power);
 
   // Length calculation logging
   if (values.precision_value != 0 || values.flag_value & HASH_FLAG) {
     len += values.precision_value + 1;
   }
 
-  value= roundl(value * pow(10, values.precision_value));
-  // long double temp = roundl(value * pow(10, values.precision_value));
-  // value = (temp / pow(10, values.precision_value));
   // Sign handling
   if (value < 0) {
     value = -value;
@@ -171,6 +161,10 @@ void formated_float(char *buffer, size_t *index, va_list factor,
     len += 1;
   }
 
+  // Rounding
+  long double temp = roundl(value * pow(10, values.precision_value));
+  value = (temp / pow(10, values.precision_value));
+
   // Format-specific processing
   if (local_spec == FLOAT_SPEC) {
     if (roundl(value) != 0) {
@@ -179,9 +173,29 @@ void formated_float(char *buffer, size_t *index, va_list factor,
     format_flag_(buffer, index, values, &value, len, sign, ftoa);
   } else if (local_spec == e_SPEC || local_spec == E_SPEC) {
     len += 4;
-    int power_len = power < 99 ? 0 : exponent(power);
+    int power_len = power < 99 ? 0 : exponent(power) - 1;
     len += min(power_len, 0);
     format_flag_(buffer, index, values, &value, len, sign, etoa);
+  }
+}
+
+void precision_processing(format_value values, char *local_spec, int power) {
+  values.precision_value =
+      values.precision_exist ? values.precision_value : STANDARD_PRECISION;
+
+  // g/G specification handling
+  if (*local_spec == g_SPEC || *local_spec == G_SPEC) {
+    if (values.precision_value == 0) {
+      values.precision_value = 1;
+    }
+
+    if (power > -4 && (size_t)power < values.precision_value) {
+      *local_spec = FLOAT_SPEC;
+      values.precision_value -= power + 1;
+    } else {
+      *local_spec = g_SPEC ? e_SPEC : E_SPEC;
+      values.precision_value -= 1;
+    }
   }
 }
 
@@ -214,14 +228,16 @@ void format_flag_(char *buffer, size_t *index, format_value values, void *c,
                   size_t len, char sign,
                   void (*write_to_buffer)(void *c, char *buffer, size_t *index,
                                           format_value values)) {
-  if (sign == '-' && s21_strchr("diouxX", values.specifier_value)) values.precision_value += 1;
+  if (sign == '-' && s21_strchr("diouxX", values.specifier_value))
+    values.precision_value += 1;
   int new_len = len > values.precision_value ? len : values.precision_value;
 
   case_blank_padding(buffer, index, values, new_len);
 
   if (sign == '-' || values.flag_value & SIGN_PRECEDENCE_FLAG)
     buffer[(*index)++] = sign;
-  else if (sign == '+' && values.flag_value & NO_SIGN_FLAG) buffer[(*index)++] = ' ';
+  else if (sign == '+' && values.flag_value & NO_SIGN_FLAG)
+    buffer[(*index)++] = ' ';
 
   if (values.flag_value & HASH_FLAG)
     flag_hash_execusion(buffer, index, values.specifier_value);

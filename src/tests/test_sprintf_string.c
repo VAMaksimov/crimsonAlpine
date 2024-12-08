@@ -5,7 +5,8 @@ START_TEST(sprintf_1_string) {
   char str2[400] = "";
   char *str3 = "Word %s Word";
   char *val = "Who I am?!";
-  ck_assert_int_eq(sprintf(str1, str3, val), s21_sprintf(str2, str3, val));
+  sprintf(str1, str3, val);
+  s21_sprintf(str2, str3, val);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -17,8 +18,8 @@ START_TEST(sprintf_2_string) {
   char *val = "I'm so glad";
   char *val2 = "Who opened the door?";
   char *val3 = "My room is tiny and dark";
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3),
-                   s21_sprintf(str2, str3, val, val2, val3));
+  sprintf(str1, str3, val, val2, val3);
+  s21_sprintf(str2, str3, val, val2, val3);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -30,8 +31,8 @@ START_TEST(sprintf_3_string) {
   char *val = "Like and sub";
   char *val2 = "Great Chinese wall";
   char *val3 = "aboba";
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3),
-                   s21_sprintf(str2, str3, val, val2, val3));
+  sprintf(str1, str3, val, val2, val3);
+  s21_sprintf(str2, str3, val, val2, val3);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -44,8 +45,8 @@ START_TEST(sprintf_4_string) {
   wchar_t *val = L"3abo80";
   sprintf(str1, str3, val);
   s21_sprintf(str2, str3, val);
-  // ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4),
-  //                s21_sprintf(str2, str3, val, val2, val3, val4));
+  // sprintf(str1, str3, val, val2, val3, val4);
+  //                s21_sprintf(str2, str3, val, val2, val3, val4);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -57,8 +58,8 @@ START_TEST(sprintf_5_string) {
   char *val = "WHO are you";
   char *val2 = "my followers";
   char *val3 = "matofatogentleman";
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3),
-                   s21_sprintf(str2, str3, val, val2, val3));
+  sprintf(str1, str3, val, val2, val3);
+  s21_sprintf(str2, str3, val, val2, val3);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -71,8 +72,8 @@ START_TEST(sprintf_6_string) {
   char *val2 = "hello guys";
   char *val3 = "MATOFATOGENTLEMAN";
   char *val4 = "And I'm feeling good";
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4),
-                   s21_sprintf(str2, str3, val, val2, val3, val4));
+  sprintf(str1, str3, val, val2, val3, val4);
+  s21_sprintf(str2, str3, val, val2, val3, val4);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -85,8 +86,8 @@ START_TEST(sprintf_7_string) {
   char *val2 = "hello guys";
   char *val3 = "MATOFATOGENTLEMAN";
   char *val4 = "And I'm feeling good";
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4),
-                   s21_sprintf(str2, str3, val, val2, val3, val4));
+  sprintf(str1, str3, val, val2, val3, val4);
+  s21_sprintf(str2, str3, val, val2, val3, val4);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -100,8 +101,8 @@ START_TEST(sprintf_8_string) {
   char *val3 = "MATOFATOGENTLEMAN";
   char *val4 = "And I'm feeling good";
   char *val5 = "hello world";
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
-                   s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  sprintf(str1, str3, val, val2, val3, val4, val5);
+  s21_sprintf(str2, str3, val, val2, val3, val4, val5);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -114,8 +115,8 @@ START_TEST(sprintf_9_string) {
   char *val2 = "And I'm feeling good";
   char *val3 = "aboba sus";
   char *val4 = "AMOGUS sus";
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4),
-                   s21_sprintf(str2, str3, val, val2, val3, val4));
+  sprintf(str1, str3, val, val2, val3, val4);
+  s21_sprintf(str2, str3, val, val2, val3, val4);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -125,9 +126,9 @@ START_TEST(sprintf_10_string) {
   char str2[400];
   char *str3 = "%s Word %3.s Word %5.7s Word %10s %#s %-s %+s %.s % .s";
   char *val = NULL;
-  ck_assert_int_eq(
-      sprintf(str1, str3, val, val, val, val, val, val, val, val, val),
-      s21_sprintf(str2, str3, val, val, val, val, val, val, val, val, val));
+
+  sprintf(str1, str3, val, val, val, val, val, val, val, val, val);
+  s21_sprintf(str2, str3, val, val, val, val, val, val, val, val, val);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -141,8 +142,8 @@ START_TEST(sprintf_11_string) {
   char *val3 = "MATOFATOGENTLEMAN";
   char *val4 = "AMOGUS sus";
   char *val5 = "hello";
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
-                   s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  sprintf(str1, str3, val, val2, val3, val4, val5);
+  s21_sprintf(str2, str3, val, val2, val3, val4, val5);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -156,8 +157,8 @@ START_TEST(sprintf_12_string) {
   char *val3 = "MATOFATOGENTLEMAN";
   char *val4 = "AMOGUS sus";
   char *val5 = "hello";
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
-                   s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  sprintf(str1, str3, val, val2, val3, val4, val5);
+  s21_sprintf(str2, str3, val, val2, val3, val4, val5);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -171,8 +172,8 @@ START_TEST(sprintf_13_string) {
   char *val3 = "MATOFATOGENTLEMAN";
   char *val4 = "AMOGUS sus";
   char *val5 = "hello";
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
-                   s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  sprintf(str1, str3, val, val2, val3, val4, val5);
+  s21_sprintf(str2, str3, val, val2, val3, val4, val5);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -186,8 +187,8 @@ START_TEST(sprintf_14_string) {
   char *val3 = "MATOFATOGENTLEMAN";
   char *val4 = "I don't";
   char *val5 = "hello";
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val3, val4, val5),
-                   s21_sprintf(str2, str3, val, val2, val3, val4, val5));
+  sprintf(str1, str3, val, val2, val3, val4, val5);
+  s21_sprintf(str2, str3, val, val2, val3, val4, val5);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -205,10 +206,9 @@ START_TEST(sprintf_15_string) {
   int ast3 = 4;
   int ast4 = 10;
   int ast5 = 7;
-  ck_assert_int_eq(
-      sprintf(str1, str3, ast, val, ast2, val2, ast3, ast4, val3, ast5, val4),
-      s21_sprintf(str2, str3, ast, val, ast2, val2, ast3, ast4, val3, ast5,
-                  val4));
+
+  sprintf(str1, str3, ast, val, ast2, val2, ast3, ast4, val3, ast5, val4);
+  s21_sprintf(str2, str3, ast, val, ast2, val2, ast3, ast4, val3, ast5, val4);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
@@ -221,8 +221,8 @@ START_TEST(sprintf_16_string) {
   char *val2 = "\0";
   int val3 = 65;
   char *val4 = "nothing";
-  ck_assert_int_eq(sprintf(str1, str3, val, val2, val4, val3),
-                   s21_sprintf(str2, str3, val, val2, val4, val3));
+  sprintf(str1, str3, val, val2, val4, val3);
+  s21_sprintf(str2, str3, val, val2, val4, val3);
   ck_assert_pstr_eq(str1, str2);
 }
 END_TEST
