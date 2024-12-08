@@ -77,7 +77,7 @@ void fractional_part_handling(long double value, char *buffer, size_t *index,
     buffer[(*index)++] = '.';
   if (values.precision_value != 0) {
     size_t fractional_part =
-        (size_t)(value - integer_part) * powl(10, values.precision_value);
+        (size_t)((value - integer_part) * powl(10, values.precision_value));
     integer_part_toa(fractional_part, buffer, index);
   }
 }
