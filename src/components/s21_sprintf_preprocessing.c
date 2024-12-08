@@ -226,7 +226,7 @@ void format_flag_(char *buffer, size_t *index, format_value values, void *c,
                                           format_value values)) {
   if (sign == '-' && s21_strchr("diouxX", values.specifier_value))
     values.precision_value += 1;
-  int new_len = len > values.precision_value ? len : values.precision_value;
+  int new_len = max(len, values.precision_value);
 
   case_blank_padding(buffer, index, values, new_len);
 
@@ -283,7 +283,6 @@ void case_blank_padding(char *buffer, size_t *index, format_value values,
 void case_zero_padding(char *buffer, size_t *index, format_value values,
                        int new_len, size_t len) {
   if (values.flag_value & ZERO_PADDING_FLAG && values.width_value > new_len &&
-      values.specifier_value != FLOAT_SPEC &&
       !(values.flag_value & LEFT_JUSTIFY_FLAG)) {
     s21_memset(buffer + (*index), '0', values.width_value - new_len);
     *index += values.width_value - new_len;
