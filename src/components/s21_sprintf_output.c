@@ -30,12 +30,15 @@ void ftoa(void *c, char *buffer, size_t *index, format_value values) {
   value = round_to_precision(*(long double *)c, values);
 
   size_t integer_part = (size_t)floorl(value);
-  size_t fractional_part =
-      (size_t)(value - integer_part) * pow(10, values.precision_value);
   integer_part_toa(integer_part, buffer, index);
+
   if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
     buffer[(*index)++] = '.';
-  integer_part_toa(fractional_part, buffer, index);
+  if (values.precision_value != 0) {
+    size_t fractional_part =
+        (size_t)(value - integer_part) * powl(10, values.precision_value);
+    integer_part_toa(fractional_part, buffer, index);
+  }
 }
 
 void etoa(void *c, char *buffer, size_t *index, format_value values) {
@@ -59,9 +62,8 @@ void etoa(void *c, char *buffer, size_t *index, format_value values) {
   if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
     buffer[(*index)++] = '.';
   if (values.precision_value != 0) {
-    // Calculate fractional part
-    value = (value - integer_part) * powl(10, values.precision_value);
-    size_t fractional_part = (size_t)value;
+    size_t fractional_part =
+        (size_t)(value - integer_part) * powl(10, values.precision_value);
     integer_part_toa(fractional_part, buffer, index);
   }
 
