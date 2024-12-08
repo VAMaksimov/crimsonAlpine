@@ -33,7 +33,7 @@ void formated_pointer(char *buffer, size_t *index, va_list factor,
                       format_value values);
 void formated_float(char *buffer, size_t *index, va_list factor,
                     format_value values);
-void precision_processing(format_value values, char *local_spec, int power);
+void precision_processing(format_value *values, char *local_spec, int power);
 void formated_percent(char *buffer, size_t *index, format_value values);
 
 void flag_hash_execusion(char *buffer, size_t *index, char specifier);
@@ -70,5 +70,6 @@ void stoa(void *c, char *buffer, size_t *index, format_value values);
 int get_uint_length(unsigned long long v, format_value values);
 int define_base_System(char spec);
 int exponent(long double value);
+long double round_to_precision(long double value, format_value values);
 
 #endif  // S21_SPRINTF_H

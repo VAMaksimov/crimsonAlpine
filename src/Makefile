@@ -1,3 +1,5 @@
+OS := $(shell uname)
+
 # main vars
 AR = ar rcs
 LIBRARY = s21_string.a
@@ -5,7 +7,13 @@ LIBRARY = s21_string.a
 # flags
 CC = gcc -Wall -Wextra -Werror -std=c11 -g
 CFLAGS_TEST = -fprofile-arcs -ftest-coverage
-LDFLAGS_TEST = -lcheck -lm  -lsubunit
+ifeq (${OS}, Linux)
+	LDFLAGS_TEST = -lcheck -lm -lsubunit
+else ifeq (${OS}, Darwin)
+	LDFLAGS_TEST = -lcheck -lm
+else
+	LDFLAGS_TEST = -lcheck
+endif
 
 # dirs
 SRC_DIR = components

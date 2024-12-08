@@ -39,3 +39,9 @@ int exponent(long double value) {
   }
   return exp;
 }
+
+long double round_to_precision(long double value, format_value values) {
+  long double temp = roundl(value * pow(10, values.precision_value));
+  value = temp * pow(0.1, values.precision_value);
+  return value;
+}

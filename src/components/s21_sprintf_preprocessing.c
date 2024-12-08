@@ -142,7 +142,7 @@ void formated_float(char *buffer, size_t *index, va_list factor,
     value = va_arg(factor, long double);
 
   int power = exponent(value);
-  precision_processing(values, &local_spec, power);
+  precision_processing(&values, &local_spec, power);
 
   // Length calculation logging
   if (values.precision_value != 0 || values.flag_value & HASH_FLAG) {
@@ -161,10 +161,6 @@ void formated_float(char *buffer, size_t *index, va_list factor,
     len += 1;
   }
 
-  // Rounding
-  long double temp = roundl(value * pow(10, values.precision_value));
-  value = (temp / pow(10, values.precision_value));
-
   // Format-specific processing
   if (local_spec == FLOAT_SPEC) {
     if (roundl(value) != 0) {
@@ -179,22 +175,22 @@ void formated_float(char *buffer, size_t *index, va_list factor,
   }
 }
 
-void precision_processing(format_value values, char *local_spec, int power) {
-  values.precision_value =
-      values.precision_exist ? values.precision_value : STANDARD_PRECISION;
+void precision_processing(format_value *values, char *local_spec, int power) {
+  values->precision_value =
+      values->precision_exist ? values->precision_value : STANDARD_PRECISION;
 
   // g/G specification handling
   if (*local_spec == g_SPEC || *local_spec == G_SPEC) {
-    if (values.precision_value == 0) {
-      values.precision_value = 1;
+    if (values->precision_value == 0) {
+      values->precision_value = 1;
     }
 
-    if (power > -4 && (size_t)power < values.precision_value) {
+    if (power > -4 && (size_t)power < values->precision_value) {
       *local_spec = FLOAT_SPEC;
-      values.precision_value -= power + 1;
+      values->precision_value -= power + 1;
     } else {
       *local_spec = g_SPEC ? e_SPEC : E_SPEC;
-      values.precision_value -= 1;
+      values->precision_value -= 1;
     }
   }
 }

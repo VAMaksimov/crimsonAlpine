@@ -9,12 +9,13 @@ void itoa(void *c, char *buffer, size_t *index, format_value values) {
     char s_v = values.specifier_value;
     int base_System = define_base_System(s_v);
     int len = get_uint_length(n, values);
-    for (int i = len; i >= 0; --i) {
+    for (int i = len - 1; i >= 0; --i) {
       unsigned long long x = n % base_System;
       n /= base_System;
       buffer[(*index) + i] =
           (x < 10) ? (x + '0') : (x - 10 + (s_v == 'x' ? 'a' : 'A'));
     }
+    *index += len;
   }
 }
 
@@ -25,25 +26,45 @@ void ctoa(void *c, char *buffer, size_t *index, format_value values) {
 
 void ftoa(void *c, char *buffer, size_t *index, format_value values) {
   long double value = *(long double *)c;
+
+  value = round_to_precision(*(long double *)c, values);
+
   size_t integer_part = (size_t)floorl(value);
   size_t fractional_part =
       (size_t)(value - integer_part) * pow(10, values.precision_value);
   integer_part_toa(integer_part, buffer, index);
-  if (values.precision_value != 0 || values.flag_value == HASH_FLAG)
+  if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
     buffer[(*index)++] = '.';
   integer_part_toa(fractional_part, buffer, index);
 }
 
 void etoa(void *c, char *buffer, size_t *index, format_value values) {
   long double value = *((long double *)c);
-  int power = exponent(value);
-  size_t integer_part = (size_t)floorl(value / pow(10, power));
+  int power = 0;
+
+  while (value >= 10) {
+    value /= 10;
+    power++;
+  }
+  while (value < 1 && value != 0) {
+    value *= 10;
+    power--;
+  }
+
+  value = round_to_precision(value, values);
+
+  size_t integer_part = (size_t)value;
   buffer[(*index)++] = integer_part + '0';
-  size_t fractional_part =
-      (size_t)(value - (int)value) * pow(10, values.precision_value);
-  if (values.precision_value != 0 || values.flag_value == HASH_FLAG)
+
+  if (values.precision_value != 0 || values.flag_value & HASH_FLAG)
     buffer[(*index)++] = '.';
-  integer_part_toa(fractional_part, buffer, index);
+  if (values.precision_value != 0) {
+    // Calculate fractional part
+    value = (value - integer_part) * powl(10, values.precision_value);
+    size_t fractional_part = (size_t)value;
+    integer_part_toa(fractional_part, buffer, index);
+  }
+
   buffer[(*index)++] = values.specifier_value;
   buffer[(*index)++] = power < 0 ? '-' : '+';
   power = abs(power);
@@ -59,9 +80,8 @@ void write_power_toa(int power, char *buffer, size_t *index) {
 
 void integer_part_toa(size_t number, char *buffer, size_t *index) {
   int length = exponent(number) + 1;
-  for (int i = length; i >= 0 && number; --i) {
-    int x = number % 10;
-    buffer[(*index) + i] = x + '0';
+  for (int i = length - 1; number; --i) {
+    buffer[(*index) + i] = number % 10 + '0';
     (number) /= 10;
   }
   *index += length;
