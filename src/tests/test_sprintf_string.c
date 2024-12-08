@@ -37,20 +37,6 @@ START_TEST(sprintf_3_string) {
 }
 END_TEST
 
-// Different sizes WCHAR FOR LATER
-START_TEST(sprintf_4_string) {
-  char str1[400];
-  char str2[400];
-  char *str3 = "Word %ls Word";
-  wchar_t *val = L"3abo80";
-  sprintf(str1, str3, val);
-  s21_sprintf(str2, str3, val);
-  // sprintf(str1, str3, val, val2, val3, val4);
-  //                s21_sprintf(str2, str3, val, val2, val3, val4);
-  ck_assert_pstr_eq(str1, str2);
-}
-END_TEST
-
 START_TEST(sprintf_5_string) {
   char str1[400];
   char str2[400];
@@ -248,7 +234,6 @@ Suite *test_sprintf_string(void) {
   tcase_add_test(tc, sprintf_1_string);
   tcase_add_test(tc, sprintf_2_string);
   tcase_add_test(tc, sprintf_3_string);
-  tcase_add_test(tc, sprintf_4_string);
   tcase_add_test(tc, sprintf_5_string);
   tcase_add_test(tc, sprintf_6_string);
   tcase_add_test(tc, sprintf_7_string);

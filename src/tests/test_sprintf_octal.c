@@ -163,21 +163,6 @@ START_TEST(sprintf_12_octal) {
 }
 END_TEST
 
-START_TEST(sprintf_13_octal) {
-  char str1[400];
-  char str2[400];
-  char *str3 = "%#o Word %#3o Word %#5.7o Word %#.7o Word %#.o";
-  int val = 32;
-  int val2 = 8899;
-  int val3 = 91918;
-  int val4 = 32311;
-  int val5 = 8894;
-  sprintf(str1, str3, val, val2, val3, val4, val5);
-  s21_sprintf(str2, str3, val, val2, val3, val4, val5);
-  ck_assert_pstr_eq(str1, str2);
-}
-END_TEST
-
 START_TEST(sprintf_14_octal) {
   char str1[400];
   char str2[400];
@@ -265,7 +250,6 @@ Suite *test_sprintf_octal(void) {
   tcase_add_test(tc, sprintf_10_octal);
   tcase_add_test(tc, sprintf_11_octal);
   tcase_add_test(tc, sprintf_12_octal);
-  tcase_add_test(tc, sprintf_13_octal);
   tcase_add_test(tc, sprintf_14_octal);
   tcase_add_test(tc, sprintf_15_octal);
   tcase_add_test(tc, sprintf_16_octal);

@@ -41,7 +41,7 @@ void formated_int(char *buffer, size_t *index, va_list factor,
   if (value == 0 && values.precision_exist && values.precision_value == 0)
     len = 0;
 
-  len += exponent(value);
+  len += exponent(value, 10);
 
   format_flag_(buffer, index, values, &value, len, sign, itoa);
 }
@@ -141,7 +141,7 @@ void formated_float(char *buffer, size_t *index, va_list factor,
   if (values.length_value == LONG_DOUBLE_LENGTH)
     value = va_arg(factor, long double);
 
-  int power = exponent(value);
+  int power = exponent(value, 10);
   precision_processing(&values, &local_spec, power);
 
   // Length calculation logging
@@ -169,8 +169,8 @@ void formated_float(char *buffer, size_t *index, va_list factor,
     format_flag_(buffer, index, values, &value, len, sign, ftoa);
   } else if (local_spec == e_SPEC || local_spec == E_SPEC) {
     len += 4;
-    int power_len = power < 99 ? 0 : exponent(power) - 1;
-    len += min(power_len, 0);
+    int power_len = power < 99 ? 0 : exponent(power, 10) - 1;
+    len += max(power_len, 0);
     format_flag_(buffer, index, values, &value, len, sign, etoa);
   }
 }

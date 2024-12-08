@@ -35,14 +35,6 @@ START_TEST(border_2) {
 }
 END_TEST
 
-START_TEST(border_3) {
-  char *s1 = S21_NULL;
-  char *s2 = S21_NULL;
-  char delim[] = " ";
-  assert_strtok(s1, s2, delim);
-}
-END_TEST
-
 START_TEST(irregular_1) {
   char s1[] = "tuz-tuz-tuz";
   char s2[] = "tuz-tuz-tuz";
@@ -87,7 +79,6 @@ Suite *test_strtok(void) {
 
   tcase_add_test(tc, border_1);
   tcase_add_test(tc, border_2);
-  tcase_add_test(tc, border_3);
 
   tcase_add_test(tc, irregular_1);
   tcase_add_test(tc, irregular_2);

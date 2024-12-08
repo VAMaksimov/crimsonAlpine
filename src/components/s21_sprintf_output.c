@@ -77,13 +77,19 @@ void fractional_part_handling(long double value, char *buffer, size_t *index,
     buffer[(*index)++] = '.';
   if (values.precision_value != 0) {
     size_t fractional_part =
-        (size_t)(value - integer_part) * powl(10, values.precision_value);
-    integer_part_toa(fractional_part, buffer, index);
+        (size_t)((value - integer_part) * powl(10, values.precision_value));
+    if(fractional_part == 0) {
+      for(size_t i = 0; i < values.precision_value; i++) {
+        buffer[(*index)++] = '0';
+      }
+    }
+    else{integer_part_toa(fractional_part, buffer, index);}
   }
 }
 
 void integer_part_toa(size_t number, char *buffer, size_t *index) {
-  int length = exponent(number) + 1;
+  buffer[*index] = '0';
+  int length = exponent(number, 10) + 1;
   for (int i = length - 1; number; --i) {
     buffer[(*index) + i] = number % 10 + '0';
     (number) /= 10;

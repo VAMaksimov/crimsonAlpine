@@ -3,13 +3,13 @@
 int get_uint_length(unsigned long long value, format_value values) {
   int len = 1;
   if (values.specifier_value == OCTAL_SPEC)
-    len += (int)((log(value) / log(OCTAL_BASE)));
+    len += exponent(value, OCTAL_BASE);
   else if (values.specifier_value == x_SPEC || values.specifier_value == X_SPEC)
-    len += (int)(log(value) / log(HEXADECIMAL_BASE));
+    len += exponent(value, HEXADECIMAL_BASE);
   else
-    len += ((int)log10(value));
-  if (values.flag_value & HASH_FLAG && values.specifier_value == OCTAL_SPEC)
-    ++len;
+    len += exponent(value, DECIMAL_BASE);
+  // if (values.flag_value & HASH_FLAG && values.specifier_value == OCTAL_SPEC)
+  //   ++len;
   return len;
 }
 
@@ -21,18 +21,18 @@ int define_base_System(char spec) {
   return base_System;
 }
 
-int exponent(long double value) {
+int exponent(long double value, int base) {
   long double temp = abs(value);
   int exp = 0;
   if (temp != 0) {
-    if (temp >= 10) {
-      while (temp >= 10) {
-        temp /= 10;
+    if (temp >= base) {
+      while (temp >= base) {
+        temp /= base;
         exp++;
       }
     } else if (temp < 1) {
       while (temp < 1 && temp != 0) {
-        temp *= 10;
+        temp *= base;
         exp--;
       }
     }

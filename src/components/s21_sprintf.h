@@ -65,7 +65,7 @@ void write_power_toa(int power, char *buffer, size_t *index);
 
 int get_uint_length(unsigned long long v, format_value values);
 int define_base_System(char spec);
-int exponent(long double value);
+int exponent(long double value, int base);
 long double round_to_precision(long double value, format_value values);
 
 #endif  // S21_SPRINTF_H
