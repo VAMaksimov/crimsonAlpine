@@ -1,6 +1,6 @@
 #include "test_me.h"
 
-void assert_memchr(const char *s, int c, s21_size_t n) {
+void assert_memchr(const char *s, int c, size_t n) {
   ck_assert_ptr_eq(memchr(s, c, n), s21_memchr(s, c, n));
 }
 

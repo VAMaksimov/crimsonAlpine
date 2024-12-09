@@ -1,7 +1,7 @@
 #include "test_me.h"
 
-void assert_strncpy(const char *src, s21_size_t n, const char *initial_dst1,
-                    const char *initial_dst2, s21_size_t dst_size) {
+void assert_strncpy(const char *src, size_t n, const char *initial_dst1,
+                    const char *initial_dst2, size_t dst_size) {
   char dst1[dst_size];
   char dst2[dst_size];
 

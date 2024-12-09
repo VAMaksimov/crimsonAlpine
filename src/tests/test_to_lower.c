@@ -23,7 +23,7 @@ END_TEST
 START_TEST(border_2) { assert_to_lower("already lower", "already lower"); }
 END_TEST
 
-START_TEST(border_3) { assert_to_lower(S21_NULL, S21_NULL); }
+START_TEST(border_3) { assert_to_lower(NULL, NULL); }
 END_TEST
 
 START_TEST(irregular_1) { assert_to_lower("_?};!234", "_?};!234"); }

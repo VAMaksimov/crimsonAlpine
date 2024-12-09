@@ -21,7 +21,7 @@ END_TEST
 START_TEST(border_1) { assert_trim("", "", ""); }
 END_TEST
 
-START_TEST(border_2) { assert_trim(S21_NULL, "", S21_NULL); }
+START_TEST(border_2) { assert_trim(NULL, "", NULL); }
 END_TEST
 
 START_TEST(border_3) { assert_trim(" wtf ", "", " wtf "); }

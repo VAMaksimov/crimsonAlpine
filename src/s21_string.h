@@ -11,6 +11,9 @@
 #define bool _Bool
 #define true 1
 #define false 0
+#ifndef NULL
+#define NULL ((void *)0)
+#endif
 
 #define DECIMAL_BASE 10
 #define OCTAL_BASE 8

@@ -55,9 +55,9 @@ START_TEST(test_to_upper_6) {
 END_TEST
 
 START_TEST(test_to_upper_7) {
-  char *s1 = S21_NULL;
+  char *s1 = NULL;
   char *s2 = s21_to_upper(s1);
-  char *s3 = S21_NULL;
+  char *s3 = NULL;
   ck_assert_pstr_eq(s3, s2);
   if (s2) free(s2);
 }

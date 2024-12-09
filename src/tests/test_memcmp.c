@@ -1,6 +1,6 @@
 #include "test_me.h"
 
-void assert_memcmp(const char *s1, const char *s2, s21_size_t n) {
+void assert_memcmp(const char *s1, const char *s2, size_t n) {
   ck_assert_int_eq(memcmp(s1, s2, n), s21_memcmp(s1, s2, n));
 }
 

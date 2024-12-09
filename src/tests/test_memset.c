@@ -1,6 +1,6 @@
 #include "test_me.h"
 
-void assert_memset(const char *initial, int ch, s21_size_t n) {
+void assert_memset(const char *initial, int ch, size_t n) {
   char s1[100] = {0};
   char s2[100] = {0};
   strncpy(s1, initial, sizeof(s1) - 1);
