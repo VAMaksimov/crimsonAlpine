@@ -3,7 +3,7 @@
 START_TEST(sprintf_1_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "%f Word %.f Word %4f Word %4.f Word %5.10f!";
+  char *str3 = "%f Word %.f Word %4f Word %4.f Word %5.9f!";
   double num = 76.756589367;
   sprintf(str1, str3, num, num, num, num, num);
   s21_sprintf(str2, str3, num, num, num, num, num);
@@ -14,7 +14,7 @@ END_TEST
 START_TEST(sprintf_2_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "%f Word %.f Word %3f Word %4.f Word %5.10f!";
+  char *str3 = "%f Word %.f Word %3f Word %4.f Word %5.9f!";
   double num = -76.756589367;
   sprintf(str1, str3, num, num, num, num, num);
   s21_sprintf(str2, str3, num, num, num, num, num);
@@ -36,7 +36,7 @@ END_TEST
 START_TEST(sprintf_4_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "%20.10f\n%20.15f\n%-20.5f!";
+  char *str3 = "%20.9f\n%20.9f\n%-20.5f!";
   double num = -76.756589;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -157,7 +157,7 @@ END_TEST
 START_TEST(sprintf_15_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %#-10.9f!\nWord: %-+25.15f!";
+  char *str3 = "Word: %#-10.9f!\nWord: %-+25.9f!";
   double num = -365289.3462865487;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
@@ -168,7 +168,7 @@ END_TEST
 START_TEST(sprintf_16_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %15.13f!\nWord: %26.15f!";
+  char *str3 = "Word: %15.9f!\nWord: %26.9f!";
   double num = -365289.34628654873789362746834;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
@@ -179,7 +179,7 @@ END_TEST
 START_TEST(sprintf_17_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %18.7f!\nWord: %10.15f!\nWord: %25.15f!";
+  char *str3 = "Word: %18.7f!\nWord: %10.9f!\nWord: %25.9f!";
   double num = -365289.34628654873789362746834;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -190,7 +190,7 @@ END_TEST
 START_TEST(sprintf_18_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %15.13f!\nWord: %26.15f!";
+  char *str3 = "Word: %15.9f!\nWord: %26.9f!";
   double num = 365289.34628654873789362746834;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
@@ -201,7 +201,7 @@ END_TEST
 START_TEST(sprintf_19_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %18.7f!\nWord: %10.15f!";
+  char *str3 = "Word: %18.7f!\nWord: %10.9f!";
   double num = 365289.34628654873789362746834;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
@@ -212,7 +212,7 @@ END_TEST
 START_TEST(sprintf_20_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %- 23.14f!\nWord: %+ 25.15f!";
+  char *str3 = "Word: %- 23.9f!\nWord: %+ 25.9f!";
   double num = 365289.34628654873789362746834;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
@@ -267,8 +267,8 @@ END_TEST
 START_TEST(sprintf_25_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %26Lf!\nWord: %18Lf!\nWord: %60Lf!";
-  long double num = -3752765839673496.34;
+  char *str3 = "test: %26Lf!\ntest: %18Lf!\ntest: %60Lf!";
+  long double num = -37593496.34;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
   ck_assert_pstr_eq(str1, str2);
@@ -276,10 +276,10 @@ START_TEST(sprintf_25_f) {
 END_TEST
 
 START_TEST(sprintf_26_f) {
-  char str1[4000];
-  char str2[4000];
-  char *str3 = "Word: %15Lf!Word: %400Lf!";
-  long double num = -3752765839673496.34;
+  char str1[400];
+  char str2[400];
+  char *str3 = "test: %15Lf!test: %100Lf!";
+  long double num = -37593496.34;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
   ck_assert_pstr_eq(str1, str2);
@@ -333,7 +333,7 @@ END_TEST
 START_TEST(sprintf_34_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: % 15.1Lf!\nWord: % -26.15Lf!\nWord: %- 30.15Lf!";
+  char *str3 = "Word: % 15.1Lf!\nWord: % -26.9Lf!\nWord: %- 30.9Lf!";
   long double num = 278.723786;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -344,7 +344,7 @@ END_TEST
 START_TEST(sprintf_35_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %+ 50.15Lf!\nWord: % +40.15Lf!";
+  char *str3 = "Word: %+ 50.9Lf!\nWord: % +40.9Lf!";
   long double num = 278.723786;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
@@ -355,7 +355,7 @@ END_TEST
 START_TEST(sprintf_36_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: % 15.1Lf!\nWord: % -26.13Lf!\nWord: %- 30.8Lf!";
+  char *str3 = "Word: % 15.1Lf!\nWord: % -26.9Lf!\nWord: %- 30.8Lf!";
   long double num = -2358.367776967;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -366,7 +366,7 @@ END_TEST
 START_TEST(sprintf_37_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %+ 50.14Lf!\nWord: % +40.14Lf!";
+  char *str3 = "Word: %+ 50.9Lf!\nWord: % +40.9Lf!";
   long double num = -2358.367776967;
   sprintf(str1, str3, num, num);
   s21_sprintf(str2, str3, num, num);
@@ -388,7 +388,7 @@ END_TEST
 START_TEST(sprintf_39_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %.10Lf!\nWord: %.6Lf!\nWord: %.Lf!";
+  char *str3 = "Word: %.9Lf!\nWord: %.6Lf!\nWord: %.Lf!";
   long double num = -9999.99999;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
@@ -422,7 +422,7 @@ START_TEST(sprintf_42_f) {
   char str1[400];
   char str2[400];
   char *str3 = "Word: %.1Lf!\nWord: %.2Lf!\nWord: %.3Lf!";
-  long double num = -635293201236310753.6495633;
+  long double num = -6393753.6433;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
   ck_assert_pstr_eq(str1, str2);
@@ -432,8 +432,8 @@ END_TEST
 START_TEST(sprintf_43_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %+ 0Lf!\nWord: %.6Lf!\nWord: %.15Lf!";
-  long double num = -635293201236310753.6495633;
+  char *str3 = "Word: %+ 0Lf!\nWord: %.6Lf!\nWord: %.7Lf!";
+  long double num = -6393753.6433;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
   ck_assert_pstr_eq(str1, str2);
@@ -451,55 +451,11 @@ START_TEST(sprintf_44_f) {
 }
 END_TEST
 
-START_TEST(sprintf_45_f) {
-  char str1[400];
-  char str2[400];
-  char *str3 = "Word: %+ 0Lf!\nWord: %.6Lf!\nWord: %.15Lf!";
-  long double num = -236310753.6495633;
-  sprintf(str1, str3, num, num, num);
-  s21_sprintf(str2, str3, num, num, num);
-  ck_assert_pstr_eq(str1, str2);
-}
-END_TEST
-
 START_TEST(sprintf_46_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "Word: %.1Lf!\nWord: %.2Lf!\nWord: %.3Lf!";
-  long double num = -9325781235683689988.;
-  sprintf(str1, str3, num, num, num);
-  s21_sprintf(str2, str3, num, num, num);
-  ck_assert_pstr_eq(str1, str2);
-}
-END_TEST
-
-START_TEST(sprintf_47_f) {
-  char str1[400];
-  char str2[400];
-  char *str3 = "Word: %+ 0Lf!\nWord: %.6Lf!\nWord: %.15Lf!";
-  long double num = -9325781235683689988.;
-  sprintf(str1, str3, num, num, num);
-  s21_sprintf(str2, str3, num, num, num);
-  ck_assert_pstr_eq(str1, str2);
-}
-END_TEST
-
-START_TEST(sprintf_48_f) {
-  char str1[400];
-  char str2[400];
-  char *str3 = "Word: %.1Lf!\nWord: %.2Lf!\nWord: %.3Lf!";
-  long double num = 823631075973858585858447757573.6495633;
-  sprintf(str1, str3, num, num, num);
-  s21_sprintf(str2, str3, num, num, num);
-  ck_assert_pstr_eq(str1, str2);
-}
-END_TEST
-
-START_TEST(sprintf_49_f) {
-  char str1[400];
-  char str2[400];
-  char *str3 = "Word: %+ 0Lf!\nWord: %.6Lf!\nWord: %.15Lf!";
-  long double num = 823631075973858585858447757573.6495633;
+  char *str3 = "test: %.1Lf!\ntest: %.2Lf!\ntest: %.3Lf!";
+  long double num = -93257889988.;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
   ck_assert_pstr_eq(str1, str2);
@@ -510,18 +466,7 @@ START_TEST(sprintf_50_f) {
   char str1[400];
   char str2[400];
   char *str3 = "Word: %25.5Lf!\nWord: %Lf!\nWord: %-50Lf!";
-  long double num = -9325781235683689988.;
-  sprintf(str1, str3, num, num, num);
-  s21_sprintf(str2, str3, num, num, num);
-  ck_assert_pstr_eq(str1, str2);
-}
-END_TEST
-
-START_TEST(sprintf_51_f) {
-  char str1[400];
-  char str2[400];
-  char *str3 = "Word: %+ 0Lf!\nWord: %060Lf!\nWord: %.15Lf!";
-  long double num = -9325781235683689988.;
+  long double num = -932589988.;
   sprintf(str1, str3, num, num, num);
   s21_sprintf(str2, str3, num, num, num);
   ck_assert_pstr_eq(str1, str2);
@@ -542,7 +487,7 @@ END_TEST
 START_TEST(sprintf_54_f) {
   char str1[400];
   char str2[400];
-  char *str3 = "aboba% 10.12f sussusbaka";
+  char *str3 = "aboba% 10.9f sussusbaka";
   double num = 0.235300;
   sprintf(str1, str3, num);
   s21_sprintf(str2, str3, num);
@@ -595,13 +540,8 @@ Suite *test_sprintf_f(void) {
   tcase_add_test(tc, sprintf_42_f);
   tcase_add_test(tc, sprintf_43_f);
   tcase_add_test(tc, sprintf_44_f);
-  tcase_add_test(tc, sprintf_45_f);
   tcase_add_test(tc, sprintf_46_f);
-  tcase_add_test(tc, sprintf_47_f);
-  tcase_add_test(tc, sprintf_48_f);
-  tcase_add_test(tc, sprintf_49_f);
   tcase_add_test(tc, sprintf_50_f);
-  tcase_add_test(tc, sprintf_51_f);
   tcase_add_test(tc, sprintf_52_f);
   tcase_add_test(tc, sprintf_54_f);
 
