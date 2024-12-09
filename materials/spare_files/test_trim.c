@@ -21,9 +21,9 @@ START_TEST(test_trim_2) {
 END_TEST
 
 START_TEST(test_trim_3) {
-  char *s1 = S21_NULL;
+  char *s1 = NULL;
   char s3[] = "";
-  char *s4 = S21_NULL;
+  char *s4 = NULL;
   char *s2 = s21_trim(s1, s3);
   ck_assert_pstr_eq(s4, s2);
   if (s2) free(s2);
@@ -61,9 +61,9 @@ START_TEST(test_trim_6) {
 END_TEST
 
 START_TEST(test_trim_7) {
-  char *s1 = S21_NULL;
-  char *s3 = S21_NULL;
-  char *s4 = S21_NULL;
+  char *s1 = NULL;
+  char *s3 = NULL;
+  char *s4 = NULL;
   char *s2 = s21_trim(s1, s3);
   ck_assert_pstr_eq(s4, s2);
   if (s2) free(s2);
@@ -82,7 +82,7 @@ END_TEST
 
 START_TEST(test_trim_9) {
   char s1[] = " wtf ";
-  char *s3 = S21_NULL;
+  char *s3 = NULL;
   char *s4 = " wtf ";
   char *s2 = s21_trim(s1, s3);
   ck_assert_pstr_eq(s4, s2);

@@ -1,7 +1,7 @@
 #include "test_me.h"
 
 void assert_strncat_func(char *expected_s1, char *expected_s2, char *s3,
-                         s21_size_t n) {
+                         size_t n) {
   char s1[100] = {0};
   char s2[100] = {0};
 

@@ -1,6 +1,6 @@
 #include "test_me.h"
 
-void assert_strncmp(const char *s1, const char *s2, s21_size_t n) {
+void assert_strncmp(const char *s1, const char *s2, size_t n) {
   int n1 = strncmp(s1, s2, n);
   n1 = n1 > 0 ? 1 : n1 == 0 ? 0 : -1;
   int n2 = s21_strncmp(s1, s2, n);

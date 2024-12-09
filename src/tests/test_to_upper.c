@@ -23,7 +23,7 @@ END_TEST
 START_TEST(border_2) { assert_to_upper("ALREADY UPPER", "ALREADY UPPER"); }
 END_TEST
 
-START_TEST(border_3) { assert_to_upper(S21_NULL, S21_NULL); }
+START_TEST(border_3) { assert_to_upper(NULL, NULL); }
 END_TEST
 
 START_TEST(irregular_1) { assert_to_upper("_?};!234", "_?};!234"); }

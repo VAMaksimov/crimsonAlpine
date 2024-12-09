@@ -1,7 +1,7 @@
 #include "test_me.h"
 
 void assert_memcpy(const char *expected, const char *actual, const char *src,
-                   s21_size_t n) {
+                   size_t n) {
   char s1[100] = {0};
   char s2[100] = {0};
   strncpy(s1, expected, sizeof(s1) - 1);

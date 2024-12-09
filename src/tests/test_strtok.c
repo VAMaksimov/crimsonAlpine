@@ -60,10 +60,10 @@ START_TEST(irregular_3) {
   char s2[] = "MYPHONENUM68697317172648";
   char delim[] = "MYPHONENUM6869";
   char *res1 = strtok(s1, delim);
-  char *res2 = strtok(S21_NULL, delim);
+  char *res2 = strtok(NULL, delim);
 
   char *res3 = s21_strtok(s2, delim);
-  char *res4 = s21_strtok(S21_NULL, delim);
+  char *res4 = s21_strtok(NULL, delim);
 
   ck_assert_pstr_eq(res1, res3);
   ck_assert_pstr_eq(res2, res4);
