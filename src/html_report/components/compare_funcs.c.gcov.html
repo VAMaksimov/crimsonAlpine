@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - components/compare_funcs.c</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">components</a> - compare_funcs.c<span style="font-size: 80%;"> (source / <a href="compare_funcs.c.func-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">14</td>
+            <td class="headerCovTableEntry">14</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2024-12-10 14:48:16</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">2</td>
+            <td class="headerCovTableEntry">2</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : #include &quot;../s21_string.h&quot;</span>
+<span id="L2"><span class="lineNum">       2</span>              : </span>
+<span id="L3"><span class="lineNum">       3</span>              : /**</span>
+<span id="L4"><span class="lineNum">       4</span>              :  * @brief Compare memory areas.</span>
+<span id="L5"><span class="lineNum">       5</span>              :  * The s21_memcmp() function compares the first n bytes of memory area</span>
+<span id="L6"><span class="lineNum">       6</span>              :  * str1 and memory area str2. It gives back a number. If this number is less</span>
+<span id="L7"><span class="lineNum">       7</span>              :  * than zero, it means the first n bytes of str1 are smaller than those of str2.</span>
+<span id="L8"><span class="lineNum">       8</span>              :  * If the number is zero, it means the first n bytes of str1 and str2 are the</span>
+<span id="L9"><span class="lineNum">       9</span>              :  * same. If the number is more than zero, it means the first n bytes of str1 are</span>
+<span id="L10"><span class="lineNum">      10</span>              :  * bigger than those of str2.</span>
+<span id="L11"><span class="lineNum">      11</span>              :  * @param str1 The first memory area.</span>
+<span id="L12"><span class="lineNum">      12</span>              :  * @param str2 The second memory area.</span>
+<span id="L13"><span class="lineNum">      13</span>              :  * @param n The number of bytes to compare.</span>
+<span id="L14"><span class="lineNum">      14</span>              :  * @return The s21_memcmp() function returns an integer less than, equal to,</span>
+<span id="L15"><span class="lineNum">      15</span>              :  * or greater than zero if the first n bytes of str1 is found, respectively,</span>
+<span id="L16"><span class="lineNum">      16</span>              :  * to be less than, to match, or be greater than the first n bytes of str2.</span>
+<span id="L17"><span class="lineNum">      17</span>              :  */</span>
+<span id="L18"><span class="lineNum">      18</span> <span class="tlaGNC tlaBgGNC">          30 : int s21_memcmp(const void *str1, const void *str2, size_t n) {</span></span>
+<span id="L19"><span class="lineNum">      19</span> <span class="tlaGNC">          30 :   const char *d = (const char *)str1;</span></span>
+<span id="L20"><span class="lineNum">      20</span> <span class="tlaGNC">          30 :   const char *s = (const char *)str2;</span></span>
+<span id="L21"><span class="lineNum">      21</span> <span class="tlaGNC">          30 :   int res = 0;</span></span>
+<span id="L22"><span class="lineNum">      22</span> <span class="tlaGNC">         105 :   for (size_t i = 0; i &lt; n &amp;&amp; !res; ++i) res = d[i] - s[i];</span></span>
+<span id="L23"><span class="lineNum">      23</span> <span class="tlaGNC">          30 :   return res;</span></span>
+<span id="L24"><span class="lineNum">      24</span>              : }</span>
+<span id="L25"><span class="lineNum">      25</span>              : </span>
+<span id="L26"><span class="lineNum">      26</span>              : /**</span>
+<span id="L27"><span class="lineNum">      27</span>              :  * @brief Compares up to n characters of the C strings str1 and str2.</span>
+<span id="L28"><span class="lineNum">      28</span>              :  * The s21_strncmp() function compares the first n characters of the</span>
+<span id="L29"><span class="lineNum">      29</span>              :  * strings str1 and str2. The comparison is done lexicographically.</span>
+<span id="L30"><span class="lineNum">      30</span>              :  *</span>
+<span id="L31"><span class="lineNum">      31</span>              :  * @param str1 The first string to be compared.</span>
+<span id="L32"><span class="lineNum">      32</span>              :  * @param str2 The second string to be compared.</span>
+<span id="L33"><span class="lineNum">      33</span>              :  * @param n The maximum number of characters to compare.</span>
+<span id="L34"><span class="lineNum">      34</span>              :  *</span>
+<span id="L35"><span class="lineNum">      35</span>              :  * @return An integer less than, equal to, or greater than zero if the first n</span>
+<span id="L36"><span class="lineNum">      36</span>              :  * characters of str1 is found, respectively, to be less than, to match, or be</span>
+<span id="L37"><span class="lineNum">      37</span>              :  * greater than the first n characters of str2.</span>
+<span id="L38"><span class="lineNum">      38</span>              :  */</span>
+<span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">          72 : int s21_strncmp(const char *str1, const char *str2, size_t n) {</span></span>
+<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">          72 :   if (str1 == NULL || str2 == NULL) return 0;</span></span>
+<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">          72 :   const char *d = (const char *)str1;</span></span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC">          72 :   const char *s = (const char *)str2;</span></span>
+<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">          72 :   int res = 0;</span></span>
+<span id="L44"><span class="lineNum">      44</span>              : </span>
+<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">       30396 :   for (size_t i = 0; i &lt; n &amp;&amp; !res; ++i) {</span></span>
+<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">       30324 :     res = d[i] - s[i];</span></span>
+<span id="L47"><span class="lineNum">      47</span>              :   }</span>
+<span id="L48"><span class="lineNum">      48</span>              : </span>
+<span id="L49"><span class="lineNum">      49</span> <span class="tlaGNC">          72 :   return res;</span></span>
+<span id="L50"><span class="lineNum">      50</span>              : }</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

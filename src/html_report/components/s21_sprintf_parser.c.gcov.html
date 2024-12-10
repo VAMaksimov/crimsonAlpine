@@ -1,0 +1,125 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - components/s21_sprintf_parser.c</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">components</a> - s21_sprintf_parser.c<span style="font-size: 80%;"> (source / <a href="s21_sprintf_parser.c.func-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryHi">94.6&nbsp;%</td>
+            <td class="headerCovTableEntry">37</td>
+            <td class="headerCovTableEntry">35</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2024-12-10 14:48:16</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">5</td>
+            <td class="headerCovTableEntry">5</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : #include &quot;s21_sprintf.h&quot;</span>
+<span id="L2"><span class="lineNum">       2</span>              : </span>
+<span id="L3"><span class="lineNum">       3</span> <span class="tlaGNC tlaBgGNC">        2675 : int number_parser(const char **p) {</span></span>
+<span id="L4"><span class="lineNum">       4</span> <span class="tlaGNC">        2675 :   int res = 0;</span></span>
+<span id="L5"><span class="lineNum">       5</span> <span class="tlaGNC">        5697 :   while (s21_strchr(&quot;0123456789&quot;, **p)) {</span></span>
+<span id="L6"><span class="lineNum">       6</span> <span class="tlaGNC">        3022 :     res = res * 10 + (**p - '0');</span></span>
+<span id="L7"><span class="lineNum">       7</span> <span class="tlaGNC">        3022 :     ++(*p);</span></span>
+<span id="L8"><span class="lineNum">       8</span>              :   }</span>
+<span id="L9"><span class="lineNum">       9</span> <span class="tlaGNC">        2675 :   --(*p);</span></span>
+<span id="L10"><span class="lineNum">      10</span> <span class="tlaGNC">        2675 :   return res;</span></span>
+<span id="L11"><span class="lineNum">      11</span>              : }</span>
+<span id="L12"><span class="lineNum">      12</span>              : </span>
+<span id="L13"><span class="lineNum">      13</span> <span class="tlaGNC">        1367 : void width_parser(const char **p, format_value *values, va_list factor) {</span></span>
+<span id="L14"><span class="lineNum">      14</span> <span class="tlaGNC">        1367 :   if (**p == '*')</span></span>
+<span id="L15"><span class="lineNum">      15</span> <span class="tlaGNC">          72 :     values-&gt;width_value = va_arg(factor, int);</span></span>
+<span id="L16"><span class="lineNum">      16</span>              :   else</span>
+<span id="L17"><span class="lineNum">      17</span> <span class="tlaGNC">        1295 :     values-&gt;width_value = number_parser(p);</span></span>
+<span id="L18"><span class="lineNum">      18</span> <span class="tlaGNC">        1367 : }</span></span>
+<span id="L19"><span class="lineNum">      19</span>              : </span>
+<span id="L20"><span class="lineNum">      20</span> <span class="tlaGNC">        1431 : void precision_parser(const char **p, format_value *values, va_list factor) {</span></span>
+<span id="L21"><span class="lineNum">      21</span> <span class="tlaGNC">        1431 :   values-&gt;precision_exist = true;</span></span>
+<span id="L22"><span class="lineNum">      22</span> <span class="tlaGNC">        1431 :   if (**p == '*')</span></span>
+<span id="L23"><span class="lineNum">      23</span> <span class="tlaGNC">          51 :     values-&gt;precision_value = va_arg(factor, int);</span></span>
+<span id="L24"><span class="lineNum">      24</span>              :   else</span>
+<span id="L25"><span class="lineNum">      25</span> <span class="tlaGNC">        1380 :     values-&gt;precision_value = number_parser(p);</span></span>
+<span id="L26"><span class="lineNum">      26</span> <span class="tlaGNC">        1431 : }</span></span>
+<span id="L27"><span class="lineNum">      27</span>              : </span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">         347 : void length_parser(const char **p, format_value *values) {</span></span>
+<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">         347 :   if (**p == 'l' &amp;&amp; *(*p + 1) == 'l') {</span></span>
+<span id="L30"><span class="lineNum">      30</span> <span class="tlaUNC tlaBgUNC">           0 :     ++(*p);</span></span>
+<span id="L31"><span class="lineNum">      31</span> <span class="tlaUNC">           0 :     values-&gt;length_value = LONG_LONG_INT_LENGTH;</span></span>
+<span id="L32"><span class="lineNum">      32</span>              :   } else</span>
+<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC tlaBgGNC">         347 :     values-&gt;length_value = **p;</span></span>
+<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">         347 : }</span></span>
+<span id="L35"><span class="lineNum">      35</span>              : </span>
+<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">        1914 : char flag_value(char c) {</span></span>
+<span id="L37"><span class="lineNum">      37</span> <span class="tlaGNC">        1914 :   char r = 0;</span></span>
+<span id="L38"><span class="lineNum">      38</span> <span class="tlaGNC">        1914 :   if (c == '-')</span></span>
+<span id="L39"><span class="lineNum">      39</span> <span class="tlaGNC">         465 :     r = LEFT_JUSTIFY_FLAG;</span></span>
+<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">        1449 :   else if (c == '+')</span></span>
+<span id="L41"><span class="lineNum">      41</span> <span class="tlaGNC">         358 :     r = SIGN_PRECEDENCE_FLAG;</span></span>
+<span id="L42"><span class="lineNum">      42</span> <span class="tlaGNC">        1091 :   else if (c == ' ')</span></span>
+<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">         463 :     r = NO_SIGN_FLAG;</span></span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">         628 :   else if (c == '#')</span></span>
+<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">         217 :     r = HASH_FLAG;</span></span>
+<span id="L46"><span class="lineNum">      46</span> <span class="tlaGNC">         411 :   else if (c == '0')</span></span>
+<span id="L47"><span class="lineNum">      47</span> <span class="tlaGNC">         411 :     r = ZERO_PADDING_FLAG;</span></span>
+<span id="L48"><span class="lineNum">      48</span> <span class="tlaGNC">        1914 :   return r;</span></span>
+<span id="L49"><span class="lineNum">      49</span>              : }</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>

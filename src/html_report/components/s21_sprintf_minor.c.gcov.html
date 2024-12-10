@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>LCOV - coverage.info - components/s21_sprintf_minor.c</title>
+  <link rel="stylesheet" type="text/css" href="../gcov.css">
+</head>
+
+<body>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="title">LCOV - code coverage report</td></tr>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+
+            <tr>
+              <td width="100%">
+                <table cellpadding=1 border=0 width="100%">
+          <tr>
+            <td width="10%" class="headerItem">Current view:</td>
+            <td width="10%" class="headerValue"><a href="../index.html">top level</a> - <a href="index.html">components</a> - s21_sprintf_minor.c<span style="font-size: 80%;"> (source / <a href="s21_sprintf_minor.c.func-c.html">functions</a>)</span></td>
+            <td width="5%"></td>
+            <td width="5%"></td>
+            <td width="5%" class="headerCovTableHead">Coverage</td>
+            <td width="5%" class="headerCovTableHead" title="Covered + Uncovered code">Total</td>
+            <td width="5%" class="headerCovTableHead" title="Exercised code only">Hit</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test:</td>
+            <td class="headerValue">coverage.info</td>
+            <td></td>
+            <td class="headerItem">Lines:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">29</td>
+            <td class="headerCovTableEntry">29</td>
+          </tr>
+          <tr>
+            <td class="headerItem">Test Date:</td>
+            <td class="headerValue">2024-12-10 14:48:16</td>
+            <td></td>
+            <td class="headerItem">Functions:</td>
+            <td class="headerCovTableEntryHi">100.0&nbsp;%</td>
+            <td class="headerCovTableEntry">4</td>
+            <td class="headerCovTableEntry">4</td>
+          </tr>
+                  <tr><td><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+                </table>
+              </td>
+            </tr>
+
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+          </table>
+
+          <table cellpadding=0 cellspacing=0 border=0>
+            <tr>
+              <td><br></td>
+            </tr>
+            <tr>
+              <td>
+<pre class="sourceHeading">            Line data    Source code</pre>
+<pre class="source">
+<span id="L1"><span class="lineNum">       1</span>              : #include &quot;s21_sprintf.h&quot;</span>
+<span id="L2"><span class="lineNum">       2</span>              : </span>
+<span id="L3"><span class="lineNum">       3</span> <span class="tlaGNC tlaBgGNC">        2067 : int get_uint_length(unsigned long long value, format_value values) {</span></span>
+<span id="L4"><span class="lineNum">       4</span> <span class="tlaGNC">        2067 :   int len = 1;</span></span>
+<span id="L5"><span class="lineNum">       5</span> <span class="tlaGNC">        2067 :   if (values.specifier_value == OCTAL_SPEC)</span></span>
+<span id="L6"><span class="lineNum">       6</span> <span class="tlaGNC">         384 :     len += exponent(value, OCTAL_BASE);</span></span>
+<span id="L7"><span class="lineNum">       7</span> <span class="tlaGNC">        1683 :   else if (values.specifier_value == x_SPEC || values.specifier_value == X_SPEC)</span></span>
+<span id="L8"><span class="lineNum">       8</span> <span class="tlaGNC">         882 :     len += exponent(value, HEXADECIMAL_BASE);</span></span>
+<span id="L9"><span class="lineNum">       9</span>              :   else</span>
+<span id="L10"><span class="lineNum">      10</span> <span class="tlaGNC">         801 :     len += exponent(value, DECIMAL_BASE);</span></span>
+<span id="L11"><span class="lineNum">      11</span>              :   // if (values.flag_value &amp; HASH_FLAG &amp;&amp; values.specifier_value == OCTAL_SPEC)</span>
+<span id="L12"><span class="lineNum">      12</span>              :   //   ++len;</span>
+<span id="L13"><span class="lineNum">      13</span> <span class="tlaGNC">        2067 :   return len;</span></span>
+<span id="L14"><span class="lineNum">      14</span>              : }</span>
+<span id="L15"><span class="lineNum">      15</span>              : </span>
+<span id="L16"><span class="lineNum">      16</span> <span class="tlaGNC">        1338 : int define_base_System(char spec) {</span></span>
+<span id="L17"><span class="lineNum">      17</span> <span class="tlaGNC">        1338 :   int base_System =</span></span>
+<span id="L18"><span class="lineNum">      18</span> <span class="tlaGNC">        1338 :       spec == x_SPEC || spec == X_SPEC ? HEXADECIMAL_BASE : DECIMAL_BASE;</span></span>
+<span id="L19"><span class="lineNum">      19</span> <span class="tlaGNC">        1338 :   base_System = spec == OCTAL_SPEC ? OCTAL_BASE : base_System;</span></span>
+<span id="L20"><span class="lineNum">      20</span>              : </span>
+<span id="L21"><span class="lineNum">      21</span> <span class="tlaGNC">        1338 :   return base_System;</span></span>
+<span id="L22"><span class="lineNum">      22</span>              : }</span>
+<span id="L23"><span class="lineNum">      23</span>              : </span>
+<span id="L24"><span class="lineNum">      24</span> <span class="tlaGNC">        4832 : int exponent(long double value, int base) {</span></span>
+<span id="L25"><span class="lineNum">      25</span> <span class="tlaGNC">        4832 :   long double temp = abs(value);</span></span>
+<span id="L26"><span class="lineNum">      26</span> <span class="tlaGNC">        4832 :   int exp = 0;</span></span>
+<span id="L27"><span class="lineNum">      27</span> <span class="tlaGNC">        4832 :   if (temp != 0) {</span></span>
+<span id="L28"><span class="lineNum">      28</span> <span class="tlaGNC">        4697 :     if (temp &gt;= base) {</span></span>
+<span id="L29"><span class="lineNum">      29</span> <span class="tlaGNC">       26918 :       while (temp &gt;= base) {</span></span>
+<span id="L30"><span class="lineNum">      30</span> <span class="tlaGNC">       22596 :         temp /= base;</span></span>
+<span id="L31"><span class="lineNum">      31</span> <span class="tlaGNC">       22596 :         exp++;</span></span>
+<span id="L32"><span class="lineNum">      32</span>              :       }</span>
+<span id="L33"><span class="lineNum">      33</span> <span class="tlaGNC">         375 :     } else if (temp &lt; 1) {</span></span>
+<span id="L34"><span class="lineNum">      34</span> <span class="tlaGNC">         473 :       while (temp &lt; 1 &amp;&amp; temp != 0) {</span></span>
+<span id="L35"><span class="lineNum">      35</span> <span class="tlaGNC">         363 :         temp *= base;</span></span>
+<span id="L36"><span class="lineNum">      36</span> <span class="tlaGNC">         363 :         exp--;</span></span>
+<span id="L37"><span class="lineNum">      37</span>              :       }</span>
+<span id="L38"><span class="lineNum">      38</span>              :     }</span>
+<span id="L39"><span class="lineNum">      39</span>              :   }</span>
+<span id="L40"><span class="lineNum">      40</span> <span class="tlaGNC">        4832 :   return exp;</span></span>
+<span id="L41"><span class="lineNum">      41</span>              : }</span>
+<span id="L42"><span class="lineNum">      42</span>              : </span>
+<span id="L43"><span class="lineNum">      43</span> <span class="tlaGNC">         847 : long double round_to_precision(long double value, format_value values) {</span></span>
+<span id="L44"><span class="lineNum">      44</span> <span class="tlaGNC">         847 :   long double temp = roundl(value * pow(10, values.precision_value));</span></span>
+<span id="L45"><span class="lineNum">      45</span> <span class="tlaGNC">         847 :   return (temp * pow(0.1, values.precision_value));</span></span>
+<span id="L46"><span class="lineNum">      46</span>              : }</span>
+        </pre>
+              </td>
+            </tr>
+          </table>
+          <br>
+
+          <table width="100%" border=0 cellspacing=0 cellpadding=0>
+            <tr><td class="ruler"><img src="../glass.png" width=3 height=3 alt=""></td></tr>
+            <tr><td class="versionInfo">Generated by: <a href="https://github.com//linux-test-project/lcov" target="_parent">LCOV version 2.0-1</a></td></tr>
+          </table>
+          <br>
+
+</body>
+</html>
